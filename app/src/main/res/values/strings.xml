@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">Fussball-EM_2024_App</string>
-    <string name="openLiga_url">https://www.openligadb.de/</string>
+    <string name="openLiga_url">https://api.openligadb.de/</string>
 </resources>
