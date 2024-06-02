@@ -45,24 +45,19 @@ private fun onResponse(response: Response){
         onFailure()
 
     val body = response.body?.string()
+    // TODO: impl finish onResponse
     if (body != null){
         val jsonBody = JSONArray(body)
         // TODO: best case: parse body to a class
         // TODO: build layout and fill it with the data
-        runOnUiThread{
-            responseTextView.text = jsonBody.get(0).toString()
-        }
+
     }else{
-        runOnUiThread{
-            responseTextView.text = "successful call"
-        }
+
     }
 }
 
 private fun onFailure(){
-    runOnUiThread{
-        responseTextView.text = "unsuccessful call"
-    }
+    // TODO: impl onFailure
 }
 
 @Composable
