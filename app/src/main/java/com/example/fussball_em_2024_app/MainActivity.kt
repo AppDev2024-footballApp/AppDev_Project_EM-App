@@ -1,30 +1,35 @@
 package com.example.fussball_em_2024_app
 
 import android.os.Bundle
-import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import com.example.testjetpackcompose.ui.theme.TestJetpackComposeTheme
 import com.example.fussball_em_2024_app.network.CallbackCreator
 import com.example.fussball_em_2024_app.network.HttpClient
 import okhttp3.Response
 import org.json.JSONArray
 
-class MainActivity : AppCompatActivity() {
-
-    private lateinit var responseTextView: TextView
+class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_main)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+        setContent {
+            TestJetpackComposeTheme {
+                // A surface container using the 'background' color from the theme
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    Greeting("Android")
+                }
+            }
         }
-
-        responseTextView = findViewById(R.id.tvApiResponse)
 
         // bsp. Get Request
         HttpClient.get("getmatchdata/em/2024",
@@ -33,29 +38,45 @@ class MainActivity : AppCompatActivity() {
                 ::onResponse
             ))
     }
+}
 
-    private fun onResponse(response: Response){
-        if(response.isSuccessful.not())
-            onFailure()
+private fun onResponse(response: Response){
+    if(response.isSuccessful.not())
+        onFailure()
 
-        val body = response.body?.string()
-        if (body != null){
-            val jsonBody = JSONArray(body)
-            // TODO: best case: parse body to a class
-            // TODO: build layout and fill it with the data
-            runOnUiThread{
-                responseTextView.text = jsonBody.get(0).toString()
-            }
-        }else{
-            runOnUiThread{
-                responseTextView.text = "successful call"
-            }
+    val body = response.body?.string()
+    if (body != null){
+        val jsonBody = JSONArray(body)
+        // TODO: best case: parse body to a class
+        // TODO: build layout and fill it with the data
+        runOnUiThread{
+            responseTextView.text = jsonBody.get(0).toString()
+        }
+    }else{
+        runOnUiThread{
+            responseTextView.text = "successful call"
         }
     }
+}
 
-    private fun onFailure(){
-        runOnUiThread{
-            responseTextView.text = "unsuccessful call"
-        }
+private fun onFailure(){
+    runOnUiThread{
+        responseTextView.text = "unsuccessful call"
+    }
+}
+
+@Composable
+fun Greeting(name: String, modifier: Modifier = Modifier) {
+    Text(
+        text = "Hello $name!",
+        modifier = modifier
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun GreetingPreview() {
+    TestJetpackComposeTheme {
+        Greeting("Android")
     }
 }
