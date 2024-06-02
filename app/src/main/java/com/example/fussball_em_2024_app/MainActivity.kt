@@ -11,6 +11,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.testjetpackcompose.ui.theme.TestJetpackComposeTheme
+import com.example.fussball_em_2024_app.network.CallbackCreator
+import com.example.fussball_em_2024_app.network.HttpClient
+import okhttp3.Response
+import org.json.JSONArray
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,7 +30,34 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+
+        // bsp. Get Request
+        HttpClient.get("getmatchdata/em/2024",
+            CallbackCreator().createCallback(
+                ::onFailure,
+                ::onResponse
+            ))
     }
+}
+
+private fun onResponse(response: Response){
+    if(response.isSuccessful.not())
+        onFailure()
+
+    val body = response.body?.string()
+    // TODO: impl finish onResponse
+    if (body != null){
+        val jsonBody = JSONArray(body)
+        // TODO: best case: parse body to a class
+        // TODO: build layout and fill it with the data
+
+    }else{
+
+    }
+}
+
+private fun onFailure(){
+    // TODO: impl onFailure
 }
 
 @Composable
