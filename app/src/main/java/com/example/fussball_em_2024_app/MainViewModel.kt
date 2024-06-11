@@ -37,11 +37,6 @@ class MainViewModel() : ViewModel() {
     }
 
 
-
-
-
-
-
     data class MatchState(
         val loading:Boolean= true,
         val list: List<Match> = emptyList(),
