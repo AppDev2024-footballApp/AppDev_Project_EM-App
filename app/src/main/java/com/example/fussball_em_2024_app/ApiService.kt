@@ -1,19 +1,20 @@
 package com.example.fussball_em_2024_app
 
-import Match
-
+import com.example.fussball_em_2024_app.model.MatchResponse
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+
+
 val retrofit = Retrofit.Builder()
     .baseUrl("https://api.openligadb.de/getmatchdata/")
     .addConverterFactory(GsonConverterFactory.create())
     .build()
-val service = retrofit.create(ExchangeService::class.java)
+val matchService = retrofit.create(ApiService::class.java)
 
-interface ExchangeService {
+interface ApiService {
     @GET("em/23")
-    suspend fun getLatestMatch(): Match
+    suspend fun getLatestMatch(): MatchResponse
 }
 
 
