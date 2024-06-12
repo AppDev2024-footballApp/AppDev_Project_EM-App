@@ -15,16 +15,15 @@ val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
 
 val okHttpClient = OkHttpClient.Builder()
     .addInterceptor(httpLoggingInterceptor)
-    // ... andere Interceptors oder Einstellungen falls benötigt
     .build()
 val gson = GsonBuilder()
-    .setDateFormat("yyyy-MM-dd'T'HH:mm:ss") // Das Format muss Ihrem Date-String entsprechen
+    .setDateFormat("yyyy-MM-dd'T'HH:mm:ss") // The format should correspond to the date string
     .create()
 
 val retrofit = Retrofit.Builder()
     .baseUrl("https://api.openligadb.de/getmatchdata/")
     .client(okHttpClient)
-    .addConverterFactory(GsonConverterFactory.create(gson)) // Verwenden Sie das `gson`-Objekt hier
+    .addConverterFactory(GsonConverterFactory.create(gson))
     .build()
 
 

@@ -4,15 +4,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fussball_em_2024_app.matchService
-import com.example.fussball_em_2024_app.model.Goal
-import com.example.fussball_em_2024_app.model.Group
-import com.example.fussball_em_2024_app.model.Location
 import com.example.fussball_em_2024_app.model.Match
-import com.example.fussball_em_2024_app.model.MatchResponse
-import com.example.fussball_em_2024_app.model.MatchResult
-import com.example.fussball_em_2024_app.model.Team
 import kotlinx.coroutines.launch
-import java.util.Date
+
 
 class MainViewModel() : ViewModel() {
     private val _matchState= mutableStateOf(MatchState())
