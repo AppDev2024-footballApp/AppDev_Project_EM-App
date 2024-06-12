@@ -1,5 +1,6 @@
 package com.example.fussball_em_2024_app.model
 
+import java.time.LocalDateTime
 import java.util.Date
 
 // /getmatchdata/{matchId}
@@ -18,9 +19,9 @@ class Match(
     var team2: Team,
     var lastUpdateDateTime: Date,
     var matchIsFinished: Boolean,
-    var matchResults: List<MatchResult>,
-    var goals: List<Goal>,
-    var location: Location,
-    var numberOfViewers: Int
+    var matchResults: List<MatchResult>?,
+    var goals: List<Goal>?,
+    var location: Location?,
+    var numberOfViewers: Int?
     ) {
 }

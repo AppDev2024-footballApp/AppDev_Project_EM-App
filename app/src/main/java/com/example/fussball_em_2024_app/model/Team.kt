@@ -7,7 +7,7 @@ class Team(
     var teamName: String,
     var shortName: String,
     var teamIconUrl: String,
-    var teamGroupName: String
+    var teamGroupName: String?
 ) {
 
 }
