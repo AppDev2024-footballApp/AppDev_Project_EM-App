@@ -1,6 +1,7 @@
 package com.example.fussball_em_2024_app
 
 import com.example.fussball_em_2024_app.model.Match
+import com.example.fussball_em_2024_app.model.Team
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -21,7 +22,7 @@ val gson = GsonBuilder()
     .create()
 
 val retrofit = Retrofit.Builder()
-    .baseUrl("https://api.openligadb.de/getmatchdata/")
+    .baseUrl("https://api.openligadb.de/")
     .client(okHttpClient)
     .addConverterFactory(GsonConverterFactory.create(gson))
     .build()
@@ -31,8 +32,17 @@ val matchService = retrofit.create(ApiService::class.java)
 
 
 interface ApiService {
-    @GET("em2024-emem/2002/1")
+    @GET("getmatchdata/em/2024/")
     suspend fun getLatestMatch(): List<Match>
+
+    @GET("getnextmatchbyleagueshortcut/EM")
+    suspend fun getNextMatch():Match
+
+    @GET("getlastmatchbyleagueshortcut/EM")
+    suspend fun getLastMatch():Match
+
+    @GET("getavailableteams/EM/2024")
+    suspend fun getTeams():List<Team>
 }
 
 
