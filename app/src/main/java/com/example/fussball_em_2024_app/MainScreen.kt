@@ -1,6 +1,7 @@
 package com.example.fussball_em_2024_app
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,14 +30,23 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import coil.compose.rememberAsyncImagePainter
 import com.example.fussball_em_2024_app.model.Match
 import com.example.fussball_em_2024_app.model.Team
+import com.example.fussball_em_2024_app.ui.TeamDetail.TeamDetailScreen
 import com.example.fussball_em_2024_app.viewModels.MatchViewModel
+import com.example.fussball_em_2024_app.viewModels.TeamDetailViewModel
 import com.example.fussball_em_2024_app.viewModels.TeamViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+
+
 
 @Composable
 fun MatchScreen(modifier: Modifier = Modifier) {
@@ -70,7 +80,7 @@ fun MatchScreen(modifier: Modifier = Modifier) {
 
                     // Zeige dann die Liste der CategoryScreen Matches
                     if (viewState.list.isNotEmpty()) {
-                        TeamScreen(teams = viewState.list)
+                        TeamScreen(teams = viewState.list, onTeamClick = {})
                     } else {
                         Text("Keine weiteren Spiele gefunden.")
                     }
@@ -81,14 +91,14 @@ fun MatchScreen(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun TeamScreen(teams: List<Team>) {
+fun TeamScreen(teams: List<Team>, onTeamClick: (Team) -> Unit) {
     // Eine LazyColumn ist bereits scrollbar
     LazyColumn(
         contentPadding = PaddingValues(all = 8.dp), // Füge Abstand der ganzen Liste hinzu
         modifier = Modifier.fillMaxSize()
     ) {
         items(teams) { team ->
-            TeamItem(team = team)
+            TeamItem(team = team, onTeamClick = onTeamClick)
         }
     }
 }
@@ -180,8 +190,10 @@ fun formatDate(date: Date?): String {
 }
 
 @Composable
-fun TeamItem(team:Team){
-    Column(modifier = Modifier.padding(8.dp)) {
+fun TeamItem(team:Team, onTeamClick: (Team) -> Unit){
+    Column(modifier = Modifier
+        .padding(8.dp)
+        .clickable { onTeamClick(team) }) {
         // Oberer Teil mit den Logos
         Row(
             modifier = Modifier.fillMaxWidth(),

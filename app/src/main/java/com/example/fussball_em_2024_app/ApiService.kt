@@ -2,12 +2,14 @@ package com.example.fussball_em_2024_app
 
 import com.example.fussball_em_2024_app.model.Match
 import com.example.fussball_em_2024_app.model.Team
+import com.example.fussball_em_2024_app.model.TeamInfo
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Path
 
 
 val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
@@ -43,6 +45,15 @@ interface ApiService {
 
     @GET("getavailableteams/EM/2024")
     suspend fun getTeams():List<Team>
+
+    @GET("getbltable/EM/2024")
+    suspend fun getTeamsDetails():List<TeamInfo>
+
+    @GET("getnextmatchbyleagueteam/4708/{id}")
+    suspend fun getNextMatchByTeam(@Path("id") id: Int):Match
+
+    @GET("getlastmatchbyleagueteam/4708/{id}")
+    suspend fun getLastMatchByTeam(@Path("id")id: Int):Match
 }
 
 
