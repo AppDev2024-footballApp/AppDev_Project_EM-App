@@ -1,3 +1,7 @@
+package com.example
+.fussball_em_2024_app
+.viewModels
+
 import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -11,6 +15,9 @@ import kotlinx.coroutines.launch
 class MainViewModel() : ViewModel() {
     private val _matchState= mutableStateOf(MatchState())
     val matchState: State<MatchState> = _matchState
+
+
+
 
     init{
         fetchMatches()
@@ -40,9 +47,14 @@ class MainViewModel() : ViewModel() {
 
 
 
+
+
+
+
     data class MatchState(
         val loading:Boolean= true,
         val list: List<Match> = emptyList(),
         val error:String?=null)
+
 }
 
