@@ -24,32 +24,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.VerticalAlignmentLine
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavType
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
+import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.fussball_em_2024_app.model.Match
 import com.example.fussball_em_2024_app.model.Team
-import com.example.fussball_em_2024_app.ui.TeamDetail.TeamDetailScreen
 import com.example.fussball_em_2024_app.viewModels.MatchViewModel
-import com.example.fussball_em_2024_app.viewModels.TeamDetailViewModel
 import com.example.fussball_em_2024_app.viewModels.TeamViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
 
-
 @Composable
-fun MatchScreen(modifier: Modifier = Modifier) {
+fun MatchScreen(navController: NavController, modifier: Modifier = Modifier) {
     val teamViewModel: TeamViewModel = viewModel()
     val viewState by teamViewModel.teamState
     val nextMatchViewModel: MatchViewModel = viewModel()
@@ -68,7 +60,6 @@ fun MatchScreen(modifier: Modifier = Modifier) {
                     nextViewState.match?.let { match ->
                         NextMatchScreen(match = match)
                         Spacer(modifier = Modifier.height(16.dp))
-
                     }
 
 
@@ -80,7 +71,7 @@ fun MatchScreen(modifier: Modifier = Modifier) {
 
                     // Zeige dann die Liste der CategoryScreen Matches
                     if (viewState.list.isNotEmpty()) {
-                        TeamScreen(teams = viewState.list, onTeamClick = {})
+                        TeamScreen(teams = viewState.list, navController = navController)
                     } else {
                         Text("Keine weiteren Spiele gefunden.")
                     }
@@ -91,14 +82,16 @@ fun MatchScreen(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun TeamScreen(teams: List<Team>, onTeamClick: (Team) -> Unit) {
+fun TeamScreen(teams: List<Team>, navController: NavController) {
     // Eine LazyColumn ist bereits scrollbar
     LazyColumn(
         contentPadding = PaddingValues(all = 8.dp), // Füge Abstand der ganzen Liste hinzu
         modifier = Modifier.fillMaxSize()
     ) {
         items(teams) { team ->
-            TeamItem(team = team, onTeamClick = onTeamClick)
+            TeamItem(team = team, onTeamClick = { selectedTeam ->
+                navController.navigate("${TeamDetail.route}/${selectedTeam.teamId}")
+            })
         }
     }
 }
@@ -200,7 +193,7 @@ fun TeamItem(team:Team, onTeamClick: (Team) -> Unit){
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             // Circle image with team name for team1
-            Row() {
+            Row {
                 Image(
                     painter = rememberAsyncImagePainter(model = team.teamIconUrl),
                     contentDescription = "Logo von ${team.teamName}",
