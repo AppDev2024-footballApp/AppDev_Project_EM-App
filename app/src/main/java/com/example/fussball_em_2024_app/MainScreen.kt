@@ -97,7 +97,7 @@ fun MatchScreen(navController: NavController, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun TeamScreen(teams: List<Team>) {
+fun TeamScreen(teams: List<Team>, navController: NavController) {
 
     Column {
         Text(
@@ -105,7 +105,6 @@ fun TeamScreen(teams: List<Team>) {
         )
     }
 
-fun TeamScreen(teams: List<Team>, navController: NavController) {
     // Eine LazyColumn ist bereits scrollbar
     LazyColumn(
         contentPadding = PaddingValues(all = 8.dp), // Füge Abstand der ganzen Liste hinzu
