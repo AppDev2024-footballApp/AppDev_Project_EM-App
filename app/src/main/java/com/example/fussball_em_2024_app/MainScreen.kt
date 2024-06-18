@@ -1,6 +1,7 @@
 package com.example.fussball_em_2024_app
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -17,14 +18,19 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.VerticalAlignmentLine
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -39,7 +45,6 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-
 @Composable
 fun MatchScreen(navController: NavController, modifier: Modifier = Modifier) {
     val teamViewModel: TeamViewModel = viewModel()
@@ -50,12 +55,22 @@ fun MatchScreen(navController: NavController, modifier: Modifier = Modifier) {
     val lastViewState by lastMatchViewModel.lastMatchState
 
     Box(modifier = Modifier.fillMaxSize()) {
+        val backgroundColor = Color(0xFFF0F0F0)
         when {
+            viewState.loading -> {
+                // Zeigt den Ladekreis in der Mitte des Bildschirms an
+                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+            }
             viewState.error != null -> {
                 Text("ERROR OCCURRED")
             }
             else -> {
-                Column {
+                Column (
+                    modifier = modifier
+                        .fillMaxSize()
+                        .background(color = backgroundColor)
+                )
+                {
                     // Zeige zuerst den nächsten Match an
                     nextViewState.match?.let { match ->
                         NextMatchScreen(match = match)
@@ -73,7 +88,7 @@ fun MatchScreen(navController: NavController, modifier: Modifier = Modifier) {
                     if (viewState.list.isNotEmpty()) {
                         TeamScreen(teams = viewState.list, navController = navController)
                     } else {
-                        Text("Keine weiteren Spiele gefunden.")
+                        Text("No Such items Found.")
                     }
                 }
             }
@@ -82,6 +97,14 @@ fun MatchScreen(navController: NavController, modifier: Modifier = Modifier) {
 }
 
 @Composable
+fun TeamScreen(teams: List<Team>) {
+
+    Column {
+        Text(
+            text="All Teams"
+        )
+    }
+
 fun TeamScreen(teams: List<Team>, navController: NavController) {
     // Eine LazyColumn ist bereits scrollbar
     LazyColumn(
@@ -98,25 +121,42 @@ fun TeamScreen(teams: List<Team>, navController: NavController) {
 
 @Composable
 fun NextMatchScreen(match: Match) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+            .background(color = Color.White, shape = RoundedCornerShape(4.dp)) // Abgerundete Ecke und weißer Hintergrund
+    ){
     Column(modifier = Modifier.padding(16.dp)) {
         Text(
             text = "Next Game:",
-            style = TextStyle(fontWeight = FontWeight.Bold),
+            style = TextStyle(fontWeight = FontWeight.W300),
             modifier = Modifier.padding(bottom = 8.dp)
         )
         MatchItems(match = match)
     }
 }
+}
 
 @Composable
 fun LastMatchScreen(match: Match) {
-    Column(modifier = Modifier.padding(16.dp)) {
-        Text(
-            text = "Last Game",
-            style = TextStyle(fontWeight = FontWeight.Bold),
-            modifier = Modifier.padding(bottom = 8.dp)
-        )
-        MatchItems(match = match)
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+            .background(
+                color = Color.White,
+                shape = RoundedCornerShape(4.dp)
+            )
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(
+                text = "Last Game",
+                style = TextStyle(fontWeight = FontWeight.Bold),
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+            MatchItems(match = match)
+        }
     }
 }
 
