@@ -1,6 +1,7 @@
 package com.example.fussball_em_2024_app.ui.MatchDetail
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -41,36 +42,40 @@ fun MatchGoalsList(
 
     Spacer(modifier = Modifier.height(15.dp))
 
-    Row(
-        modifier = Modifier.fillMaxSize(),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        var team1GoalNumber = 0
-        var team2GoalNumber = 0
+    Box(modifier = modifier){
+        Row(
+            modifier = Modifier.fillMaxSize(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            var team1GoalNumber = 0
+            var team2GoalNumber = 0
 
-        Column(horizontalAlignment = Alignment.Start) {
-            goals.forEach { goal ->
-                if (goal.scoreTeam1!! > team1GoalNumber){
-                    team1GoalNumber++
-                    Text(
-                        text = "${goal.matchMinute}'\n${goal.goalGetterName}",
-                        textAlign = TextAlign.Center
-                    )
+            Column(horizontalAlignment = Alignment.Start) {
+                goals.forEach { goal ->
+                    if (goal.scoreTeam1!! > team1GoalNumber){
+                        team1GoalNumber++
+                        Text(
+                            text = "${goal.matchMinute}'\n${goal.goalGetterName}",
+                            textAlign = TextAlign.Center
+                        )
+                    }
+
                 }
-
             }
-        }
-        VerticalDivider(color = Color.Black, thickness = 3.dp)
-        Column(horizontalAlignment = Alignment.End) {
-            goals.forEach { goal ->
-                if (goal.scoreTeam2!! > team1GoalNumber){
-                    team2GoalNumber++
-                    Text(
-                        text = "${goal.matchMinute}'\n${goal.goalGetterName}",
-                        textAlign = TextAlign.Center
-                    )
+            VerticalDivider(color = Color.Black, thickness = 3.dp)
+            Column(horizontalAlignment = Alignment.End) {
+                goals.forEach { goal ->
+                    if (goal.scoreTeam2!! > team1GoalNumber){
+                        team2GoalNumber++
+                        Text(
+                            text = "${goal.matchMinute}'\n${goal.goalGetterName}",
+                            textAlign = TextAlign.Center
+                        )
+                    }
                 }
             }
         }
     }
+
+
 }

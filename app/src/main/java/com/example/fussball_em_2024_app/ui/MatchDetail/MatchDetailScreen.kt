@@ -5,21 +5,26 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -29,9 +34,12 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
-import com.example.fussball_em_2024_app.utils.getCurrentDateTime
+import com.example.fussball_em_2024_app.utils.DateFormater
 import com.example.fussball_em_2024_app.viewModels.MatchDetailViewModel
 import com.example.fussball_em_2024_app.viewModels.MatchDetailViewModelFactory
+import java.time.LocalDate
+import java.time.ZonedDateTime
+import java.util.Date
 
 @Composable
 fun MatchDetailScreen(
@@ -115,12 +123,12 @@ fun MatchDetailScreen(
                     if (match?.matchIsFinished == true) {
                         Text(
                             text = "Finished\n" +
-                                    "Started: ${match.matchDateTime}",
+                                    "Started: ${DateFormater.formatDate(match.matchDateTime)}",
                             textAlign = TextAlign.Center,
                             modifier = Modifier.padding(bottom = 16.dp)
                         )
                     }
-                    else if(getCurrentDateTime() > match!!.matchDateTime){
+                    else if(DateFormater.isDateAfterNow(match!!.matchDateTimeUTC)){
                         Text(
                             text = "Ongoing",
                             textAlign = TextAlign.Center,
@@ -130,7 +138,7 @@ fun MatchDetailScreen(
                     else{
                         Text(
                             text = "Not Started\n" +
-                                    "Starting at: ${match.matchDateTime}",
+                                    "Starting at: ${DateFormater.formatDate(match.matchDateTime)}",
                             textAlign = TextAlign.Center,
                             modifier = Modifier.padding(bottom = 16.dp)
                         )
@@ -150,7 +158,58 @@ fun MatchDetailScreen(
                     }
 
                     // goals
-                    MatchGoalsList(teamName1 = match.team1.teamName, teamName2 = match.team2.teamName, goals = match.goals!!)
+                    //MatchGoalsList(teamName1 = match.team1.teamName, teamName2 = match.team2.teamName, )
+                    Row(
+                        modifier = Modifier.fillMaxSize(),
+                        horizontalArrangement = Arrangement.SpaceEvenly
+                    ) {
+                        Column(horizontalAlignment = Alignment.Start) {
+                            Text(match.team1.teamName)
+                        }
+
+                        Column(horizontalAlignment = Alignment.End) {
+                            Text(match.team2.teamName)
+                        }
+                    }
+
+                    HorizontalDivider(color = Color.Black, thickness = 3.dp)
+
+                    Spacer(modifier = Modifier.height(15.dp))
+
+                        Row(
+                            modifier = Modifier.fillMaxSize().weight(1f),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            var team1GoalNumber = 0
+                            var team2GoalNumber = 0
+
+                            Column(horizontalAlignment = Alignment.Start) {
+                                match.goals!!.forEach { goal ->
+                                    if (goal.scoreTeam1!! > team1GoalNumber){
+                                        team1GoalNumber++
+                                        Text(
+                                            text = "${goal.matchMinute}'\n${goal.goalGetterName}",
+                                            textAlign = TextAlign.Center
+                                        )
+                                    }
+
+                                }
+                            }
+                            VerticalDivider(color = Color.Black, thickness = 2.dp)
+
+                            Column(horizontalAlignment = Alignment.End) {
+                                match.goals!!.forEach { goal ->
+                                    if (goal.scoreTeam2!! > team2GoalNumber){
+                                        team2GoalNumber++
+                                        Text(
+                                            text = "${goal.matchMinute}'\n${goal.goalGetterName}",
+                                            textAlign = TextAlign.Center
+                                        )
+                                    }
+                                }
+                            }
+                        }
+
 
                     // Back button
                     Button(

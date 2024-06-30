@@ -39,6 +39,7 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.fussball_em_2024_app.model.Match
 import com.example.fussball_em_2024_app.model.Team
+import com.example.fussball_em_2024_app.utils.DateFormater.formatDate
 import com.example.fussball_em_2024_app.viewModels.MatchViewModel
 import com.example.fussball_em_2024_app.viewModels.TeamViewModel
 import java.text.SimpleDateFormat
@@ -216,16 +217,6 @@ fun MatchItems(match: Match) {
     }
 }
 
-
-// Funktion zum Konvertieren des Datums in String
-@Composable
-fun formatDate(date: Date?): String {
-    return if(date != null) {
-        SimpleDateFormat("dd.MM.yy \n'um' HH:mm 'Uhr'", Locale.GERMANY).format(date)
-    } else {
-        "Datum unbekannt"
-    }
-}
 
 @Composable
 fun TeamItem(team:Team, onTeamClick: (Team) -> Unit){
