@@ -2,6 +2,7 @@ package com.example.fussball_em_2024_app
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,6 +35,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.fussball_em_2024_app.model.Match
 import com.example.fussball_em_2024_app.model.Team
@@ -44,7 +46,7 @@ import java.util.Date
 import java.util.Locale
 
 @Composable
-fun MatchScreen(modifier: Modifier = Modifier) {
+fun MatchScreen(navController: NavController, modifier: Modifier = Modifier) {
     val teamViewModel: TeamViewModel = viewModel()
     val viewState by teamViewModel.teamState
     val nextMatchViewModel: MatchViewModel = viewModel()
@@ -73,7 +75,6 @@ fun MatchScreen(modifier: Modifier = Modifier) {
                     nextViewState.match?.let { match ->
                         NextMatchScreen(match = match)
                         Spacer(modifier = Modifier.height(16.dp))
-
                     }
 
 
@@ -85,7 +86,7 @@ fun MatchScreen(modifier: Modifier = Modifier) {
 
                     // Zeige dann die Liste der CategoryScreen Matches
                     if (viewState.list.isNotEmpty()) {
-                        TeamScreen(teams = viewState.list)
+                        TeamScreen(teams = viewState.list, navController = navController)
                     } else {
                         Text("No Such items Found.")
                     }
@@ -96,7 +97,7 @@ fun MatchScreen(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun TeamScreen(teams: List<Team>) {
+fun TeamScreen(teams: List<Team>, navController: NavController) {
 
     Column {
         Text(
@@ -110,7 +111,9 @@ fun TeamScreen(teams: List<Team>) {
         modifier = Modifier.fillMaxSize()
     ) {
         items(teams) { team ->
-            TeamItem(team = team)
+            TeamItem(team = team, onTeamClick = { selectedTeam ->
+                navController.navigate("${TeamDetail.route}/${selectedTeam.teamId}")
+            })
         }
     }
 }
@@ -219,15 +222,17 @@ fun formatDate(date: Date?): String {
 }
 
 @Composable
-fun TeamItem(team:Team){
-    Column(modifier = Modifier.padding(8.dp)) {
+fun TeamItem(team:Team, onTeamClick: (Team) -> Unit){
+    Column(modifier = Modifier
+        .padding(8.dp)
+        .clickable { onTeamClick(team) }) {
         // Oberer Teil mit den Logos
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             // Circle image with team name for team1
-            Row() {
+            Row {
                 Image(
                     painter = rememberAsyncImagePainter(model = team.teamIconUrl),
                     contentDescription = "Logo von ${team.teamName}",
