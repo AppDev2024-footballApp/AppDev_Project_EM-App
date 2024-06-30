@@ -1,6 +1,5 @@
 package com.example.fussball_em_2024_app.viewModels
 
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.State
 import androidx.lifecycle.ViewModel
@@ -8,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.fussball_em_2024_app.matchService
 import com.example.fussball_em_2024_app.model.Match
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class MatchDetailViewModelFactory(private val matchId: Int) : ViewModelProvider.Factory{
@@ -19,41 +19,40 @@ class MatchDetailViewModelFactory(private val matchId: Int) : ViewModelProvider.
     }
 }
 
-class MatchDetailViewModel(matchId: Int) : ViewModel() {
+class MatchDetailViewModel(private val matchId: Int) : ViewModel() {
     private val _matchState= mutableStateOf(SingleMatchState())
     val matchState: State<SingleMatchState> = _matchState
 
     init{
-        fetchMatches(matchId)
+        fetchMatchesPeriodically()
     }
 
-
-    private fun fetchMatches(matchId: Int){
+    private fun fetchMatchesPeriodically() {
         viewModelScope.launch {
-            try {
-                val response= matchService.getMatch(matchId)
-                if (response != null) {
-                    _matchState.value= _matchState.value.copy(
-                        match = response,
-                        loading = false,
-                        error = null
-                    )
-                }
-            }catch (e:Exception){
-                _matchState.value= _matchState.value.copy(
-                    loading = false,
-                    error = "Error fetching Match: ${e.message}"
-                )
-                Log.d("FetchError", e.message.toString())
+            while (true) {
+                fetchMatch(matchId)
+                delay(60_000)  // Fetch data every 60 seconds
             }
         }
     }
 
-
-
-
-
-
+    private suspend fun fetchMatch(matchId: Int) {
+        try {
+            val response = matchService.getMatch(matchId)
+            if (response != null) {
+                _matchState.value = _matchState.value.copy(
+                    match = response,
+                    loading = false,
+                    error = null
+                )
+            }
+        } catch (e: Exception) {
+            _matchState.value = _matchState.value.copy(
+                loading = false,
+                error = "Error fetching match: ${e.message}"
+            )
+        }
+    }
 
     data class SingleMatchState(
         val loading:Boolean= true,
