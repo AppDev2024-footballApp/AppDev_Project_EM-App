@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class FavouriteTeam(
-    @PrimaryKey val ftid: Int,
+    @PrimaryKey(autoGenerate = true) val ftid: Int = 0,
     @ColumnInfo(name = "leagueName") val leagueName: String,
     @ColumnInfo(name = "teamName") val teamName: String
 )

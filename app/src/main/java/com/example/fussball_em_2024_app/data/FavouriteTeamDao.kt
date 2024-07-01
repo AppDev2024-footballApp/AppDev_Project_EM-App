@@ -11,6 +11,9 @@ interface FavouriteTeamDao {
     @Query("SELECT * FROM favouriteTeam WHERE leagueName LIKE :league")
     fun findByLeagueName(league: String): List<FavouriteTeam>
 
+    @Query("SELECT * FROM favouriteTeam WHERE leagueName LIKE :league AND teamName LIKE :teamName")
+    fun findByLeagueAndTeamName(league: String, teamName: String) : FavouriteTeam?
+
     @Insert
     fun insert(vararg favouriteTeam: FavouriteTeam)
 

@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.room.Room
 import com.example.fussball_em_2024_app.data.AppDatabase
 import com.example.fussball_em_2024_app.entity.FavouriteTeam
+import com.example.fussball_em_2024_app.model.Team
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -35,6 +36,23 @@ class FavouriteTeamsViewModel(context: Context) : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             val favTeams = db.favouriteTeamDao().findByLeagueName(leagueName)
             _favouriteTeams.value = favTeams
+        }
+    }
+
+    fun addFavouriteTeam(team: Team) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val teamAlreadyAdded = db.favouriteTeamDao().findByLeagueAndTeamName(league = "em24", teamName = team.teamName)
+            if(teamAlreadyAdded == null){
+                db.favouriteTeamDao().insert(FavouriteTeam(leagueName = "em24", teamName = team.teamName))
+                loadFavouriteTeams("em24")
+            }
+        }
+    }
+
+    fun removeFavouriteTeam(team: FavouriteTeam) {
+        viewModelScope.launch(Dispatchers.IO) {
+            db.favouriteTeamDao().delete(team)
+            loadFavouriteTeams("em24")
         }
     }
 }
