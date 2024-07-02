@@ -1,15 +1,31 @@
 package com.example.fussball_em_2024_app.viewModels
 
+import android.content.Context
 import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.room.Room
+import com.example.fussball_em_2024_app.data.AppDatabase
+import com.example.fussball_em_2024_app.entity.FavouriteTeam
 import com.example.fussball_em_2024_app.matchService
 import com.example.fussball_em_2024_app.model.Match
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class MatchViewModel: ViewModel() {
+class MatchViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(MatchViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return MatchViewModel(context) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
+}
+
+class MatchViewModel(private val myContext: Context): ViewModel() {
     private val _nextMatchState= mutableStateOf(MatchState())
     val nextMatchState: State<MatchState> = _nextMatchState
     private val _lastMatchState= mutableStateOf(MatchState())
@@ -21,10 +37,24 @@ class MatchViewModel: ViewModel() {
     }
 
     private fun fetchNextMatch(){
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
+                val favoriteTeams = getFavoriteTeams()
+                var response: Match? = null
 
-                val response= matchService.getNextMatch()
+                for(favouriteTeam in favoriteTeams){
+                    try{
+                        val match = matchService.getNextMatchByTeam(favouriteTeam.apiTeamId)
+                        if(response == null || response.matchDateTime > match.matchDateTime)
+                            response = match
+                    }catch (e: Exception){
+                        Log.d("FetchError", e.message.toString())
+                    }
+                }
+
+                if (response == null) {
+                    response = matchService.getNextMatch()
+                }
                 if (response != null) {
                     _nextMatchState.value= _nextMatchState.value.copy(
                         match= response,
@@ -46,8 +76,22 @@ class MatchViewModel: ViewModel() {
     private fun fetchLastMatch(){
         viewModelScope.launch {
             try {
+                val favoriteTeams = getFavoriteTeams()
+                var response: Match? = null
 
-                val response= matchService.getLastMatch()
+                for(favouriteTeam in favoriteTeams){
+                    try{
+                        val match = matchService.getLastMatchByTeam(favouriteTeam.apiTeamId)
+                        if(response == null || response.matchDateTime < match.matchDateTime)
+                            response = match
+                    }catch (e: Exception){
+                        Log.d("FetchError", e.message.toString())
+                    }
+                }
+
+                if (response == null) {
+                    response = matchService.getLastMatch()
+                }
                 if (response != null) {
                     _lastMatchState.value= _lastMatchState.value.copy(
                         match= response,
@@ -64,6 +108,14 @@ class MatchViewModel: ViewModel() {
                 Log.d("FetchError", e.message.toString())
             }
         }
+    }
+
+    private suspend fun getFavoriteTeams(): List<FavouriteTeam> {
+        val db = Room.databaseBuilder(
+            context = myContext,
+            AppDatabase::class.java, "FootballAppDB"
+        ).build()
+        return db.favouriteTeamDao().findByLeagueName("em24")
     }
 
 
