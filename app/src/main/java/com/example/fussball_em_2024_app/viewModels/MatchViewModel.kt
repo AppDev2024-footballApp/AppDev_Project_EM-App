@@ -74,7 +74,7 @@ class MatchViewModel(private val myContext: Context): ViewModel() {
     }
 
     private fun fetchLastMatch(){
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 val favoriteTeams = getFavoriteTeams()
                 var response: Match? = null
