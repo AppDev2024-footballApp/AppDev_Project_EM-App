@@ -43,7 +43,7 @@ class FavouriteTeamsViewModel(context: Context) : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             val teamAlreadyAdded = db.favouriteTeamDao().findByLeagueAndTeamName(league = "em24", teamName = team.teamName)
             if(teamAlreadyAdded == null){
-                db.favouriteTeamDao().insert(FavouriteTeam(leagueName = "em24", teamName = team.teamName))
+                db.favouriteTeamDao().insert(FavouriteTeam(apiTeamId = team.teamId, leagueName = "em24", teamName = team.teamName))
                 loadFavouriteTeams("em24")
             }
         }
