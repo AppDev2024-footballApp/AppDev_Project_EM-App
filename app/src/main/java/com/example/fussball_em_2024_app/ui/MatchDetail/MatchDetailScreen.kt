@@ -1,17 +1,20 @@
 package com.example.fussball_em_2024_app.ui.MatchDetail
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
@@ -26,14 +29,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
+import com.example.fussball_em_2024_app.R
+import com.example.fussball_em_2024_app.model.Goal
 import com.example.fussball_em_2024_app.utils.DateFormater
 import com.example.fussball_em_2024_app.viewModels.MatchDetailViewModel
 import com.example.fussball_em_2024_app.viewModels.MatchDetailViewModelFactory
@@ -177,34 +188,38 @@ fun MatchDetailScreen(
                     Spacer(modifier = Modifier.height(15.dp))
 
                         Row(
-                            modifier = Modifier.fillMaxSize().weight(1f),
-                            horizontalArrangement = Arrangement.SpaceBetween
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .weight(1f),
+                            horizontalArrangement = Arrangement.Absolute.SpaceAround
                         ) {
                             var team1GoalNumber = 0
                             var team2GoalNumber = 0
 
-                            Column(horizontalAlignment = Alignment.Start) {
+                            Column(horizontalAlignment = Alignment.Start, ) {
                                 match.goals!!.forEach { goal ->
                                     if (goal.scoreTeam1!! > team1GoalNumber){
                                         team1GoalNumber++
-                                        Text(
-                                            text = "${goal.matchMinute}'\n${goal.goalGetterName}",
-                                            textAlign = TextAlign.Center
-                                        )
+                                        GoalItem(goal)
                                     }
-
+                                    else{
+                                        GoalItem(null)
+                                    }
                                 }
                             }
+
+
                             VerticalDivider(color = Color.Black, thickness = 2.dp)
+
 
                             Column(horizontalAlignment = Alignment.End) {
                                 match.goals!!.forEach { goal ->
                                     if (goal.scoreTeam2!! > team2GoalNumber){
                                         team2GoalNumber++
-                                        Text(
-                                            text = "${goal.matchMinute}'\n${goal.goalGetterName}",
-                                            textAlign = TextAlign.Center
-                                        )
+                                        GoalItem(goal)
+                                    }
+                                    else{
+                                        GoalItem(null)
                                     }
                                 }
                             }
@@ -228,4 +243,40 @@ fun MatchDetailScreen(
         }
 
     }
+}
+
+
+@Composable
+fun GoalItem(goal: Goal?) {
+    if(goal == null){
+        Spacer(modifier = Modifier.height(48.dp))
+    }else{
+        Row(horizontalArrangement = Arrangement.End) {
+            Text(
+                text = "${goal.matchMinute}'",
+            )
+        }
+        Row {
+            Image(
+                painter = painterResource(id = R.drawable.football),
+                contentDescription = "football"
+            )
+            if(goal.goalGetterName!!.length > 15){
+                Text(
+                    text = "${goal.goalGetterName}",
+                    textAlign = TextAlign.Center,
+                    fontSize = 12.sp
+                )
+            }
+            else{
+                Text(
+                    text = "${goal.goalGetterName}",
+                    textAlign = TextAlign.Center,
+                )
+            }
+        }
+
+    }
+    Spacer(modifier = Modifier.height(24.dp))
+
 }
