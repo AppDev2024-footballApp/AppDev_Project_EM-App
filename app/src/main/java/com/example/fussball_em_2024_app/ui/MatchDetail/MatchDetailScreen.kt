@@ -64,7 +64,6 @@ fun MatchDetailScreen(
     )
     val matchInfo by matchDetailViewModel.matchState
 
-    // Scroll state for vertical scrolling
     val scrollState = rememberScrollState()
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -83,7 +82,6 @@ fun MatchDetailScreen(
                         .verticalScroll(scrollState),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    // Title
                     Text(
                         text = "Game: ${match?.team1?.shortName} vs. ${match?.team2?.shortName}",
                         style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 24.sp),
@@ -108,7 +106,6 @@ fun MatchDetailScreen(
                         }
 
                         Column {
-                            // Group
                             Text(
                                 text = (if(match?.group?.groupName?.length!! > 1) match.group.groupName else "Group ${match.group.groupName}"),
                                 style = TextStyle(fontSize = 18.sp),
@@ -130,7 +127,6 @@ fun MatchDetailScreen(
                         }
                     }
 
-                    // Match State and Icon
                     if (match?.matchIsFinished == true) {
                         Text(
                             text = "Finished\n" +
@@ -138,6 +134,7 @@ fun MatchDetailScreen(
                             textAlign = TextAlign.Center,
                             modifier = Modifier.padding(bottom = 16.dp)
                         )
+                        
                     }
                     else if(DateFormater.isDateAfterNow(match!!.matchDateTimeUTC)){
                         Text(
@@ -169,7 +166,6 @@ fun MatchDetailScreen(
                     }
 
                     // goals
-                    //MatchGoalsList(teamName1 = match.team1.teamName, teamName2 = match.team2.teamName, )
                     Row(
                         modifier = Modifier.fillMaxSize(),
                         horizontalArrangement = Arrangement.SpaceEvenly
@@ -185,46 +181,23 @@ fun MatchDetailScreen(
 
                     HorizontalDivider(color = Color.Black, thickness = 3.dp)
 
-                    Spacer(modifier = Modifier.height(15.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
 
-                        Row(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .weight(1f),
-                            horizontalArrangement = Arrangement.Absolute.SpaceAround
-                        ) {
-                            var team1GoalNumber = 0
-                            var team2GoalNumber = 0
+                    var team1GoalNumber = 0
+                    var team2GoalNumber = 0
 
-                            Column(horizontalAlignment = Alignment.Start, ) {
-                                match.goals!!.forEach { goal ->
-                                    if (goal.scoreTeam1!! > team1GoalNumber){
-                                        team1GoalNumber++
-                                        GoalItem(goal)
-                                    }
-                                    else{
-                                        GoalItem(null)
-                                    }
-                                }
-                            }
-
-
-                            VerticalDivider(color = Color.Black, thickness = 2.dp)
-
-
-                            Column(horizontalAlignment = Alignment.End) {
-                                match.goals!!.forEach { goal ->
-                                    if (goal.scoreTeam2!! > team2GoalNumber){
-                                        team2GoalNumber++
-                                        GoalItem(goal)
-                                    }
-                                    else{
-                                        GoalItem(null)
-                                    }
-                                }
-                            }
+                    match.goals!!.forEach{ goal ->
+                        if (goal.scoreTeam1!! > team1GoalNumber){
+                            team1GoalNumber++
+                            GoalItem(goal, true)
                         }
-
+                        else if (goal.scoreTeam2!! > team2GoalNumber){
+                            team2GoalNumber++
+                            GoalItem(goal, false)
+                        }
+                    }
+                    
+                    Spacer(modifier = Modifier.weight(1f))
 
                     // Back button
                     Button(
@@ -247,36 +220,50 @@ fun MatchDetailScreen(
 
 
 @Composable
-fun GoalItem(goal: Goal?) {
-    if(goal == null){
-        Spacer(modifier = Modifier.height(48.dp))
-    }else{
-        Row(horizontalArrangement = Arrangement.End) {
+fun GoalItem(goal: Goal, isFirstTeam: Boolean) {
+    Column(modifier = Modifier.fillMaxSize(),horizontalAlignment = if (isFirstTeam) Alignment.Start else Alignment.End){
+        Column(modifier = Modifier.fillMaxWidth(0.5f), horizontalAlignment = if (isFirstTeam) Alignment.End else Alignment.Start) {
+            Row {
+                if (isFirstTeam){
+                    Text(
+                        text = "${goal.matchMinute}'  ",
+                    )
+                    Image(
+                        painter = painterResource(id = R.drawable.football),
+                        contentDescription = "football"
+                    )
+                }else {
+                    Image(
+                        painter = painterResource(id = R.drawable.football),
+                        contentDescription = "football"
+                    )
+                    Text(
+                        text = "  ${goal.matchMinute}'",
+                    )
+                }
+            }
+        }
+
+        if(goal.comment != null){
             Text(
-                text = "${goal.matchMinute}'",
+                text = "${goal.goalGetterName}" +
+                        "${goal.comment}",
+                textAlign = TextAlign.Center,
             )
         }
-        Row {
-            Image(
-                painter = painterResource(id = R.drawable.football),
-                contentDescription = "football"
+        else if(goal.isOwnGoal == true){
+            Text(
+                text = "${goal.goalGetterName}\n" +
+                        "(OG)",
+                textAlign = TextAlign.Center,
             )
-            if(goal.goalGetterName!!.length > 15){
-                Text(
-                    text = "${goal.goalGetterName}",
-                    textAlign = TextAlign.Center,
-                    fontSize = 12.sp
-                )
-            }
-            else{
-                Text(
-                    text = "${goal.goalGetterName}",
-                    textAlign = TextAlign.Center,
-                )
-            }
         }
-
+        else{
+            Text(
+                text = "${goal.goalGetterName}",
+                textAlign = TextAlign.Center,
+            )
+        }
+        Spacer(modifier = Modifier.height(24.dp))
     }
-    Spacer(modifier = Modifier.height(24.dp))
-
 }
