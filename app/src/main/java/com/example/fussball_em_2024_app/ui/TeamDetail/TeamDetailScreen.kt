@@ -20,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -35,7 +36,7 @@ import com.example.fussball_em_2024_app.viewModels.TeamDetailViewModel
 import com.example.fussball_em_2024_app.viewModels.TeamDetailViewModelFactory
 
 @Composable
-fun TeamDetailScreen(teamId: Int, navController: NavController, modifier: Modifier = Modifier) {
+fun TeamDetailScreen(teamId: Int, navController: NavController, textColor: Color, modifier: Modifier = Modifier) {
     val teamDetailViewModel: TeamDetailViewModel = viewModel(
         factory = TeamDetailViewModelFactory(teamId)
     )
@@ -43,7 +44,7 @@ fun TeamDetailScreen(teamId: Int, navController: NavController, modifier: Modifi
     val nextMatch by teamDetailViewModel.nextMatchState
     val lastMatch by teamDetailViewModel.lastMatchState
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = modifier.fillMaxSize()) {
         when{
             teamInfo.error != null -> {
                 Text("ERROR OCCURRED")
@@ -60,14 +61,15 @@ fun TeamDetailScreen(teamId: Int, navController: NavController, modifier: Modifi
                             text = it,
                             style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 48.sp),
                             textAlign = TextAlign.Center,
-                            modifier = Modifier.padding(bottom = 10.dp)
+                            color = textColor,
+                            modifier = modifier.padding(bottom = 10.dp)
                         )
                     }
 
                     Image(
                         painter = rememberAsyncImagePainter(model = teamInfo.teamInfo?.teamIconUrl),
                         contentDescription = "Logo von ${teamInfo.teamInfo?.teamName}",
-                        modifier = Modifier
+                        modifier = modifier
                             .size(60.dp)
                             .aspectRatio(1f)
                             .clip(CircleShape),  // Macht das Bild kreisförmig
@@ -78,7 +80,8 @@ fun TeamDetailScreen(teamId: Int, navController: NavController, modifier: Modifi
                     Text(
                         text = "Points: ${teamInfo.teamInfo?.points}",
                         style = TextStyle(fontSize = 30.sp),
-                        modifier = Modifier.padding(bottom = 16.dp)
+                        color = textColor,
+                        modifier = modifier.padding(bottom = 16.dp)
                     )
 
                     Spacer(modifier = Modifier.height(8.dp))
@@ -91,17 +94,20 @@ fun TeamDetailScreen(teamId: Int, navController: NavController, modifier: Modifi
                             Text(
                                 text = "Wins: ${teamInfo.teamInfo?.won}",
                                 style = TextStyle(fontSize = 24.sp),
-                                modifier = Modifier.padding(bottom = 8.dp)
+                                color = textColor,
+                                modifier = modifier.padding(bottom = 8.dp)
                             )
                             Text(
                                 text = "Losses: ${teamInfo.teamInfo?.lost}",
                                 style = TextStyle(fontSize = 24.sp),
-                                modifier = Modifier.padding(bottom = 8.dp)
+                                color = textColor,
+                                modifier = modifier.padding(bottom = 8.dp)
                             )
                             Text(
                                 text = "Draws: ${teamInfo.teamInfo?.draw}",
                                 style = TextStyle(fontSize = 24.sp),
-                                modifier = Modifier.padding(bottom = 8.dp)
+                                color = textColor,
+                                modifier = modifier.padding(bottom = 8.dp)
                             )
                         }
 
@@ -109,17 +115,20 @@ fun TeamDetailScreen(teamId: Int, navController: NavController, modifier: Modifi
                             Text(
                                 text = "Goals: ${teamInfo.teamInfo?.goals}",
                                 style = TextStyle(fontSize = 24.sp),
-                                modifier = Modifier.padding(bottom = 8.dp)
+                                color = textColor,
+                                modifier = modifier.padding(bottom = 8.dp)
                             )
                             Text(
                                 text = "Opponent Goals: ${teamInfo.teamInfo?.opponentGoals}",
                                 style = TextStyle(fontSize = 24.sp),
-                                modifier = Modifier.padding(bottom = 8.dp)
+                                color = textColor,
+                                modifier = modifier.padding(bottom = 8.dp)
                             )
                             Text(
                                 text = "Goal Diff: ${teamInfo.teamInfo?.goalDiff}",
                                 style = TextStyle(fontSize = 24.sp),
-                                modifier = Modifier.padding(bottom = 8.dp)
+                                color = textColor,
+                                modifier = modifier.padding(bottom = 8.dp)
                             )
                         }
                     }
@@ -127,12 +136,12 @@ fun TeamDetailScreen(teamId: Int, navController: NavController, modifier: Modifi
                     Spacer(modifier = Modifier.height(24.dp))
 
                     nextMatch.match?.let { match ->
-                        NextMatchScreen(match = match)
+                        NextMatchScreen(match = match, textColor = textColor)
                         Spacer(modifier = Modifier.height(16.dp))
                     }
 
                     lastMatch.match?.let { match ->
-                        LastMatchScreen(match = match)
+                        LastMatchScreen(match = match, textColor = textColor)
                         Spacer(modifier = Modifier.height(16.dp))
                     }
 

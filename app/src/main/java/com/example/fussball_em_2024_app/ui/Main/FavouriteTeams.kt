@@ -43,7 +43,8 @@ import com.example.fussball_em_2024_app.model.Team
 fun FavouriteTeams(leagueName: String, teams: List<Team>, onTeamClick: (Team) -> Unit,
                    viewModel: FavouriteTeamsViewModel = viewModel(
                        factory = FavouriteTeamsViewModelFactory(LocalContext.current)
-                   )){
+                   ),
+                   textColor: Color){
 
     LaunchedEffect(leagueName) {
         viewModel.loadFavouriteTeams(leagueName)
@@ -60,6 +61,7 @@ fun FavouriteTeams(leagueName: String, teams: List<Team>, onTeamClick: (Team) ->
         Text(
             text = "Favourite Teams",
             style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 18.sp),
+            color = textColor,
             modifier = Modifier.padding(bottom = 8.dp)
         )
 
@@ -93,6 +95,7 @@ fun FavouriteTeams(leagueName: String, teams: List<Team>, onTeamClick: (Team) ->
                             Text(
                                 text = team.teamName,
                                 textAlign = TextAlign.Center,
+                                color = textColor,
                                 style = TextStyle(fontSize = 14.sp)
                             )
                             Spacer(modifier = Modifier.width(8.dp))
@@ -104,7 +107,7 @@ fun FavouriteTeams(leagueName: String, teams: List<Team>, onTeamClick: (Team) ->
                                     .clickable { viewModel.removeFavouriteTeam(favTeam) },
                                 contentAlignment = Alignment.Center
                             ) {
-                                Text("-", style = TextStyle(color = Color.White, fontSize = 24.sp))
+                                Text("-", style = TextStyle(color = Color.White, fontSize = 24.sp), color = textColor)
                             }
 
                         }
@@ -127,11 +130,12 @@ fun FavouriteTeams(leagueName: String, teams: List<Team>, onTeamClick: (Team) ->
                                 .background(Color.Gray),
                             contentAlignment = Alignment.Center
                         ) {
-                            Text("+", style = TextStyle(color = Color.White, fontSize = 24.sp))
+                            Text("+", style = TextStyle(color = Color.White, fontSize = 24.sp), color = textColor)
                         }
                         Text(
                             text = "Add",
                             textAlign = TextAlign.Center,
+                            color = textColor,
                             style = TextStyle(fontSize = 14.sp)
                         )
                     }
@@ -154,11 +158,12 @@ fun FavouriteTeams(leagueName: String, teams: List<Team>, onTeamClick: (Team) ->
                         .background(Color.Gray),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text("+", style = TextStyle(color = Color.White, fontSize = 24.sp))
+                    Text("+", style = TextStyle(color = Color.White, fontSize = 24.sp), color = textColor)
                 }
                 Text(
                     text = "Add",
                     textAlign = TextAlign.Center,
+                    color = textColor,
                     style = TextStyle(fontSize = 14.sp)
                 )
             }

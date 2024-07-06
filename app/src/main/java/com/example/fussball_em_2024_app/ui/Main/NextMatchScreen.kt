@@ -15,22 +15,31 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.fussball_em_2024_app.MatchItems
 import com.example.fussball_em_2024_app.model.Match
+import com.example.fussball_em_2024_app.utils.LightDarkModeHelper
 
 @Composable
-fun NextMatchScreen(match: Match) {
+fun NextMatchScreen(match: Match, textColor: Color) {
+    val isDarkMode = LightDarkModeHelper.isDarkMode(textColor)
+    val backgroundColor = if(isDarkMode){
+        Color.Gray
+    }else{
+        Color.White
+    }
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
-            .background(color = Color.White, shape = RoundedCornerShape(4.dp)) // Abgerundete Ecke und weißer Hintergrund
+            .background(color = backgroundColor, shape = RoundedCornerShape(4.dp)) // Abgerundete Ecke und weißer Hintergrund
     ){
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
                 text = "Next Game:",
-                style = TextStyle(fontWeight = FontWeight.W300),
+                style = TextStyle(fontWeight = FontWeight.Bold),
+                color = textColor,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
-            MatchItems(match = match)
+            MatchItems(match = match, textColor = textColor)
         }
     }
 }
