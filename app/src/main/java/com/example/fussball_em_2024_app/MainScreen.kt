@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,10 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.VerticalAlignmentLine
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -39,7 +35,11 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.fussball_em_2024_app.model.Match
 import com.example.fussball_em_2024_app.model.Team
+import com.example.fussball_em_2024_app.ui.Main.FavouriteTeams
+import com.example.fussball_em_2024_app.ui.Main.LastMatchScreen
+import com.example.fussball_em_2024_app.ui.Main.NextMatchScreen
 import com.example.fussball_em_2024_app.viewModels.MatchViewModel
+import com.example.fussball_em_2024_app.viewModels.MatchViewModelFactory
 import com.example.fussball_em_2024_app.viewModels.TeamViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -49,10 +49,9 @@ import java.util.Locale
 fun MatchScreen(navController: NavController, modifier: Modifier = Modifier) {
     val teamViewModel: TeamViewModel = viewModel()
     val viewState by teamViewModel.teamState
-    val nextMatchViewModel: MatchViewModel = viewModel()
-    val nextViewState by nextMatchViewModel.nextMatchState
-    val lastMatchViewModel: MatchViewModel= viewModel()
-    val lastViewState by lastMatchViewModel.lastMatchState
+    val matchViewModel: MatchViewModel = viewModel(factory = MatchViewModelFactory(LocalContext.current))
+    val nextViewState by matchViewModel.nextMatchState
+    val lastViewState by matchViewModel.lastMatchState
 
     Box(modifier = Modifier.fillMaxSize()) {
         val backgroundColor = Color(0xFFF0F0F0)
@@ -77,12 +76,15 @@ fun MatchScreen(navController: NavController, modifier: Modifier = Modifier) {
                         Spacer(modifier = Modifier.height(16.dp))
                     }
 
-
                     lastViewState.match?.let { match ->
                         LastMatchScreen(match = match)
                         Spacer(modifier = Modifier.height(16.dp))
                     }
 
+                    // Favourite Teams Section
+                    FavouriteTeams("em24", viewState.list, { selectedTeam ->
+                        navController.navigate("${TeamDetail.route}/${selectedTeam.teamId}")
+                    })
 
                     // Zeige dann die Liste der CategoryScreen Matches
                     if (viewState.list.isNotEmpty()) {
@@ -114,47 +116,6 @@ fun TeamScreen(teams: List<Team>, navController: NavController) {
             TeamItem(team = team, onTeamClick = { selectedTeam ->
                 navController.navigate("${TeamDetail.route}/${selectedTeam.teamId}")
             })
-        }
-    }
-}
-
-@Composable
-fun NextMatchScreen(match: Match) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-            .background(color = Color.White, shape = RoundedCornerShape(4.dp)) // Abgerundete Ecke und weißer Hintergrund
-    ){
-    Column(modifier = Modifier.padding(16.dp)) {
-        Text(
-            text = "Next Game:",
-            style = TextStyle(fontWeight = FontWeight.W300),
-            modifier = Modifier.padding(bottom = 8.dp)
-        )
-        MatchItems(match = match)
-    }
-}
-}
-
-@Composable
-fun LastMatchScreen(match: Match) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-            .background(
-                color = Color.White,
-                shape = RoundedCornerShape(4.dp)
-            )
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(
-                text = "Last Game",
-                style = TextStyle(fontWeight = FontWeight.Bold),
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
-            MatchItems(match = match)
         }
     }
 }
