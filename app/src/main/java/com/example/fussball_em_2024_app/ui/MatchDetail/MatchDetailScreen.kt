@@ -1,5 +1,6 @@
 package com.example.fussball_em_2024_app.ui.MatchDetail
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -23,7 +24,12 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -44,10 +50,14 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.fussball_em_2024_app.R
+import com.example.fussball_em_2024_app.getMatchData
 import com.example.fussball_em_2024_app.model.Goal
+import com.example.fussball_em_2024_app.model.OpenAIResponse
 import com.example.fussball_em_2024_app.utils.DateFormater
 import com.example.fussball_em_2024_app.viewModels.MatchDetailViewModel
 import com.example.fussball_em_2024_app.viewModels.MatchDetailViewModelFactory
+import kotlinx.coroutines.launch
+import org.json.JSONObject
 import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.util.Date
@@ -64,7 +74,44 @@ fun MatchDetailScreen(
     )
     val matchInfo by matchDetailViewModel.matchState
 
-    val scrollState = rememberScrollState()
+    var prediction by remember { mutableStateOf("Loading...") }
+    val coroutineScope = rememberCoroutineScope()
+
+    // Fetch prediction
+    LaunchedEffect(matchInfo.match) {
+        coroutineScope.launch {
+            try {
+                val team1Name = matchInfo.match?.team1?.teamName ?: "Unknown"
+                val team2Name = matchInfo.match?.team2?.teamName ?: "Unknown"
+                val prompt = """
+                Generate a JSON object for the expected outcome of the match between $team1Name and $team2Name. The JSON should have the following structure:
+                {
+                    "team1": "$team1Name",
+                    "team2": "$team2Name",
+                    "expectedOutcome": {
+                        "team1Score": <integer>,
+                        "team2Score": <integer>,
+                        "summary": <string>
+                    }
+                }
+                """.trimIndent()
+                val data: OpenAIResponse? = getMatchData(prompt)
+                val jsonString = data?.choices?.firstOrNull()?.message?.content ?: "{}"
+                Log.d("OpenAIResponse", jsonString)  // Log the response
+                val jsonObject = JSONObject(jsonString)
+                val team1 = jsonObject.optString("team1", "Unknown")
+                val team2 = jsonObject.optString("team2", "Unknown")
+                val expectedOutcome = jsonObject.optJSONObject("expectedOutcome")
+                val team1Score = expectedOutcome?.optInt("team1Score", 0) ?: 0
+                val team2Score = expectedOutcome?.optInt("team2Score", 0) ?: 0
+
+                prediction = "$team1 $team1Score - $team2Score $team2"
+            } catch (e: Exception) {
+                e.printStackTrace()
+                prediction = "Error fetching prediction"
+            }
+        }
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
         when {
@@ -79,7 +126,7 @@ fun MatchDetailScreen(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(16.dp)
-                        .verticalScroll(scrollState),
+                        .verticalScroll(rememberScrollState()),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
@@ -92,7 +139,7 @@ fun MatchDetailScreen(
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
-                    ){
+                    ) {
                         Column(horizontalAlignment = Alignment.Start) {
                             Image(
                                 painter = rememberAsyncImagePainter(model = match?.team1?.teamIconUrl),
@@ -100,14 +147,14 @@ fun MatchDetailScreen(
                                 modifier = Modifier
                                     .size(60.dp)
                                     .aspectRatio(1f)
-                                    .clip(CircleShape),  // Macht das Bild kreisförmig
+                                    .clip(CircleShape),
                                 contentScale = ContentScale.Crop
                             )
                         }
 
                         Column {
                             Text(
-                                text = (if(match?.group?.groupName?.length!! > 1) match.group.groupName else "Group ${match.group.groupName}"),
+                                text = if (match?.group?.groupName?.length!! > 1) match.group.groupName else "Group ${match.group.groupName}",
                                 style = TextStyle(fontSize = 18.sp),
                                 textAlign = TextAlign.Center,
                                 modifier = Modifier.padding(bottom = 16.dp)
@@ -121,7 +168,7 @@ fun MatchDetailScreen(
                                 modifier = Modifier
                                     .size(60.dp)
                                     .aspectRatio(1f)
-                                    .clip(CircleShape),  // Macht das Bild kreisförmig
+                                    .clip(CircleShape),
                                 contentScale = ContentScale.Crop
                             )
                         }
@@ -134,16 +181,13 @@ fun MatchDetailScreen(
                             textAlign = TextAlign.Center,
                             modifier = Modifier.padding(bottom = 16.dp)
                         )
-                        
-                    }
-                    else if(DateFormater.isDateAfterNow(match!!.matchDateTimeUTC)){
+                    } else if (DateFormater.isDateAfterNow(match!!.matchDateTimeUTC)) {
                         Text(
                             text = "Ongoing",
                             textAlign = TextAlign.Center,
                             modifier = Modifier.padding(bottom = 16.dp)
                         )
-                    }
-                    else{
+                    } else {
                         Text(
                             text = "Not Started\n" +
                                     "Starting at: ${DateFormater.formatDate(match.matchDateTime)}",
@@ -157,13 +201,32 @@ fun MatchDetailScreen(
                         textAlign = TextAlign.Center,
                         modifier = Modifier.padding(bottom = 16.dp)
                     )
-                    if (match.numberOfViewers != null){
+                    if (match.numberOfViewers != null) {
                         Text(
                             text = "Number of Viewers: ${match.numberOfViewers}",
                             textAlign = TextAlign.Center,
                             modifier = Modifier.padding(bottom = 16.dp)
                         )
                     }
+
+
+
+                    if (match.matchIsFinished) {
+                        Text(
+                            text = "Result: ${match.team1.teamName} ${match.goals?.lastOrNull()?.scoreTeam1} - ${match.goals?.lastOrNull()?.scoreTeam2} ${match.team2.teamName}",
+                            style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp),
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(bottom = 16.dp)
+                        )
+                    }
+
+                    // Display prediction
+                    Text(
+                        text = "Prediction: $prediction",
+                        style = TextStyle(fontWeight = FontWeight.SemiBold, fontSize = 20.sp),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(bottom = 16.dp)
+                    )
 
                     // goals
                     Row(
@@ -186,17 +249,16 @@ fun MatchDetailScreen(
                     var team1GoalNumber = 0
                     var team2GoalNumber = 0
 
-                    match.goals!!.forEach{ goal ->
-                        if (goal.scoreTeam1!! > team1GoalNumber){
+                    match.goals!!.forEach { goal ->
+                        if (goal.scoreTeam1!! > team1GoalNumber) {
                             team1GoalNumber++
                             GoalItem(goal, true)
-                        }
-                        else if (goal.scoreTeam2!! > team2GoalNumber){
+                        } else if (goal.scoreTeam2!! > team2GoalNumber) {
                             team2GoalNumber++
                             GoalItem(goal, false)
                         }
                     }
-                    
+
                     Spacer(modifier = Modifier.weight(1f))
 
                     // Back button
@@ -204,7 +266,6 @@ fun MatchDetailScreen(
                         onClick = { navController.popBackStack() },
                         modifier = Modifier
                             .align(Alignment.CenterHorizontally)
-
                             .padding(top = 16.dp)
                     ) {
                         Text("Go back")
@@ -218,13 +279,12 @@ fun MatchDetailScreen(
     }
 }
 
-
 @Composable
 fun GoalItem(goal: Goal, isFirstTeam: Boolean) {
-    Column(modifier = Modifier.fillMaxSize(),horizontalAlignment = if (isFirstTeam) Alignment.Start else Alignment.End){
+    Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = if (isFirstTeam) Alignment.Start else Alignment.End) {
         Column(modifier = Modifier.fillMaxWidth(0.5f), horizontalAlignment = if (isFirstTeam) Alignment.End else Alignment.Start) {
             Row {
-                if (isFirstTeam){
+                if (isFirstTeam) {
                     Text(
                         text = "${goal.matchMinute}'  ",
                     )
@@ -232,7 +292,7 @@ fun GoalItem(goal: Goal, isFirstTeam: Boolean) {
                         painter = painterResource(id = R.drawable.football),
                         contentDescription = "football"
                     )
-                }else {
+                } else {
                     Image(
                         painter = painterResource(id = R.drawable.football),
                         contentDescription = "football"
@@ -244,21 +304,19 @@ fun GoalItem(goal: Goal, isFirstTeam: Boolean) {
             }
         }
 
-        if(goal.comment != null){
+        if (goal.comment != null) {
             Text(
                 text = "${goal.goalGetterName}" +
                         "${goal.comment}",
                 textAlign = TextAlign.Center,
             )
-        }
-        else if(goal.isOwnGoal == true){
+        } else if (goal.isOwnGoal == true) {
             Text(
                 text = "${goal.goalGetterName}\n" +
                         "(OG)",
                 textAlign = TextAlign.Center,
             )
-        }
-        else{
+        } else {
             Text(
                 text = "${goal.goalGetterName}",
                 textAlign = TextAlign.Center,
