@@ -15,19 +15,24 @@ import retrofit2.http.Headers
 import retrofit2.http.POST
 import java.io.IOException
 
+val apiKey = System.getenv("OPENAI_API_KEY")
+
+
 val openAIRetrofit = Retrofit.Builder()
     .baseUrl("https://api.openai.com/v1/")
     .client(
         OkHttpClient.Builder().addInterceptor { chain ->
             val request = chain.request().newBuilder()
-                .addHeader("Authorization", "Bearer ${System.getenv("OPENAI_API_KEY")}")
+                .addHeader("Authorization", "Bearer $apiKey")
                 .build()
             chain.proceed(request)
         }.build()
     )
     .addConverterFactory(GsonConverterFactory.create())
     .build()
-// OpenAI
+
+
+
 val openAIService = openAIRetrofit.create(OpenAIService::class.java)
 
 interface OpenAIService {
