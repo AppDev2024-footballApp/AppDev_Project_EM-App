@@ -27,7 +27,7 @@ val openAIRetrofit = Retrofit.Builder()
     )
     .addConverterFactory(GsonConverterFactory.create())
     .build()
-
+// OpenAI
 val openAIService = openAIRetrofit.create(OpenAIService::class.java)
 
 interface OpenAIService {
