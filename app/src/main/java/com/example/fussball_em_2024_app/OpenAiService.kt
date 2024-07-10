@@ -15,8 +15,8 @@ import retrofit2.http.Headers
 import retrofit2.http.POST
 import java.io.IOException
 
-val apiKey = System.getenv("OPENAI_API_KEY")
 
+val apiKey = BuildConfig.OPENAI_API_KEY
 
 val openAIRetrofit = Retrofit.Builder()
     .baseUrl("https://api.openai.com/v1/")
@@ -30,7 +30,6 @@ val openAIRetrofit = Retrofit.Builder()
     )
     .addConverterFactory(GsonConverterFactory.create())
     .build()
-
 
 
 val openAIService = openAIRetrofit.create(OpenAIService::class.java)
