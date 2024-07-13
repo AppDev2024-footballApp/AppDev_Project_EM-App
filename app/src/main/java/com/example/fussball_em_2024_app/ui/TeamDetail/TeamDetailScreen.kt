@@ -30,13 +30,14 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
+import com.example.fussball_em_2024_app.LocalTextColor
 import com.example.fussball_em_2024_app.ui.Main.LastMatchScreen
 import com.example.fussball_em_2024_app.ui.Main.NextMatchScreen
 import com.example.fussball_em_2024_app.viewModels.TeamDetailViewModel
 import com.example.fussball_em_2024_app.viewModels.TeamDetailViewModelFactory
 
 @Composable
-fun TeamDetailScreen(teamId: Int, navController: NavController, textColor: Color, modifier: Modifier = Modifier) {
+fun TeamDetailScreen(teamId: Int, navController: NavController, modifier: Modifier = Modifier) {
     val teamDetailViewModel: TeamDetailViewModel = viewModel(
         factory = TeamDetailViewModelFactory(teamId)
     )
@@ -61,7 +62,7 @@ fun TeamDetailScreen(teamId: Int, navController: NavController, textColor: Color
                             text = it,
                             style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 48.sp),
                             textAlign = TextAlign.Center,
-                            color = textColor,
+                            color = LocalTextColor.current,
                             modifier = modifier.padding(bottom = 10.dp)
                         )
                     }
@@ -80,7 +81,7 @@ fun TeamDetailScreen(teamId: Int, navController: NavController, textColor: Color
                     Text(
                         text = "Points: ${teamInfo.teamInfo?.points}",
                         style = TextStyle(fontSize = 30.sp),
-                        color = textColor,
+                        color = LocalTextColor.current,
                         modifier = modifier.padding(bottom = 16.dp)
                     )
 
@@ -94,19 +95,19 @@ fun TeamDetailScreen(teamId: Int, navController: NavController, textColor: Color
                             Text(
                                 text = "Wins: ${teamInfo.teamInfo?.won}",
                                 style = TextStyle(fontSize = 24.sp),
-                                color = textColor,
+                                color = LocalTextColor.current,
                                 modifier = modifier.padding(bottom = 8.dp)
                             )
                             Text(
                                 text = "Losses: ${teamInfo.teamInfo?.lost}",
                                 style = TextStyle(fontSize = 24.sp),
-                                color = textColor,
+                                color = LocalTextColor.current,
                                 modifier = modifier.padding(bottom = 8.dp)
                             )
                             Text(
                                 text = "Draws: ${teamInfo.teamInfo?.draw}",
                                 style = TextStyle(fontSize = 24.sp),
-                                color = textColor,
+                                color = LocalTextColor.current,
                                 modifier = modifier.padding(bottom = 8.dp)
                             )
                         }
@@ -115,19 +116,19 @@ fun TeamDetailScreen(teamId: Int, navController: NavController, textColor: Color
                             Text(
                                 text = "Goals: ${teamInfo.teamInfo?.goals}",
                                 style = TextStyle(fontSize = 24.sp),
-                                color = textColor,
+                                color = LocalTextColor.current,
                                 modifier = modifier.padding(bottom = 8.dp)
                             )
                             Text(
                                 text = "Opponent Goals: ${teamInfo.teamInfo?.opponentGoals}",
                                 style = TextStyle(fontSize = 24.sp),
-                                color = textColor,
+                                color = LocalTextColor.current,
                                 modifier = modifier.padding(bottom = 8.dp)
                             )
                             Text(
                                 text = "Goal Diff: ${teamInfo.teamInfo?.goalDiff}",
                                 style = TextStyle(fontSize = 24.sp),
-                                color = textColor,
+                                color = LocalTextColor.current,
                                 modifier = modifier.padding(bottom = 8.dp)
                             )
                         }
@@ -136,12 +137,12 @@ fun TeamDetailScreen(teamId: Int, navController: NavController, textColor: Color
                     Spacer(modifier = Modifier.height(24.dp))
 
                     nextMatch.match?.let { match ->
-                        NextMatchScreen(match = match, textColor = textColor)
+                        NextMatchScreen(match = match)
                         Spacer(modifier = Modifier.height(16.dp))
                     }
 
                     lastMatch.match?.let { match ->
-                        LastMatchScreen(match = match, textColor = textColor)
+                        LastMatchScreen(match = match)
                         Spacer(modifier = Modifier.height(16.dp))
                     }
 

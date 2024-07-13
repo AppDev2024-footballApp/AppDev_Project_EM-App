@@ -46,7 +46,7 @@ import java.util.Date
 import java.util.Locale
 
 @Composable
-fun MatchScreen(navController: NavController, textColor: Color, modifier: Modifier = Modifier) {
+fun MatchScreen(navController: NavController, modifier: Modifier = Modifier) {
     val teamViewModel: TeamViewModel = viewModel()
     val viewState by teamViewModel.teamState
     val matchViewModel: MatchViewModel = viewModel(factory = MatchViewModelFactory(LocalContext.current))
@@ -60,7 +60,7 @@ fun MatchScreen(navController: NavController, textColor: Color, modifier: Modifi
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
             }
             viewState.error != null -> {
-                Text("ERROR OCCURRED", color = textColor)
+                Text("ERROR OCCURRED", color = LocalTextColor.current)
             }
             else -> {
                 Column (
@@ -70,25 +70,25 @@ fun MatchScreen(navController: NavController, textColor: Color, modifier: Modifi
                 {
                     // Zeige zuerst den nächsten Match an
                     nextViewState.match?.let { match ->
-                        NextMatchScreen(match = match, textColor = textColor)
+                        NextMatchScreen(match = match)
                         Spacer(modifier = Modifier.height(16.dp))
                     }
 
                     lastViewState.match?.let { match ->
-                        LastMatchScreen(match = match, textColor = textColor)
+                        LastMatchScreen(match = match)
                         Spacer(modifier = Modifier.height(16.dp))
                     }
 
                     // Favourite Teams Section
                     FavouriteTeams("em24", viewState.list, { selectedTeam ->
                         navController.navigate("${TeamDetail.route}/${selectedTeam.teamId}")
-                    }, textColor = textColor)
+                    })
 
                     // Zeige dann die Liste der CategoryScreen Matches
                     if (viewState.list.isNotEmpty()) {
-                        TeamScreen(teams = viewState.list, navController = navController, textColor)
+                        TeamScreen(teams = viewState.list, navController = navController, LocalTextColor.current)
                     } else {
-                        Text("No Such items Found.", color = textColor)
+                        Text("No Such items Found.", color = LocalTextColor.current)
                     }
                 }
             }

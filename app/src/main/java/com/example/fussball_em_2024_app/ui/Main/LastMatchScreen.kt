@@ -13,14 +13,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.fussball_em_2024_app.LocalTextColor
 import com.example.fussball_em_2024_app.MatchItems
 import com.example.fussball_em_2024_app.R
 import com.example.fussball_em_2024_app.model.Match
 import com.example.fussball_em_2024_app.utils.LightDarkModeHelper
 
 @Composable
-fun LastMatchScreen(match: Match, textColor: Color) {
-    val isDarkMode = LightDarkModeHelper.isDarkMode(textColor)
+fun LastMatchScreen(match: Match) {
+    val isDarkMode = LightDarkModeHelper.isDarkMode(LocalTextColor.current)
     val backgroundColor = if(isDarkMode){
         Color.Gray
     }else{
@@ -40,10 +41,10 @@ fun LastMatchScreen(match: Match, textColor: Color) {
             Text(
                 text = "Last Game",
                 style = TextStyle(fontWeight = FontWeight.Bold),
-                color = textColor,
+                color = LocalTextColor.current,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
-            MatchItems(match = match, textColor = textColor)
+            MatchItems(match = match, textColor = LocalTextColor.current)
         }
     }
 }
