@@ -20,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -29,8 +30,9 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
-import com.example.fussball_em_2024_app.LastMatchScreen
-import com.example.fussball_em_2024_app.NextMatchScreen
+import com.example.fussball_em_2024_app.LocalTextColor
+import com.example.fussball_em_2024_app.ui.Main.LastMatchScreen
+import com.example.fussball_em_2024_app.ui.Main.NextMatchScreen
 import com.example.fussball_em_2024_app.viewModels.TeamDetailViewModel
 import com.example.fussball_em_2024_app.viewModels.TeamDetailViewModelFactory
 
@@ -43,7 +45,7 @@ fun TeamDetailScreen(teamId: Int, navController: NavController, modifier: Modifi
     val nextMatch by teamDetailViewModel.nextMatchState
     val lastMatch by teamDetailViewModel.lastMatchState
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = modifier.fillMaxSize()) {
         when{
             teamInfo.error != null -> {
                 Text("ERROR OCCURRED")
@@ -54,77 +56,46 @@ fun TeamDetailScreen(teamId: Int, navController: NavController, modifier: Modifi
                         .padding(16.dp)
                         .fillMaxSize(),
                     horizontalAlignment = Alignment.CenterHorizontally) {
-                    // Team name as a headline
-                    teamInfo.teamInfo?.teamName?.let {
-                        Text(
-                            text = it,
-                            style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 48.sp),
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.padding(bottom = 10.dp)
-                        )
-                    }
 
-                    Image(
-                        painter = rememberAsyncImagePainter(model = teamInfo.teamInfo?.teamIconUrl),
-                        contentDescription = "Logo von ${teamInfo.teamInfo?.teamName}",
-                        modifier = Modifier
-                            .size(60.dp)
-                            .aspectRatio(1f)
-                            .clip(CircleShape),  // Macht das Bild kreisförmig
-                        contentScale = ContentScale.Crop
-                    )
-
-                    // Team details
-                    Text(
-                        text = "Points: ${teamInfo.teamInfo?.points}",
-                        style = TextStyle(fontSize = 30.sp),
-                        modifier = Modifier.padding(bottom = 16.dp)
-                    )
-
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceAround
-                    ){
-                        Column {
-                            Text(
-                                text = "Wins: ${teamInfo.teamInfo?.won}",
-                                style = TextStyle(fontSize = 24.sp),
-                                modifier = Modifier.padding(bottom = 8.dp)
-                            )
-                            Text(
-                                text = "Losses: ${teamInfo.teamInfo?.lost}",
-                                style = TextStyle(fontSize = 24.sp),
-                                modifier = Modifier.padding(bottom = 8.dp)
-                            )
-                            Text(
-                                text = "Draws: ${teamInfo.teamInfo?.draw}",
-                                style = TextStyle(fontSize = 24.sp),
-                                modifier = Modifier.padding(bottom = 8.dp)
-                            )
+                    when{
+                        teamInfo.teamInfo == null -> {
+                            Text("ERROR OCCURRED")
                         }
+                        else -> {
+                            // Team name as a headline
+                            Text(
+                                text = teamInfo.teamInfo!!.teamName,
+                                style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 48.sp),
+                                textAlign = TextAlign.Center,
+                                color = LocalTextColor.current,
+                                modifier = modifier.padding(bottom = 10.dp)
+                            )
 
-                        Column {
-                            Text(
-                                text = "Goals: ${teamInfo.teamInfo?.goals}",
-                                style = TextStyle(fontSize = 24.sp),
-                                modifier = Modifier.padding(bottom = 8.dp)
+                            Image(
+                                painter = rememberAsyncImagePainter(model = teamInfo.teamInfo?.teamIconUrl),
+                                contentDescription = "Logo von ${teamInfo.teamInfo?.teamName}",
+                                modifier = modifier
+                                    .size(60.dp)
+                                    .aspectRatio(1f)
+                                    .clip(CircleShape),  // Macht das Bild kreisförmig
+                                contentScale = ContentScale.Crop
                             )
+
+                            // Team details
                             Text(
-                                text = "Opponent Goals: ${teamInfo.teamInfo?.opponentGoals}",
-                                style = TextStyle(fontSize = 24.sp),
-                                modifier = Modifier.padding(bottom = 8.dp)
+                                text = "Points: ${teamInfo.teamInfo?.points}",
+                                style = TextStyle(fontSize = 30.sp),
+                                color = LocalTextColor.current,
+                                modifier = modifier.padding(bottom = 16.dp)
                             )
-                            Text(
-                                text = "Goal Diff: ${teamInfo.teamInfo?.goalDiff}",
-                                style = TextStyle(fontSize = 24.sp),
-                                modifier = Modifier.padding(bottom = 8.dp)
-                            )
+
+                            Spacer(modifier = Modifier.height(8.dp))
+
+                            // Team Points & Goal Points
+                            TeamPoints(teamInfo = teamInfo.teamInfo!!, modifier)
+                            Spacer(modifier = Modifier.height(24.dp))
                         }
                     }
-
-                    Spacer(modifier = Modifier.height(24.dp))
 
                     nextMatch.match?.let { match ->
                         NextMatchScreen(match = match, navController)

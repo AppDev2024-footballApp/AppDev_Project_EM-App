@@ -28,9 +28,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.VerticalAlignmentLine
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -40,7 +39,11 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.fussball_em_2024_app.model.Match
 import com.example.fussball_em_2024_app.model.Team
 import com.example.fussball_em_2024_app.utils.DateFormater.formatDate
+import com.example.fussball_em_2024_app.ui.Main.FavouriteTeams
+import com.example.fussball_em_2024_app.ui.Main.LastMatchScreen
+import com.example.fussball_em_2024_app.ui.Main.NextMatchScreen
 import com.example.fussball_em_2024_app.viewModels.MatchViewModel
+import com.example.fussball_em_2024_app.viewModels.MatchViewModelFactory
 import com.example.fussball_em_2024_app.viewModels.TeamViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -50,26 +53,23 @@ import java.util.Locale
 fun MatchScreen(navController: NavController, modifier: Modifier = Modifier) {
     val teamViewModel: TeamViewModel = viewModel()
     val viewState by teamViewModel.teamState
-    val nextMatchViewModel: MatchViewModel = viewModel()
-    val nextViewState by nextMatchViewModel.nextMatchState
-    val lastMatchViewModel: MatchViewModel= viewModel()
-    val lastViewState by lastMatchViewModel.lastMatchState
+    val matchViewModel: MatchViewModel = viewModel(factory = MatchViewModelFactory(LocalContext.current))
+    val nextViewState by matchViewModel.nextMatchState
+    val lastViewState by matchViewModel.lastMatchState
 
     Box(modifier = Modifier.fillMaxSize()) {
-        val backgroundColor = Color(0xFFF0F0F0)
         when {
             viewState.loading -> {
                 // Zeigt den Ladekreis in der Mitte des Bildschirms an
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
             }
             viewState.error != null -> {
-                Text("ERROR OCCURRED")
+                Text("ERROR OCCURRED", color = LocalTextColor.current)
             }
             else -> {
                 Column (
                     modifier = modifier
                         .fillMaxSize()
-                        .background(color = backgroundColor)
                 )
                 {
                     // Zeige zuerst den nächsten Match an
@@ -78,12 +78,15 @@ fun MatchScreen(navController: NavController, modifier: Modifier = Modifier) {
                         Spacer(modifier = Modifier.height(16.dp))
                     }
 
-
                     lastViewState.match?.let { match ->
                         LastMatchScreen(match = match, navController = navController)
                         Spacer(modifier = Modifier.height(16.dp))
                     }
 
+                    // Favourite Teams Section
+                    FavouriteTeams("em24", viewState.list, { selectedTeam ->
+                        navController.navigate("${TeamDetail.route}/${selectedTeam.teamId}")
+                    })
 
                     // Zeige dann die Liste der CategoryScreen Matches
                     if (viewState.list.isNotEmpty()) {
@@ -102,7 +105,7 @@ fun TeamScreen(teams: List<Team>, navController: NavController) {
 
     Column {
         Text(
-            text="All Teams"
+            text="All Teams", color = LocalTextColor.current
         )
     }
 
@@ -114,7 +117,7 @@ fun TeamScreen(teams: List<Team>, navController: NavController) {
         items(teams) { team ->
             TeamItem(team = team, onTeamClick = { selectedTeam ->
                 navController.navigate("${TeamDetail.route}/${selectedTeam.teamId}")
-            })
+            }, textColor = LocalTextColor.current)
         }
     }
 }
@@ -187,13 +190,15 @@ fun MatchItems(match: Match) {
                 )
                 Text(
                     text = match.team1.teamName,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
+                    color = LocalTextColor.current
                 )
             }
 
             // Datum des Spiels in der Mitte
             Text(
                 text = formatDate(match.matchDateTime),  // Datum formatieren nach Bedarf
+                color = LocalTextColor.current,
                 modifier = Modifier.align(Alignment.CenterVertically)
             )
 
@@ -210,7 +215,8 @@ fun MatchItems(match: Match) {
                 )
                 Text(
                     text = match.team2.teamName,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
+                    color = LocalTextColor.current
                 )
             }
         }
@@ -219,7 +225,7 @@ fun MatchItems(match: Match) {
 
 
 @Composable
-fun TeamItem(team:Team, onTeamClick: (Team) -> Unit){
+fun TeamItem(team:Team, onTeamClick: (Team) -> Unit, textColor: Color){
     Column(modifier = Modifier
         .padding(8.dp)
         .clickable { onTeamClick(team) }) {
@@ -243,14 +249,14 @@ fun TeamItem(team:Team, onTeamClick: (Team) -> Unit){
                     team.teamGroupName?.let {
                         Text(
                             text= it,
-                            textAlign = TextAlign.Center
-
+                            textAlign = TextAlign.Center,
+                            color = textColor
                             )
                     }
                     Text(
                         text = team.teamName,
-                        textAlign = TextAlign.Center
-
+                        textAlign = TextAlign.Center,
+                        color = textColor
                     )
                 }
 
