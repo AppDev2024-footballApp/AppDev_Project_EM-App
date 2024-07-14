@@ -59,14 +59,14 @@ fun FussballEMApp(lightData: LiveData<Float>){
                     route = TeamDetail.routeWithArgs,
                     arguments = TeamDetail.arguments){ backStackEntry ->
                     val teamId = backStackEntry.arguments?.getInt(TeamDetail.teamIdArg) ?: 0
-                    TeamDetailScreen(teamId = teamId, navController)
+                    TeamDetailScreen(teamId = teamId, navController, modifier)
                 }
 
                 composable(
                     route = MatchDetail.routeWithArgs,
                     arguments = MatchDetail.arguments){ backStackEntry ->
                     val matchId = backStackEntry.arguments?.getInt(MatchDetail.matchIdArg) ?: 0
-                    MatchDetailScreen(matchId = matchId, navController)
+                    MatchDetailScreen(matchId = matchId, navController, modifier)
                 }
             }
         }

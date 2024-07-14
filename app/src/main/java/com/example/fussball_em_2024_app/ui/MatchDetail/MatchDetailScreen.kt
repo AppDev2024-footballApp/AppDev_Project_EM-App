@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
+import com.example.fussball_em_2024_app.LocalTextColor
 import com.example.fussball_em_2024_app.R
 import com.example.fussball_em_2024_app.model.Goal
 import com.example.fussball_em_2024_app.utils.DateFormater
@@ -54,10 +55,10 @@ fun MatchDetailScreen(
 
     val scrollState = rememberScrollState()
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = modifier.fillMaxSize()) {
         when {
             matchInfo.error != null || matchInfo.match == null -> {
-                Text("ERROR OCCURRED")
+                Text("ERROR OCCURRED", color = LocalTextColor.current)
             }
 
             else -> {
@@ -74,6 +75,7 @@ fun MatchDetailScreen(
                         text = "Game: ${match?.team1?.shortName} vs. ${match?.team2?.shortName}",
                         style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 24.sp),
                         textAlign = TextAlign.Center,
+                        color = LocalTextColor.current,
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
 
@@ -98,6 +100,7 @@ fun MatchDetailScreen(
                                 text = (if(match?.group?.groupName?.length!! > 1) match.group.groupName else "Group ${match.group.groupName}"),
                                 style = TextStyle(fontSize = 18.sp),
                                 textAlign = TextAlign.Center,
+                                color = LocalTextColor.current,
                                 modifier = Modifier.padding(bottom = 16.dp)
                             )
                         }
@@ -120,6 +123,7 @@ fun MatchDetailScreen(
                             text = "Finished\n" +
                                     "Started: ${DateFormater.formatDate(match.matchDateTime)}",
                             textAlign = TextAlign.Center,
+                            color = LocalTextColor.current,
                             modifier = Modifier.padding(bottom = 16.dp)
                         )
                         
@@ -128,6 +132,7 @@ fun MatchDetailScreen(
                         Text(
                             text = "Ongoing",
                             textAlign = TextAlign.Center,
+                            color = LocalTextColor.current,
                             modifier = Modifier.padding(bottom = 16.dp)
                         )
                     }
@@ -136,6 +141,7 @@ fun MatchDetailScreen(
                             text = "Not Started\n" +
                                     "Starting at: ${DateFormater.formatDate(match.matchDateTime)}",
                             textAlign = TextAlign.Center,
+                            color = LocalTextColor.current,
                             modifier = Modifier.padding(bottom = 16.dp)
                         )
                     }
@@ -143,12 +149,14 @@ fun MatchDetailScreen(
                     Text(
                         text = "Stadion: ${match.location?.locationStadium} (${match.location?.locationCity})",
                         textAlign = TextAlign.Center,
+                        color = LocalTextColor.current,
                         modifier = Modifier.padding(bottom = 16.dp)
                     )
                     if (match.numberOfViewers != null){
                         Text(
                             text = "Number of Viewers: ${match.numberOfViewers}",
                             textAlign = TextAlign.Center,
+                            color = LocalTextColor.current,
                             modifier = Modifier.padding(bottom = 16.dp)
                         )
                     }
@@ -159,11 +167,11 @@ fun MatchDetailScreen(
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
                         Column(horizontalAlignment = Alignment.Start) {
-                            Text(match.team1.teamName)
+                            Text(match.team1.teamName, color = LocalTextColor.current)
                         }
 
                         Column(horizontalAlignment = Alignment.End) {
-                            Text(match.team2.teamName)
+                            Text(match.team2.teamName, color = LocalTextColor.current)
                         }
                     }
 
@@ -195,7 +203,7 @@ fun MatchDetailScreen(
 
                             .padding(top = 16.dp)
                     ) {
-                        Text("Go back")
+                        Text("Go back", color = LocalTextColor.current,)
                     }
 
                 }
@@ -215,6 +223,7 @@ fun GoalItem(goal: Goal, isFirstTeam: Boolean) {
                 if (isFirstTeam){
                     Text(
                         text = "${goal.matchMinute}'  ",
+                        color = LocalTextColor.current
                     )
                     Image(
                         painter = painterResource(id = R.drawable.football),
@@ -227,6 +236,7 @@ fun GoalItem(goal: Goal, isFirstTeam: Boolean) {
                     )
                     Text(
                         text = "  ${goal.matchMinute}'",
+                        color = LocalTextColor.current
                     )
                 }
             }
@@ -237,6 +247,7 @@ fun GoalItem(goal: Goal, isFirstTeam: Boolean) {
                 text = "${goal.goalGetterName}" +
                         "${goal.comment}",
                 textAlign = TextAlign.Center,
+                color = LocalTextColor.current
             )
         }
         else if(goal.isOwnGoal == true){
@@ -244,12 +255,14 @@ fun GoalItem(goal: Goal, isFirstTeam: Boolean) {
                 text = "${goal.goalGetterName}\n" +
                         "(OG)",
                 textAlign = TextAlign.Center,
+                color = LocalTextColor.current
             )
         }
         else{
             Text(
                 text = "${goal.goalGetterName}",
                 textAlign = TextAlign.Center,
+                color = LocalTextColor.current
             )
         }
         Spacer(modifier = Modifier.height(24.dp))
