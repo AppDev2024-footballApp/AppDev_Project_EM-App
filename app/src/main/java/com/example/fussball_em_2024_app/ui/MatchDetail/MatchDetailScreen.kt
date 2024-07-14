@@ -119,46 +119,19 @@ fun MatchDetailScreen(
                     }
 
                     if (match?.matchIsFinished == true) {
-                        Text(
-                            text = "Finished\n" +
-                                    "Started: ${DateFormater.formatDate(match.matchDateTime)}",
-                            textAlign = TextAlign.Center,
-                            color = LocalTextColor.current,
-                            modifier = Modifier.padding(bottom = 16.dp)
-                        )
-                        
+                        TextDetailMatchInformation(text = "Finished\n" + "Started: ${DateFormater.formatDate(match.matchDateTime)}")
                     }
                     else if(DateFormater.isDateAfterNow(match!!.matchDateTimeUTC)){
-                        Text(
-                            text = "Ongoing",
-                            textAlign = TextAlign.Center,
-                            color = LocalTextColor.current,
-                            modifier = Modifier.padding(bottom = 16.dp)
-                        )
+                        TextDetailMatchInformation(text = "Ongoing")
                     }
                     else{
-                        Text(
-                            text = "Not Started\n" +
-                                    "Starting at: ${DateFormater.formatDate(match.matchDateTime)}",
-                            textAlign = TextAlign.Center,
-                            color = LocalTextColor.current,
-                            modifier = Modifier.padding(bottom = 16.dp)
-                        )
+                        TextDetailMatchInformation(text = "Not Started\n" + "Starting at: ${DateFormater.formatDate(match.matchDateTime)}")
                     }
 
-                    Text(
-                        text = "Stadion: ${match.location?.locationStadium} (${match.location?.locationCity})",
-                        textAlign = TextAlign.Center,
-                        color = LocalTextColor.current,
-                        modifier = Modifier.padding(bottom = 16.dp)
-                    )
+                    TextDetailMatchInformation(text = "Stadion: ${match.location?.locationStadium} (${match.location?.locationCity})")
+
                     if (match.numberOfViewers != null){
-                        Text(
-                            text = "Number of Viewers: ${match.numberOfViewers}",
-                            textAlign = TextAlign.Center,
-                            color = LocalTextColor.current,
-                            modifier = Modifier.padding(bottom = 16.dp)
-                        )
+                        TextDetailMatchInformation(text = "Number of Viewers: ${match.numberOfViewers}")
                     }
 
                     // goals
@@ -267,4 +240,15 @@ fun GoalItem(goal: Goal, isFirstTeam: Boolean) {
         }
         Spacer(modifier = Modifier.height(24.dp))
     }
+}
+
+
+@Composable
+fun TextDetailMatchInformation(text: String){
+    Text(
+        text = text,
+        textAlign = TextAlign.Center,
+        color = LocalTextColor.current,
+        modifier = Modifier.padding(bottom = 16.dp)
+    )
 }
