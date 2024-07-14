@@ -76,6 +76,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.room.common)
     implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.runtime.livedata)
 
     // https://stackoverflow.com/questions/46665621/android-room-persistent-appdatabase-impl-does-not-exist
     kapt("androidx.room:room-compiler:2.6.1")

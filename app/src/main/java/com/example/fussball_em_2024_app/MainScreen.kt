@@ -54,20 +54,18 @@ fun MatchScreen(navController: NavController, modifier: Modifier = Modifier) {
     val lastViewState by matchViewModel.lastMatchState
 
     Box(modifier = Modifier.fillMaxSize()) {
-        val backgroundColor = Color(0xFFF0F0F0)
         when {
             viewState.loading -> {
                 // Zeigt den Ladekreis in der Mitte des Bildschirms an
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
             }
             viewState.error != null -> {
-                Text("ERROR OCCURRED")
+                Text("ERROR OCCURRED", color = LocalTextColor.current)
             }
             else -> {
                 Column (
                     modifier = modifier
                         .fillMaxSize()
-                        .background(color = backgroundColor)
                 )
                 {
                     // Zeige zuerst den nächsten Match an
@@ -88,9 +86,9 @@ fun MatchScreen(navController: NavController, modifier: Modifier = Modifier) {
 
                     // Zeige dann die Liste der CategoryScreen Matches
                     if (viewState.list.isNotEmpty()) {
-                        TeamScreen(teams = viewState.list, navController = navController)
+                        TeamScreen(teams = viewState.list, navController = navController, LocalTextColor.current)
                     } else {
-                        Text("No Such items Found.")
+                        Text("No Such items Found.", color = LocalTextColor.current)
                     }
                 }
             }
@@ -99,11 +97,11 @@ fun MatchScreen(navController: NavController, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun TeamScreen(teams: List<Team>, navController: NavController) {
+fun TeamScreen(teams: List<Team>, navController: NavController, textColor: Color) {
 
     Column {
         Text(
-            text="All Teams"
+            text="All Teams", color = textColor
         )
     }
 
@@ -115,13 +113,13 @@ fun TeamScreen(teams: List<Team>, navController: NavController) {
         items(teams) { team ->
             TeamItem(team = team, onTeamClick = { selectedTeam ->
                 navController.navigate("${TeamDetail.route}/${selectedTeam.teamId}")
-            })
+            }, textColor = textColor)
         }
     }
 }
 
 @Composable
-fun MatchItems(match: Match) {
+fun MatchItems(match: Match, textColor: Color) {
     Column(modifier = Modifier.padding(8.dp)) {
         // Oberer Teil mit den Logos
         Row(
@@ -141,13 +139,15 @@ fun MatchItems(match: Match) {
                 )
                 Text(
                     text = match.team1.teamName,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
+                    color = textColor
                 )
             }
 
             // Datum des Spiels in der Mitte
             Text(
                 text = formatDate(match.matchDateTime),  // Datum formatieren nach Bedarf
+                color = textColor,
                 modifier = Modifier.align(Alignment.CenterVertically)
             )
 
@@ -164,7 +164,8 @@ fun MatchItems(match: Match) {
                 )
                 Text(
                     text = match.team2.teamName,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
+                    color = textColor
                 )
             }
         }
@@ -183,7 +184,7 @@ fun formatDate(date: Date?): String {
 }
 
 @Composable
-fun TeamItem(team:Team, onTeamClick: (Team) -> Unit){
+fun TeamItem(team:Team, onTeamClick: (Team) -> Unit, textColor: Color){
     Column(modifier = Modifier
         .padding(8.dp)
         .clickable { onTeamClick(team) }) {
@@ -207,14 +208,14 @@ fun TeamItem(team:Team, onTeamClick: (Team) -> Unit){
                     team.teamGroupName?.let {
                         Text(
                             text= it,
-                            textAlign = TextAlign.Center
-
+                            textAlign = TextAlign.Center,
+                            color = textColor
                             )
                     }
                     Text(
                         text = team.teamName,
-                        textAlign = TextAlign.Center
-
+                        textAlign = TextAlign.Center,
+                        color = textColor
                     )
                 }
 
