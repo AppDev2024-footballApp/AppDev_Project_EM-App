@@ -176,7 +176,7 @@ fun MatchDetailScreen(
 
                             .padding(top = 16.dp)
                     ) {
-                        Text("Go back", color = LocalTextColor.current,)
+                        Text("Go back", color = LocalTextColor.current)
                     }
 
                 }

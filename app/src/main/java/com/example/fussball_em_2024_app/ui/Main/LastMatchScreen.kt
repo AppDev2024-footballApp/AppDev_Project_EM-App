@@ -18,7 +18,6 @@ import androidx.navigation.NavController
 import com.example.fussball_em_2024_app.LocalTextColor
 import com.example.fussball_em_2024_app.MatchDetail
 import com.example.fussball_em_2024_app.MatchItems
-import com.example.fussball_em_2024_app.R
 import com.example.fussball_em_2024_app.model.Match
 import com.example.fussball_em_2024_app.utils.LightDarkModeHelper
 

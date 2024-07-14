@@ -38,16 +38,13 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.fussball_em_2024_app.model.Match
 import com.example.fussball_em_2024_app.model.Team
-import com.example.fussball_em_2024_app.utils.DateFormater.formatDate
 import com.example.fussball_em_2024_app.ui.Main.FavouriteTeams
 import com.example.fussball_em_2024_app.ui.Main.LastMatchScreen
 import com.example.fussball_em_2024_app.ui.Main.NextMatchScreen
+import com.example.fussball_em_2024_app.utils.DateFormater.formatDate
 import com.example.fussball_em_2024_app.viewModels.MatchViewModel
 import com.example.fussball_em_2024_app.viewModels.MatchViewModelFactory
 import com.example.fussball_em_2024_app.viewModels.TeamViewModel
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 @Composable
 fun MatchScreen(navController: NavController, modifier: Modifier = Modifier) {
@@ -118,53 +115,6 @@ fun TeamScreen(teams: List<Team>, navController: NavController) {
             TeamItem(team = team, onTeamClick = { selectedTeam ->
                 navController.navigate("${TeamDetail.route}/${selectedTeam.teamId}")
             }, textColor = LocalTextColor.current)
-        }
-    }
-}
-
-@Composable
-fun NextMatchScreen(match: Match, navController: NavController) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-            .background(color = Color.White, shape = RoundedCornerShape(4.dp)) // Abgerundete Ecke und weißer Hintergrund
-            .clickable {
-                navController.navigate("${MatchDetail.route}/${match.matchID}")
-            }
-    ){
-    Column(modifier = Modifier.padding(16.dp)) {
-        Text(
-            text = "Next Game:",
-            style = TextStyle(fontWeight = FontWeight.W300),
-            modifier = Modifier.padding(bottom = 8.dp)
-        )
-        MatchItems(match = match)
-    }
-}
-}
-
-@Composable
-fun LastMatchScreen(match: Match, navController: NavController) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-            .background(
-                color = Color.White,
-                shape = RoundedCornerShape(4.dp)
-            )
-            .clickable {
-                navController.navigate("${MatchDetail.route}/${match.matchID}")
-            }
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(
-                text = "Last Game",
-                style = TextStyle(fontWeight = FontWeight.Bold),
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
-            MatchItems(match = match)
         }
     }
 }
