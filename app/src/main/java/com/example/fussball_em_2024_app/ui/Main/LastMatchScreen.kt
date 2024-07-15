@@ -1,6 +1,7 @@
 package com.example.fussball_em_2024_app.ui.Main
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,14 +14,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.fussball_em_2024_app.LocalTextColor
+import com.example.fussball_em_2024_app.MatchDetail
 import com.example.fussball_em_2024_app.MatchItems
-import com.example.fussball_em_2024_app.R
 import com.example.fussball_em_2024_app.model.Match
 import com.example.fussball_em_2024_app.utils.LightDarkModeHelper
 
 @Composable
-fun LastMatchScreen(match: Match) {
+fun LastMatchScreen(match: Match, navController: NavController) {
     val isDarkMode = LightDarkModeHelper.isDarkMode(LocalTextColor.current)
     val backgroundColor = if(isDarkMode){
         Color.Gray
@@ -36,6 +38,9 @@ fun LastMatchScreen(match: Match) {
                 color = backgroundColor,
                 shape = RoundedCornerShape(4.dp)
             )
+            .clickable {
+                navController.navigate("${MatchDetail.route}/${match.matchID}")
+            }
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
@@ -44,7 +49,7 @@ fun LastMatchScreen(match: Match) {
                 color = LocalTextColor.current,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
-            MatchItems(match = match, textColor = LocalTextColor.current)
+            MatchItems(match = match)
         }
     }
 }

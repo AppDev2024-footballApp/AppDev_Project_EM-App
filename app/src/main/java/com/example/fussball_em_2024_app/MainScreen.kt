@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,6 +29,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -38,12 +41,10 @@ import com.example.fussball_em_2024_app.model.Team
 import com.example.fussball_em_2024_app.ui.Main.FavouriteTeams
 import com.example.fussball_em_2024_app.ui.Main.LastMatchScreen
 import com.example.fussball_em_2024_app.ui.Main.NextMatchScreen
+import com.example.fussball_em_2024_app.utils.DateFormater.formatDate
 import com.example.fussball_em_2024_app.viewModels.MatchViewModel
 import com.example.fussball_em_2024_app.viewModels.MatchViewModelFactory
 import com.example.fussball_em_2024_app.viewModels.TeamViewModel
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 @Composable
 fun MatchScreen(navController: NavController, modifier: Modifier = Modifier) {
@@ -70,12 +71,12 @@ fun MatchScreen(navController: NavController, modifier: Modifier = Modifier) {
                 {
                     // Zeige zuerst den nächsten Match an
                     nextViewState.match?.let { match ->
-                        NextMatchScreen(match = match)
+                        NextMatchScreen(match = match, navController = navController)
                         Spacer(modifier = Modifier.height(16.dp))
                     }
 
                     lastViewState.match?.let { match ->
-                        LastMatchScreen(match = match)
+                        LastMatchScreen(match = match, navController = navController)
                         Spacer(modifier = Modifier.height(16.dp))
                     }
 
@@ -86,9 +87,9 @@ fun MatchScreen(navController: NavController, modifier: Modifier = Modifier) {
 
                     // Zeige dann die Liste der CategoryScreen Matches
                     if (viewState.list.isNotEmpty()) {
-                        TeamScreen(teams = viewState.list, navController = navController, LocalTextColor.current)
+                        TeamScreen(teams = viewState.list, navController = navController)
                     } else {
-                        Text("No Such items Found.", color = LocalTextColor.current)
+                        Text("No Such items Found.")
                     }
                 }
             }
@@ -97,11 +98,11 @@ fun MatchScreen(navController: NavController, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun TeamScreen(teams: List<Team>, navController: NavController, textColor: Color) {
+fun TeamScreen(teams: List<Team>, navController: NavController) {
 
     Column {
         Text(
-            text="All Teams", color = textColor
+            text="All Teams", color = LocalTextColor.current
         )
     }
 
@@ -113,13 +114,13 @@ fun TeamScreen(teams: List<Team>, navController: NavController, textColor: Color
         items(teams) { team ->
             TeamItem(team = team, onTeamClick = { selectedTeam ->
                 navController.navigate("${TeamDetail.route}/${selectedTeam.teamId}")
-            }, textColor = textColor)
+            }, textColor = LocalTextColor.current)
         }
     }
 }
 
 @Composable
-fun MatchItems(match: Match, textColor: Color) {
+fun MatchItems(match: Match) {
     Column(modifier = Modifier.padding(8.dp)) {
         // Oberer Teil mit den Logos
         Row(
@@ -140,14 +141,14 @@ fun MatchItems(match: Match, textColor: Color) {
                 Text(
                     text = match.team1.teamName,
                     textAlign = TextAlign.Center,
-                    color = textColor
+                    color = LocalTextColor.current
                 )
             }
 
             // Datum des Spiels in der Mitte
             Text(
                 text = formatDate(match.matchDateTime),  // Datum formatieren nach Bedarf
-                color = textColor,
+                color = LocalTextColor.current,
                 modifier = Modifier.align(Alignment.CenterVertically)
             )
 
@@ -165,23 +166,13 @@ fun MatchItems(match: Match, textColor: Color) {
                 Text(
                     text = match.team2.teamName,
                     textAlign = TextAlign.Center,
-                    color = textColor
+                    color = LocalTextColor.current
                 )
             }
         }
     }
 }
 
-
-// Funktion zum Konvertieren des Datums in String
-@Composable
-fun formatDate(date: Date?): String {
-    return if(date != null) {
-        SimpleDateFormat("dd.MM.yy \n'um' HH:mm 'Uhr'", Locale.GERMANY).format(date)
-    } else {
-        "Datum unbekannt"
-    }
-}
 
 @Composable
 fun TeamItem(team:Team, onTeamClick: (Team) -> Unit, textColor: Color){

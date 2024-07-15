@@ -110,7 +110,7 @@ class MatchViewModel(private val myContext: Context): ViewModel() {
         }
     }
 
-    private suspend fun getFavoriteTeams(): List<FavouriteTeam> {
+    private fun getFavoriteTeams(): List<FavouriteTeam> {
         val db = Room.databaseBuilder(
             context = myContext,
             AppDatabase::class.java, "FootballAppDB"
