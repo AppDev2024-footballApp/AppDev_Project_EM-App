@@ -2,6 +2,7 @@ package com.example.fussball_em_2024_app
 
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
+import com.example.fussball_em_2024_app.TeamDetail.teamIdArg
 
 interface FussballDestination {
     val route: String
@@ -9,6 +10,17 @@ interface FussballDestination {
 
 object Overview : FussballDestination {
     override val route = "overview"
+}
+
+object LeagueDetail : FussballDestination {
+    override val route = "league_detail"
+    const val leagueShortcutArg = "league_shortcut"
+    const val leagueSeasonArg = "league_season"
+    val routeWithArgs = "${route}/{$leagueShortcutArg}/{$leagueSeasonArg}"
+    val arguments = listOf(
+        navArgument(leagueShortcutArg) { type = NavType.StringType},
+        navArgument(leagueSeasonArg) { type = NavType.StringType}
+    )
 }
 
 object TeamDetail : FussballDestination {

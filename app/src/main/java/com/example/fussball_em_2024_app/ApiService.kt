@@ -1,5 +1,6 @@
 package com.example.fussball_em_2024_app
 
+import com.example.fussball_em_2024_app.model.League
 import com.example.fussball_em_2024_app.model.Match
 import com.example.fussball_em_2024_app.model.Team
 import com.example.fussball_em_2024_app.model.TeamInfo
@@ -34,6 +35,9 @@ val matchService = retrofit.create(ApiService::class.java)
 
 
 interface ApiService {
+    @GET("getavailableleagues")
+    suspend fun getAllLeagues(): List<League>
+
     @GET("getmatchdata/em/2024/")
     suspend fun getLatestMatch(): List<Match>
 

@@ -19,6 +19,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -92,6 +93,14 @@ fun MatchScreen(navController: NavController, modifier: Modifier = Modifier) {
                         Text("No Such items Found.")
                     }
                 }
+
+                Button(
+                    onClick = { navController.navigate("overview") },
+                    modifier = Modifier
+                        .padding(top = 16.dp)
+                ) {
+                    Text("Go to leagues", color = LocalTextColor.current)
+                }
             }
         }
     }
@@ -114,7 +123,7 @@ fun TeamScreen(teams: List<Team>, navController: NavController) {
         items(teams) { team ->
             TeamItem(team = team, onTeamClick = { selectedTeam ->
                 navController.navigate("${TeamDetail.route}/${selectedTeam.teamId}")
-            }, textColor = LocalTextColor.current)
+            })
         }
     }
 }
@@ -175,7 +184,7 @@ fun MatchItems(match: Match) {
 
 
 @Composable
-fun TeamItem(team:Team, onTeamClick: (Team) -> Unit, textColor: Color){
+fun TeamItem(team:Team, onTeamClick: (Team) -> Unit){
     Column(modifier = Modifier
         .padding(8.dp)
         .clickable { onTeamClick(team) }) {
@@ -200,13 +209,13 @@ fun TeamItem(team:Team, onTeamClick: (Team) -> Unit, textColor: Color){
                         Text(
                             text= it,
                             textAlign = TextAlign.Center,
-                            color = textColor
+                            color = LocalTextColor.current
                             )
                     }
                     Text(
                         text = team.teamName,
                         textAlign = TextAlign.Center,
-                        color = textColor
+                        color = LocalTextColor.current
                     )
                 }
 

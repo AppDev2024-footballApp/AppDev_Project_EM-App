@@ -16,6 +16,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.fussball_em_2024_app.ui.Leagues.LeaguesScreen
 import com.example.fussball_em_2024_app.ui.MatchDetail.MatchDetailScreen
 import com.example.fussball_em_2024_app.ui.LightSensorViewModel
 import com.example.fussball_em_2024_app.ui.TeamDetail.TeamDetailScreen
@@ -52,6 +53,14 @@ fun FussballEMApp(lightData: LiveData<Float>){
 
             NavHost(navController, startDestination = Overview.route) {
                 composable(route = Overview.route){
+                    LeaguesScreen(navController, modifier)
+                }
+
+                composable(
+                    route = LeagueDetail.routeWithArgs,
+                    arguments = LeagueDetail.arguments){ backStackEntry ->
+                    val leagueShortcut = backStackEntry.arguments?.getString(LeagueDetail.leagueShortcutArg) ?: "em"
+                    val leagueSeasons = backStackEntry.arguments?.getString(LeagueDetail.leagueSeasonArg) ?: "2024"
                     MatchScreen(navController, modifier)
                 }
 
