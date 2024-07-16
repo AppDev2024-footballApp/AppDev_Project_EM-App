@@ -116,15 +116,16 @@ fun TeamScreen(leagueShortcut: String, leagueSeason: String, teams: List<Team>, 
             text="All Teams", color = LocalTextColor.current
         )
     }
-
+    val leagueId = LocalLeagueId.current
     // Eine LazyColumn ist bereits scrollbar
     LazyColumn(
         contentPadding = PaddingValues(all = 8.dp), // Füge Abstand der ganzen Liste hinzu
         modifier = Modifier.fillMaxSize()
     ) {
+
         items(teams) { team ->
             TeamItem(team = team, onTeamClick = { selectedTeam ->
-                navController.navigate("${TeamDetail.route}/${leagueShortcut}/${leagueSeason}/${selectedTeam.teamId}")
+                navController.navigate("${TeamDetail.route}/${leagueId}/${leagueShortcut}/${leagueSeason}/${selectedTeam.teamId}")
             })
         }
     }

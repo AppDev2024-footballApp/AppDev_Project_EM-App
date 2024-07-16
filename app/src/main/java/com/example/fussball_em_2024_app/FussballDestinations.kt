@@ -16,10 +16,12 @@ object Overview : FussballDestination {
 
 object LeagueDetail : FussballDestination {
     override val route = "league_detail"
+    const val leagueIdArg = "league_id"
     const val leagueShortcutArg = "league_shortcut"
     const val leagueSeasonArg = "league_season"
-    val routeWithArgs = "${route}/{$leagueShortcutArg}/{$leagueSeasonArg}"
+    val routeWithArgs = "${route}/{$leagueIdArg}/{$leagueShortcutArg}/{$leagueSeasonArg}"
     val arguments = listOf(
+        navArgument(leagueIdArg) { type = NavType.IntType},
         navArgument(leagueShortcutArg) { type = NavType.StringType},
         navArgument(leagueSeasonArg) { type = NavType.StringType}
     )
@@ -27,9 +29,13 @@ object LeagueDetail : FussballDestination {
 
 object TeamDetail : FussballDestination {
     override val route = "team_detail"
+    const val leagueIdArg = "league_id"
+    const val leagueShortcutArg = "league_shortcut"
+    const val leagueSeasonArg = "league_season"
     const val teamIdArg = "team_id"
-    val routeWithArgs = "${route}/{$leagueShortcutArg}/{$leagueSeasonArg}/{${teamIdArg}}"
+    val routeWithArgs = "${route}/{${leagueIdArg}}/{$leagueShortcutArg}/{$leagueSeasonArg}/{${teamIdArg}}"
     val arguments = listOf(
+        navArgument(leagueIdArg) { type = NavType.IntType},
         navArgument(leagueShortcutArg) { type = NavType.StringType},
         navArgument(leagueSeasonArg) { type = NavType.StringType},
         navArgument(teamIdArg) { type = NavType.IntType }

@@ -22,7 +22,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.fussball_em_2024_app.LeagueDetail
-import com.example.fussball_em_2024_app.LocalLeagueId
 import com.example.fussball_em_2024_app.LocalTextColor
 import com.example.fussball_em_2024_app.model.League
 import com.example.fussball_em_2024_app.viewModels.LeaguesViewModel
@@ -75,8 +74,7 @@ fun LeaguesList(leagues: List<League>, navController: NavController){
     ) {
         items(leagues) { league ->
             LeagueItem(league = league, onLeagueClick = { selectedLeague ->
-                LocalLeagueId provides selectedLeague.leagueId
-                navController.navigate("${LeagueDetail.route}/${league.leagueShortcut}/${league.leagueSeason}")
+                navController.navigate("${LeagueDetail.route}/${league.leagueId}/${league.leagueShortcut}/${league.leagueSeason}")
             })
         }
     }

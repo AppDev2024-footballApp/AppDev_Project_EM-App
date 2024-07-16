@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.staticCompositionLocalOf
@@ -23,7 +24,7 @@ import com.example.fussball_em_2024_app.ui.TeamDetail.TeamDetailScreen
 import com.example.testjetpackcompose.ui.theme.TestJetpackComposeTheme
 
 var LocalTextColor = staticCompositionLocalOf { Color.Black }
-var LocalLeagueId = staticCompositionLocalOf { 4708 }
+var LocalLeagueId = compositionLocalOf { 4708 }
 
 class MainActivity : ComponentActivity() {
 
@@ -48,12 +49,7 @@ fun FussballEMApp(lightData: LiveData<Float>){
 
     val modifier: Modifier = Modifier.background(backgroundColor)
 
-    val leagueId = 4708
-
     CompositionLocalProvider(LocalTextColor provides textColor) {
-        CompositionLocalProvider(value = LocalLeagueId provides leagueId) {
-
-        }
         TestJetpackComposeTheme {
             val navController = rememberNavController()
 
@@ -65,18 +61,26 @@ fun FussballEMApp(lightData: LiveData<Float>){
                 composable(
                     route = LeagueDetail.routeWithArgs,
                     arguments = LeagueDetail.arguments){ backStackEntry ->
+                    val leagueId = backStackEntry.arguments?.getInt(LeagueDetail.leagueIdArg) ?: 4708
                     val leagueShortcut = backStackEntry.arguments?.getString(LeagueDetail.leagueShortcutArg) ?: "em"
                     val leagueSeasons = backStackEntry.arguments?.getString(LeagueDetail.leagueSeasonArg) ?: "2024"
-                    MatchScreen(leagueShortcut, leagueSeasons, navController, modifier)
+
+                    CompositionLocalProvider(value = LocalLeagueId provides leagueId) {
+                        MatchScreen(leagueShortcut, leagueSeasons, navController, modifier)
+                    }
                 }
 
                 composable(
                     route = TeamDetail.routeWithArgs,
                     arguments = TeamDetail.arguments){ backStackEntry ->
+                    val leagueId = backStackEntry.arguments?.getInt(LeagueDetail.leagueIdArg) ?: 4708
                     val leagueShortcut = backStackEntry.arguments?.getString(LeagueDetail.leagueShortcutArg) ?: "em"
                     val leagueSeasons = backStackEntry.arguments?.getString(LeagueDetail.leagueSeasonArg) ?: "2024"
                     val teamId = backStackEntry.arguments?.getInt(TeamDetail.teamIdArg) ?: 0
-                    TeamDetailScreen(teamId = teamId, leagueShortcut, leagueSeasons, navController, modifier)
+
+                    CompositionLocalProvider(value = LocalLeagueId provides leagueId){
+                        TeamDetailScreen(teamId = teamId, leagueShortcut, leagueSeasons, navController, modifier)
+                    }
                 }
 
                 composable(

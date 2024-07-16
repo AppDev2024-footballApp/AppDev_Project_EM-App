@@ -25,7 +25,14 @@ class LeaguesViewModel : ViewModel() {
 
                     _leaguesState.value = _leaguesState.value.copy(
                         loading = false,
-                        list = response.filter { league: League ->  league.sport.sportId == 1 && league.leagueShortcut == "em" }
+                        list = response.filter { league: League ->  league.sport.sportId == 1
+                            && (league.leagueShortcut == "em"
+                                || league.leagueShortcut == "wwc"
+                                || league.leagueShortcut.startsWith("bl")
+                                || league.leagueShortcut.startsWith("fem")
+                                || league.leagueShortcut.startsWith("wm"))
+                                && league.leagueId != 4684
+                                && !league.leagueName.lowercase().contains("test")}
                             .sortedBy { league: League ->  league.leagueSeason}.reversed(),
                         error = null
                     )
