@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
+import com.example.fussball_em_2024_app.model.League
 import com.example.fussball_em_2024_app.model.Match
 import com.example.fussball_em_2024_app.model.Team
 import com.example.fussball_em_2024_app.ui.Main.FavouriteTeams
@@ -46,12 +47,13 @@ import com.example.fussball_em_2024_app.utils.DateFormater.formatDate
 import com.example.fussball_em_2024_app.viewModels.MatchViewModel
 import com.example.fussball_em_2024_app.viewModels.MatchViewModelFactory
 import com.example.fussball_em_2024_app.viewModels.TeamViewModel
+import com.example.fussball_em_2024_app.viewModels.TeamViewModelFactory
 
 @Composable
-fun MatchScreen(navController: NavController, modifier: Modifier = Modifier) {
-    val teamViewModel: TeamViewModel = viewModel()
+fun MatchScreen(leagueShortcut: String, leagueSeason: String, navController: NavController, modifier: Modifier = Modifier) {
+    val teamViewModel: TeamViewModel = viewModel(factory = TeamViewModelFactory(leagueShortcut, leagueSeason))
     val viewState by teamViewModel.teamState
-    val matchViewModel: MatchViewModel = viewModel(factory = MatchViewModelFactory(LocalContext.current))
+    val matchViewModel: MatchViewModel = viewModel(factory = MatchViewModelFactory(LocalContext.current, LocalLeagueId.current, leagueShortcut))
     val nextViewState by matchViewModel.nextMatchState
     val lastViewState by matchViewModel.lastMatchState
 
@@ -82,13 +84,13 @@ fun MatchScreen(navController: NavController, modifier: Modifier = Modifier) {
                     }
 
                     // Favourite Teams Section
-                    FavouriteTeams("em24", viewState.list, { selectedTeam ->
+                    FavouriteTeams(leagueShortcut+leagueSeason, viewState.list, { selectedTeam ->
                         navController.navigate("${TeamDetail.route}/${selectedTeam.teamId}")
                     })
 
                     // Zeige dann die Liste der CategoryScreen Matches
                     if (viewState.list.isNotEmpty()) {
-                        TeamScreen(teams = viewState.list, navController = navController)
+                        TeamScreen(leagueShortcut, leagueSeason, teams = viewState.list, navController = navController)
                     } else {
                         Text("No Such items Found.")
                     }
@@ -107,7 +109,7 @@ fun MatchScreen(navController: NavController, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun TeamScreen(teams: List<Team>, navController: NavController) {
+fun TeamScreen(leagueShortcut: String, leagueSeason: String, teams: List<Team>, navController: NavController) {
 
     Column {
         Text(
@@ -122,7 +124,7 @@ fun TeamScreen(teams: List<Team>, navController: NavController) {
     ) {
         items(teams) { team ->
             TeamItem(team = team, onTeamClick = { selectedTeam ->
-                navController.navigate("${TeamDetail.route}/${selectedTeam.teamId}")
+                navController.navigate("${TeamDetail.route}/${leagueShortcut}/${leagueSeason}/${selectedTeam.teamId}")
             })
         }
     }

@@ -23,6 +23,7 @@ import com.example.fussball_em_2024_app.ui.TeamDetail.TeamDetailScreen
 import com.example.testjetpackcompose.ui.theme.TestJetpackComposeTheme
 
 var LocalTextColor = staticCompositionLocalOf { Color.Black }
+var LocalLeagueId = staticCompositionLocalOf { 4708 }
 
 class MainActivity : ComponentActivity() {
 
@@ -47,7 +48,12 @@ fun FussballEMApp(lightData: LiveData<Float>){
 
     val modifier: Modifier = Modifier.background(backgroundColor)
 
+    val leagueId = 4708
+
     CompositionLocalProvider(LocalTextColor provides textColor) {
+        CompositionLocalProvider(value = LocalLeagueId provides leagueId) {
+
+        }
         TestJetpackComposeTheme {
             val navController = rememberNavController()
 
@@ -61,14 +67,16 @@ fun FussballEMApp(lightData: LiveData<Float>){
                     arguments = LeagueDetail.arguments){ backStackEntry ->
                     val leagueShortcut = backStackEntry.arguments?.getString(LeagueDetail.leagueShortcutArg) ?: "em"
                     val leagueSeasons = backStackEntry.arguments?.getString(LeagueDetail.leagueSeasonArg) ?: "2024"
-                    MatchScreen(navController, modifier)
+                    MatchScreen(leagueShortcut, leagueSeasons, navController, modifier)
                 }
 
                 composable(
                     route = TeamDetail.routeWithArgs,
                     arguments = TeamDetail.arguments){ backStackEntry ->
+                    val leagueShortcut = backStackEntry.arguments?.getString(LeagueDetail.leagueShortcutArg) ?: "em"
+                    val leagueSeasons = backStackEntry.arguments?.getString(LeagueDetail.leagueSeasonArg) ?: "2024"
                     val teamId = backStackEntry.arguments?.getInt(TeamDetail.teamIdArg) ?: 0
-                    TeamDetailScreen(teamId = teamId, navController, modifier)
+                    TeamDetailScreen(teamId = teamId, leagueShortcut, leagueSeasons, navController, modifier)
                 }
 
                 composable(

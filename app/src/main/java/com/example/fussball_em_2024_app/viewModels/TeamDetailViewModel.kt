@@ -11,16 +11,16 @@ import com.example.fussball_em_2024_app.model.Match
 import com.example.fussball_em_2024_app.model.TeamInfo
 import kotlinx.coroutines.launch
 
-class TeamDetailViewModelFactory(private val teamId: Int) : ViewModelProvider.Factory{
+class TeamDetailViewModelFactory(private val teamId: Int, private val leagueId: Int, private val leagueShortcut: String, private val leagueSeason: String) : ViewModelProvider.Factory{
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(TeamDetailViewModel::class.java)) {
-            return TeamDetailViewModel(teamId) as T
+            return TeamDetailViewModel(teamId, leagueId, leagueShortcut, leagueSeason) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
 }
 
-class TeamDetailViewModel(teamId: Int) : ViewModel() {
+class TeamDetailViewModel(teamId: Int, private val leagueId: Int, private val leagueShortcut: String, private val leagueSeason: String) : ViewModel() {
     private val _teamInfoState = mutableStateOf(TeamInfoState())
     val teamInfoState: State<TeamInfoState> = _teamInfoState
     private val _nextMatchState= mutableStateOf(MatchState())
@@ -37,7 +37,7 @@ class TeamDetailViewModel(teamId: Int) : ViewModel() {
     private fun fetchTeam(teamId: Int){
         viewModelScope.launch{
             try {
-                val response= matchService.getTeamsDetails()
+                val response= matchService.getTeamsDetails(leagueShortcut, leagueSeason)
                 if (response.isNotEmpty()) {
                     for(team in response){
                         if(team.teamInfoId == teamId){
@@ -65,7 +65,7 @@ class TeamDetailViewModel(teamId: Int) : ViewModel() {
         viewModelScope.launch {
             try {
 
-                val response= matchService.getNextMatchByTeam(teamId)
+                val response= matchService.getNextMatchByTeam(leagueId, teamId)
                 if (response != null) {
                     _nextMatchState.value= _nextMatchState.value.copy(
                         match= response,
@@ -88,7 +88,7 @@ class TeamDetailViewModel(teamId: Int) : ViewModel() {
         viewModelScope.launch {
             try {
 
-                val response= matchService.getLastMatchByTeam(teamId)
+                val response= matchService.getLastMatchByTeam(leagueId, teamId)
                 if (response != null) {
                     _lastMatchState.value= _lastMatchState.value.copy(
                         match= response,

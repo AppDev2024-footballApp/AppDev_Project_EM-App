@@ -38,29 +38,29 @@ interface ApiService {
     @GET("getavailableleagues")
     suspend fun getAllLeagues(): List<League>
 
-    @GET("getmatchdata/em/2024/")
-    suspend fun getLatestMatch(): List<Match>
+    @GET("getmatchdata/{leagueShortcut}/{leagueSeason}/")
+    suspend fun getLatestMatch(@Path("leagueShortcut") leagueShortcut: String, @Path("leagueSeason") leagueSeason: String): List<Match>
 
     @GET("getmatchdata/{id}")
     suspend fun getMatch(@Path("id") id: Int):Match?
 
-    @GET("getnextmatchbyleagueshortcut/EM")
-    suspend fun getNextMatch():Match
+    @GET("getnextmatchbyleagueshortcut/{leagueShortcut}")
+    suspend fun getNextMatch(@Path("leagueShortcut") leagueShortcut: String):Match
 
-    @GET("getlastmatchbyleagueshortcut/EM")
-    suspend fun getLastMatch():Match
+    @GET("getlastmatchbyleagueshortcut/{leagueShortcut}")
+    suspend fun getLastMatch(@Path("leagueShortcut") leagueShortcut: String):Match
 
-    @GET("getavailableteams/EM/2024")
-    suspend fun getTeams():List<Team>
+    @GET("getavailableteams/{leagueShortcut}/{leagueSeason}")
+    suspend fun getTeams(@Path("leagueShortcut") leagueShortcut: String, @Path("leagueSeason") leagueSeason: String):List<Team>
 
-    @GET("getbltable/EM/2024")
-    suspend fun getTeamsDetails():List<TeamInfo>
+    @GET("getbltable/{leagueShortcut}/{leagueSeason}")
+    suspend fun getTeamsDetails(@Path("leagueShortcut") leagueShortcut: String, @Path("leagueSeason") leagueSeason: String):List<TeamInfo>
 
-    @GET("getnextmatchbyleagueteam/4708/{id}")
-    suspend fun getNextMatchByTeam(@Path("id") id: Int):Match
+    @GET("getnextmatchbyleagueteam/{leagueId}/{id}")
+    suspend fun getNextMatchByTeam(@Path("leagueId")leagueId: Int, @Path("id") id: Int):Match
 
-    @GET("getlastmatchbyleagueteam/4708/{id}")
-    suspend fun getLastMatchByTeam(@Path("id")id: Int):Match
+    @GET("getlastmatchbyleagueteam/{leagueId}/{id}")
+    suspend fun getLastMatchByTeam(@Path("leagueId")leagueId: Int, @Path("id")id: Int):Match
 }
 
 

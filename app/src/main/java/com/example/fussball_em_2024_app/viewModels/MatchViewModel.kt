@@ -15,17 +15,17 @@ import com.example.fussball_em_2024_app.model.Match
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class MatchViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
+class MatchViewModelFactory(private val context: Context, private val leagueId: Int, private val leagueShortcut: String) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(MatchViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return MatchViewModel(context) as T
+            return MatchViewModel(context, leagueId, leagueShortcut) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
 }
 
-class MatchViewModel(private val myContext: Context): ViewModel() {
+class MatchViewModel(private val myContext: Context, private val leagueId: Int, private val leagueShortcut: String): ViewModel() {
     private val _nextMatchState= mutableStateOf(MatchState())
     val nextMatchState: State<MatchState> = _nextMatchState
     private val _lastMatchState= mutableStateOf(MatchState())
@@ -44,7 +44,7 @@ class MatchViewModel(private val myContext: Context): ViewModel() {
 
                 for(favouriteTeam in favoriteTeams){
                     try{
-                        val match = matchService.getNextMatchByTeam(favouriteTeam.apiTeamId)
+                        val match = matchService.getNextMatchByTeam(leagueId, favouriteTeam.apiTeamId)
                         if(response == null || response.matchDateTime > match.matchDateTime)
                             response = match
                     }catch (e: Exception){
@@ -53,7 +53,7 @@ class MatchViewModel(private val myContext: Context): ViewModel() {
                 }
 
                 if (response == null) {
-                    response = matchService.getNextMatch()
+                    response = matchService.getNextMatch(leagueShortcut)
                 }
                 if (response != null) {
                     _nextMatchState.value= _nextMatchState.value.copy(
@@ -81,7 +81,7 @@ class MatchViewModel(private val myContext: Context): ViewModel() {
 
                 for(favouriteTeam in favoriteTeams){
                     try{
-                        val match = matchService.getLastMatchByTeam(favouriteTeam.apiTeamId)
+                        val match = matchService.getLastMatchByTeam(leagueId, favouriteTeam.apiTeamId)
                         if(response == null || response.matchDateTime < match.matchDateTime)
                             response = match
                     }catch (e: Exception){
@@ -90,7 +90,7 @@ class MatchViewModel(private val myContext: Context): ViewModel() {
                 }
 
                 if (response == null) {
-                    response = matchService.getLastMatch()
+                    response = matchService.getLastMatch(leagueShortcut)
                 }
                 if (response != null) {
                     _lastMatchState.value= _lastMatchState.value.copy(

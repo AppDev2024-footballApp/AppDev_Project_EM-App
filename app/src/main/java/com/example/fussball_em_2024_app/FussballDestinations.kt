@@ -2,6 +2,8 @@ package com.example.fussball_em_2024_app
 
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
+import com.example.fussball_em_2024_app.LeagueDetail.leagueSeasonArg
+import com.example.fussball_em_2024_app.LeagueDetail.leagueShortcutArg
 import com.example.fussball_em_2024_app.TeamDetail.teamIdArg
 
 interface FussballDestination {
@@ -26,8 +28,12 @@ object LeagueDetail : FussballDestination {
 object TeamDetail : FussballDestination {
     override val route = "team_detail"
     const val teamIdArg = "team_id"
-    val routeWithArgs = "${route}/{${teamIdArg}}"
-    val arguments = listOf(navArgument(teamIdArg) { type = NavType.IntType })
+    val routeWithArgs = "${route}/{$leagueShortcutArg}/{$leagueSeasonArg}/{${teamIdArg}}"
+    val arguments = listOf(
+        navArgument(leagueShortcutArg) { type = NavType.StringType},
+        navArgument(leagueSeasonArg) { type = NavType.StringType},
+        navArgument(teamIdArg) { type = NavType.IntType }
+    )
 }
 
 object MatchDetail : FussballDestination {
