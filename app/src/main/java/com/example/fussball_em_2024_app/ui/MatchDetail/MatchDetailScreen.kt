@@ -84,7 +84,7 @@ fun MatchDetailScreen(
                 val team1Name = matchInfo.match?.team1?.teamName ?: "Unknown"
                 val team2Name = matchInfo.match?.team2?.teamName ?: "Unknown"
                 val prompt = """
-                Generate a JSON object for the expected outcome of the match between $team1Name and $team2Name. The JSON should have the following structure:
+                Generate a JSON object for the expected outcome of the match between $team1Name and $team2Name. The Prediction should be based on the last 4 matches of the teams. The JSON should have the following structure:
                 {
                     "team1": "$team1Name",
                     "team2": "$team2Name",
