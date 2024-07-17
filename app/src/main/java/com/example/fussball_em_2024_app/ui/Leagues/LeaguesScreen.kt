@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -24,6 +25,7 @@ import androidx.navigation.NavController
 import com.example.fussball_em_2024_app.LeagueDetail
 import com.example.fussball_em_2024_app.LocalTextColor
 import com.example.fussball_em_2024_app.model.League
+import com.example.fussball_em_2024_app.utils.StoreLeague
 import com.example.fussball_em_2024_app.viewModels.LeaguesViewModel
 
 
@@ -34,6 +36,11 @@ fun LeaguesScreen(
 ){
     val leaguesViewModel: LeaguesViewModel = viewModel()
     val viewState by leaguesViewModel.leaguesState
+
+    val startLeague = StoreLeague().getCurrentLeague(LocalContext.current)
+    if(startLeague != null){
+        navController.navigate("${LeagueDetail.route}/${startLeague.leagueId}/${startLeague.leagueShortcut}/${startLeague.leagueSeason}")
+    }
 
     Box(modifier = Modifier.fillMaxSize()){
         when{
@@ -68,12 +75,15 @@ fun LeaguesList(leagues: List<League>, navController: NavController){
         )
     }
 
+    val currentContext = LocalContext.current
+
     LazyColumn(
         contentPadding = PaddingValues(all = 8.dp), // Füge Abstand der ganzen Liste hinzu
         modifier = Modifier.fillMaxSize()
     ) {
         items(leagues) { league ->
             LeagueItem(league = league, onLeagueClick = { selectedLeague ->
+                StoreLeague().saveCurrentLeague(selectedLeague, currentContext)
                 navController.navigate("${LeagueDetail.route}/${league.leagueId}/${league.leagueShortcut}/${league.leagueSeason}")
             })
         }

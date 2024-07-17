@@ -7,4 +7,5 @@ class League(
     var leagueSeason: String,
     var sport: Sport
 ) {
+    constructor(leagueId: Int, leagueShortcut: String, leagueSeason: String):this(leagueId, "", leagueShortcut, leagueSeason, Sport(0, ""))
 }
