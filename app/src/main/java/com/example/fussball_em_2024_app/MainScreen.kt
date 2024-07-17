@@ -45,10 +45,10 @@ import com.example.fussball_em_2024_app.viewModels.TeamViewModel
 import com.example.fussball_em_2024_app.viewModels.TeamViewModelFactory
 
 @Composable
-fun MatchScreen(leagueShortcut: String, leagueSeason: String, navController: NavController, modifier: Modifier = Modifier) {
-    val teamViewModel: TeamViewModel = viewModel(factory = TeamViewModelFactory(leagueShortcut, leagueSeason))
+fun MatchScreen(navController: NavController, modifier: Modifier = Modifier) {
+    val teamViewModel: TeamViewModel = viewModel(factory = TeamViewModelFactory(LocalLeague.current.leagueShortcut, LocalLeague.current.leagueSeason))
     val viewState by teamViewModel.teamState
-    val matchViewModel: MatchViewModel = viewModel(factory = MatchViewModelFactory(LocalContext.current, LocalLeagueId.current, leagueShortcut))
+    val matchViewModel: MatchViewModel = viewModel(factory = MatchViewModelFactory(LocalContext.current, LocalLeague.current.leagueId, LocalLeague.current.leagueShortcut))
     val nextViewState by matchViewModel.nextMatchState
     val lastViewState by matchViewModel.lastMatchState
     val context = LocalContext.current
@@ -101,13 +101,13 @@ fun MatchScreen(leagueShortcut: String, leagueSeason: String, navController: Nav
                     }
 
                     // Favourite Teams Section
-                    FavouriteTeams(leagueShortcut+leagueSeason, viewState.list, { selectedTeam ->
+                    FavouriteTeams(viewState.list, { selectedTeam ->
                         navController.navigate("${TeamDetail.route}/${selectedTeam.teamId}")
                     })
 
                     // Zeige dann die Liste der CategoryScreen Matches
                     if (viewState.list.isNotEmpty()) {
-                        TeamScreen(leagueShortcut, leagueSeason, teams = viewState.list, navController = navController)
+                        TeamScreen(teams = viewState.list, navController = navController)
                     } else {
                         Text("No Such items Found.")
                     }
@@ -118,14 +118,14 @@ fun MatchScreen(leagueShortcut: String, leagueSeason: String, navController: Nav
 }
 
 @Composable
-fun TeamScreen(leagueShortcut: String, leagueSeason: String, teams: List<Team>, navController: NavController) {
+fun TeamScreen(teams: List<Team>, navController: NavController) {
 
     Column {
         Text(
             text="All Teams", color = LocalTextColor.current
         )
     }
-    val leagueId = LocalLeagueId.current
+    val league = LocalLeague.current
     // Eine LazyColumn ist bereits scrollbar
     LazyColumn(
         contentPadding = PaddingValues(all = 8.dp), // Füge Abstand der ganzen Liste hinzu
@@ -134,7 +134,7 @@ fun TeamScreen(leagueShortcut: String, leagueSeason: String, teams: List<Team>, 
 
         items(teams) { team ->
             TeamItem(team = team, onTeamClick = { selectedTeam ->
-                navController.navigate("${TeamDetail.route}/${leagueId}/${leagueShortcut}/${leagueSeason}/${selectedTeam.teamId}")
+                navController.navigate("${TeamDetail.route}/${league.leagueId}/${league.leagueShortcut}/${league.leagueSeason}/${selectedTeam.teamId}")
             })
         }
     }

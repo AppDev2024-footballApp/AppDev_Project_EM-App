@@ -17,6 +17,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.fussball_em_2024_app.model.League
 import com.example.fussball_em_2024_app.ui.Leagues.LeaguesScreen
 import com.example.fussball_em_2024_app.ui.MatchDetail.MatchDetailScreen
 import com.example.fussball_em_2024_app.ui.LightSensorViewModel
@@ -24,7 +25,7 @@ import com.example.fussball_em_2024_app.ui.TeamDetail.TeamDetailScreen
 import com.example.testjetpackcompose.ui.theme.TestJetpackComposeTheme
 
 var LocalTextColor = staticCompositionLocalOf { Color.Black }
-var LocalLeagueId = compositionLocalOf { 4708 }
+val LocalLeague = staticCompositionLocalOf { League() }
 
 class MainActivity : ComponentActivity() {
 
@@ -65,8 +66,8 @@ fun FussballEMApp(lightData: LiveData<Float>){
                     val leagueShortcut = backStackEntry.arguments?.getString(LeagueDetail.leagueShortcutArg) ?: "em"
                     val leagueSeasons = backStackEntry.arguments?.getString(LeagueDetail.leagueSeasonArg) ?: "2024"
 
-                    CompositionLocalProvider(value = LocalLeagueId provides leagueId) {
-                        MatchScreen(leagueShortcut, leagueSeasons, navController, modifier)
+                    CompositionLocalProvider(value = LocalLeague provides League(leagueId, leagueShortcut, leagueSeasons)) {
+                        MatchScreen(navController, modifier)
                     }
                 }
 
@@ -78,8 +79,8 @@ fun FussballEMApp(lightData: LiveData<Float>){
                     val leagueSeasons = backStackEntry.arguments?.getString(LeagueDetail.leagueSeasonArg) ?: "2024"
                     val teamId = backStackEntry.arguments?.getInt(TeamDetail.teamIdArg) ?: 0
 
-                    CompositionLocalProvider(value = LocalLeagueId provides leagueId){
-                        TeamDetailScreen(teamId = teamId, leagueShortcut, leagueSeasons, navController, modifier)
+                    CompositionLocalProvider(value = LocalLeague provides League(leagueId, leagueShortcut, leagueSeasons)){
+                        TeamDetailScreen(teamId = teamId, navController, modifier)
                     }
                 }
 
