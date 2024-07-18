@@ -60,7 +60,7 @@ fun TeamDetailScreen(teamId: Int, navController: NavController, modifier: Modifi
     val teamName = teamInfo.teamInfo?.teamName
     val league = "UEFA EURO 2024"
     val lastMatchesViewModel: LastMatchesViewModel? = teamName?.let {
-        viewModel(factory = LastMatchesFactory(it, pastWeeks = 4))
+        viewModel(factory = LastMatchesFactory(it, pastWeeks = 8))
     }
 
     val lastMatches = lastMatchesViewModel?.matchState
