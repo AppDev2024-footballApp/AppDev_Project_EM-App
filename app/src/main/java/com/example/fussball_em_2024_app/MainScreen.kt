@@ -81,12 +81,12 @@ fun MatchScreen(navController: NavController, modifier: Modifier = Modifier) {
                     // Zeige zuerst den nächsten Match an
                     nextViewState.match?.let { match ->
                         NextMatchScreen(match = match, navController = navController)
-                        Spacer(modifier = Modifier.height(16.dp))
+                        Spacer(modifier = Modifier.height(12.dp))
                     }
 
                     lastViewState.match?.let { match ->
                         LastMatchScreen(match = match, navController = navController)
-                        Spacer(modifier = Modifier.height(16.dp))
+                        Spacer(modifier = Modifier.height(12.dp))
                     }
 
                     Button(
@@ -95,7 +95,7 @@ fun MatchScreen(navController: NavController, modifier: Modifier = Modifier) {
                             navController.navigate("overview")
                         },
                         modifier = Modifier
-                            .padding(top = 16.dp)
+                            .padding(top = 12.dp)
                     ) {
                         Text("Other leagues", color = LocalTextColor.current)
                     }
@@ -160,7 +160,7 @@ fun MatchItems(match: Match) {
                     contentScale = ContentScale.Crop
                 )
                 Text(
-                    text = match.team1.teamName,
+                    text = match.team1.teamName.replace(" ", "\n"), // replace because of too long teamNames
                     textAlign = TextAlign.Center,
                     color = LocalTextColor.current
                 )
@@ -185,7 +185,7 @@ fun MatchItems(match: Match) {
                     contentScale = ContentScale.Crop
                 )
                 Text(
-                    text = match.team2.teamName,
+                    text = match.team2.teamName.replace(" ", "\n"), // replace because of too long teamNames
                     textAlign = TextAlign.Center,
                     color = LocalTextColor.current
                 )

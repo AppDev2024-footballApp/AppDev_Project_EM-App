@@ -23,17 +23,20 @@ class LeaguesViewModel : ViewModel() {
                 val response = matchService.getAllLeagues()
                 if(response.isNotEmpty()){
 
-                    _leaguesState.value = _leaguesState.value.copy(
-                        loading = false,
-                        list = response.filter { league: League ->  league.sport.sportId == 1
-                            && (league.leagueShortcut == "em"
+                    val allLeagues = response.filter { league: League ->
+                        league.sport.sportId == 1
+                                && (league.leagueShortcut == "em"
                                 || league.leagueShortcut == "wwc"
                                 || league.leagueShortcut.startsWith("bl")
                                 || league.leagueShortcut.startsWith("fem")
                                 || league.leagueShortcut.startsWith("wm"))
                                 && league.leagueId != 4684
                                 && !league.leagueName.lowercase().contains("test")}
-                            .sortedBy { league: League ->  league.leagueSeason}.reversed(),
+
+                    _leaguesState.value = _leaguesState.value.copy(
+                        loading = false,
+                        list = allLeagues,
+                        filteredList = allLeagues,
                         error = null
                     )
 
@@ -49,10 +52,39 @@ class LeaguesViewModel : ViewModel() {
         }
     }
 
+    fun searchLeagues(query: String){
+        val filteredList = if (query.isEmpty()) {
+            _leaguesState.value.list
+        } else {
+            _leaguesState.value.list.filter {
+                it.leagueName.contains(query, ignoreCase = true)
+            }
+        }
+        _leaguesState.value = _leaguesState.value.copy(filteredList = filteredList)
+    }
+
+    fun sortLeagues(byName: Boolean, ascending: Boolean) {
+        val sortedList = if (byName) {
+            if(ascending){
+                _leaguesState.value.filteredList.sortedBy { it.leagueName }
+            }else{
+                _leaguesState.value.filteredList.sortedByDescending { it.leagueName }
+            }
+        } else {
+            if(ascending){
+                _leaguesState.value.filteredList.sortedBy { it.leagueSeason }
+            }else{
+                _leaguesState.value.filteredList.sortedByDescending { it.leagueSeason }
+            }
+        }
+        _leaguesState.value = _leaguesState.value.copy(filteredList = sortedList)
+    }
+
 
     data class LeaguesState(
         val loading: Boolean = true,
         val list: List<League> = emptyList(),
+        val filteredList: List<League> = emptyList(),
         val error: String? = null
     )
 }
