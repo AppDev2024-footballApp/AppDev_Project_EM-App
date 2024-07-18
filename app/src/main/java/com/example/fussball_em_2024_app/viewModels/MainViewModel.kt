@@ -37,6 +37,11 @@ class LastMatchesViewModel(val teamName: String, val pastWeeks: Int) : ViewModel
                         loading = false,
                         error = null
                     )
+                } else {
+                    _matchState.value = _matchState.value.copy(
+                        loading = false,
+                        error = "No matches found"
+                    )
                 }
             } catch (e: Exception) {
                 _matchState.value = _matchState.value.copy(
