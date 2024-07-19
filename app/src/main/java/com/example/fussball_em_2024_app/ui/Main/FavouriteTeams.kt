@@ -37,17 +37,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
+import com.example.fussball_em_2024_app.LocalLeague
 import com.example.fussball_em_2024_app.LocalTextColor
 import com.example.fussball_em_2024_app.model.Team
 
 @Composable
-fun FavouriteTeams(leagueName: String, teams: List<Team>, onTeamClick: (Team) -> Unit,
+fun FavouriteTeams(teams: List<Team>, onTeamClick: (Team) -> Unit,
                    viewModel: FavouriteTeamsViewModel = viewModel(
                        factory = FavouriteTeamsViewModelFactory(LocalContext.current)
                    )){
+    val league = LocalLeague.current
 
-    LaunchedEffect(leagueName) {
-        viewModel.loadFavouriteTeams(leagueName)
+    LaunchedEffect(league.leagueShortcut + league.leagueSeason) {
+        viewModel.loadFavouriteTeams(league.leagueShortcut + league.leagueSeason)
     }
 
     val favouriteTeams by viewModel.favouriteTeams.collectAsState()

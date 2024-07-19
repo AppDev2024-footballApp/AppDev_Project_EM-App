@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
+import com.example.fussball_em_2024_app.LocalLeague
 import com.example.fussball_em_2024_app.LocalTextColor
 import com.example.fussball_em_2024_app.ui.Main.LastMatchScreen
 import com.example.fussball_em_2024_app.ui.Main.NextMatchScreen
@@ -34,8 +35,9 @@ import com.example.fussball_em_2024_app.viewModels.TeamDetailViewModelFactory
 
 @Composable
 fun TeamDetailScreen(teamId: Int, navController: NavController, modifier: Modifier = Modifier) {
+    val league = LocalLeague.current
     val teamDetailViewModel: TeamDetailViewModel = viewModel(
-        factory = TeamDetailViewModelFactory(teamId)
+        factory = TeamDetailViewModelFactory(teamId, league.leagueId, league.leagueShortcut, league.leagueSeason)
     )
     val teamInfo by teamDetailViewModel.teamInfoState
     val nextMatch by teamDetailViewModel.nextMatchState

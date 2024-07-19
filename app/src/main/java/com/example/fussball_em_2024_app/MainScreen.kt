@@ -1,7 +1,6 @@
 package com.example.fussball_em_2024_app
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,7 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,11 +25,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -42,17 +38,20 @@ import com.example.fussball_em_2024_app.ui.Main.FavouriteTeams
 import com.example.fussball_em_2024_app.ui.Main.LastMatchScreen
 import com.example.fussball_em_2024_app.ui.Main.NextMatchScreen
 import com.example.fussball_em_2024_app.utils.DateFormater.formatDate
+import com.example.fussball_em_2024_app.utils.StoreLeague
 import com.example.fussball_em_2024_app.viewModels.MatchViewModel
 import com.example.fussball_em_2024_app.viewModels.MatchViewModelFactory
 import com.example.fussball_em_2024_app.viewModels.TeamViewModel
+import com.example.fussball_em_2024_app.viewModels.TeamViewModelFactory
 
 @Composable
 fun MatchScreen(navController: NavController, modifier: Modifier = Modifier) {
-    val teamViewModel: TeamViewModel = viewModel()
+    val teamViewModel: TeamViewModel = viewModel(factory = TeamViewModelFactory(LocalLeague.current.leagueShortcut, LocalLeague.current.leagueSeason))
     val viewState by teamViewModel.teamState
-    val matchViewModel: MatchViewModel = viewModel(factory = MatchViewModelFactory(LocalContext.current))
+    val matchViewModel: MatchViewModel = viewModel(factory = MatchViewModelFactory(LocalContext.current, LocalLeague.current.leagueId, LocalLeague.current.leagueShortcut))
     val nextViewState by matchViewModel.nextMatchState
     val lastViewState by matchViewModel.lastMatchState
+    val context = LocalContext.current
 
     Box(modifier = Modifier.fillMaxSize()) {
         when {
@@ -62,6 +61,16 @@ fun MatchScreen(navController: NavController, modifier: Modifier = Modifier) {
             }
             viewState.error != null -> {
                 Text("ERROR OCCURRED", color = LocalTextColor.current)
+                Button(
+                    onClick = {
+                        StoreLeague().removeCurrentLeague(context)
+                        navController.navigate("overview")
+                    },
+                    modifier = Modifier
+                        .padding(top = 16.dp)
+                ) {
+                    Text("Other leagues", color = LocalTextColor.current)
+                }
             }
             else -> {
                 Column (
@@ -72,16 +81,27 @@ fun MatchScreen(navController: NavController, modifier: Modifier = Modifier) {
                     // Zeige zuerst den nächsten Match an
                     nextViewState.match?.let { match ->
                         NextMatchScreen(match = match, navController = navController)
-                        Spacer(modifier = Modifier.height(16.dp))
+                        Spacer(modifier = Modifier.height(12.dp))
                     }
 
                     lastViewState.match?.let { match ->
                         LastMatchScreen(match = match, navController = navController)
-                        Spacer(modifier = Modifier.height(16.dp))
+                        Spacer(modifier = Modifier.height(12.dp))
+                    }
+
+                    Button(
+                        onClick = {
+                            StoreLeague().removeCurrentLeague(context)
+                            navController.navigate("overview")
+                        },
+                        modifier = Modifier
+                            .padding(top = 12.dp)
+                    ) {
+                        Text("Other leagues", color = LocalTextColor.current)
                     }
 
                     // Favourite Teams Section
-                    FavouriteTeams("em24", viewState.list, { selectedTeam ->
+                    FavouriteTeams(viewState.list, { selectedTeam ->
                         navController.navigate("${TeamDetail.route}/${selectedTeam.teamId}")
                     })
 
@@ -105,16 +125,17 @@ fun TeamScreen(teams: List<Team>, navController: NavController) {
             text="All Teams", color = LocalTextColor.current
         )
     }
-
+    val league = LocalLeague.current
     // Eine LazyColumn ist bereits scrollbar
     LazyColumn(
         contentPadding = PaddingValues(all = 8.dp), // Füge Abstand der ganzen Liste hinzu
         modifier = Modifier.fillMaxSize()
     ) {
+
         items(teams) { team ->
             TeamItem(team = team, onTeamClick = { selectedTeam ->
-                navController.navigate("${TeamDetail.route}/${selectedTeam.teamId}")
-            }, textColor = LocalTextColor.current)
+                navController.navigate("${TeamDetail.route}/${league.leagueId}/${league.leagueShortcut}/${league.leagueSeason}/${selectedTeam.teamId}")
+            })
         }
     }
 }
@@ -139,7 +160,7 @@ fun MatchItems(match: Match) {
                     contentScale = ContentScale.Crop
                 )
                 Text(
-                    text = match.team1.teamName,
+                    text = match.team1.teamName.replace(" ", "\n"), // replace because of too long teamNames
                     textAlign = TextAlign.Center,
                     color = LocalTextColor.current
                 )
@@ -164,7 +185,7 @@ fun MatchItems(match: Match) {
                     contentScale = ContentScale.Crop
                 )
                 Text(
-                    text = match.team2.teamName,
+                    text = match.team2.teamName.replace(" ", "\n"), // replace because of too long teamNames
                     textAlign = TextAlign.Center,
                     color = LocalTextColor.current
                 )
@@ -175,7 +196,7 @@ fun MatchItems(match: Match) {
 
 
 @Composable
-fun TeamItem(team:Team, onTeamClick: (Team) -> Unit, textColor: Color){
+fun TeamItem(team:Team, onTeamClick: (Team) -> Unit){
     Column(modifier = Modifier
         .padding(8.dp)
         .clickable { onTeamClick(team) }) {
@@ -200,13 +221,13 @@ fun TeamItem(team:Team, onTeamClick: (Team) -> Unit, textColor: Color){
                         Text(
                             text= it,
                             textAlign = TextAlign.Center,
-                            color = textColor
+                            color = LocalTextColor.current
                             )
                     }
                     Text(
                         text = team.teamName,
                         textAlign = TextAlign.Center,
-                        color = textColor
+                        color = LocalTextColor.current
                     )
                 }
 
