@@ -43,6 +43,16 @@ class LeaguesViewModel : ViewModel() {
                                 && league.leagueId != 4748 // no data (em 2024)
                                 && !league.leagueName.lowercase().contains("test")}
 
+                    allLeagues.filter { league: League ->
+                        league.leagueId == 4694
+                                || league.leagueId == 4708
+                                || league.leagueId == 4537
+                                || league.leagueId == 4457
+                                || league.leagueId == 4755
+                                || league.leagueId == 4741
+                                || league.leagueId == 4756
+                    }.forEach { league: League -> league.isSuggested = true }
+
                     _leaguesState.value = _leaguesState.value.copy(
                         loading = false,
                         list = allLeagues,

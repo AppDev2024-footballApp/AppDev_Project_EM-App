@@ -5,7 +5,8 @@ class League(
     var leagueName: String,
     var leagueShortcut: String,
     var leagueSeason: String,
-    var sport: Sport
+    var sport: Sport,
+    var isSuggested: Boolean = false
 ) {
     constructor(leagueId: Int, leagueShortcut: String, leagueSeason: String):this(leagueId, "", leagueShortcut, leagueSeason, Sport(0, ""))
 

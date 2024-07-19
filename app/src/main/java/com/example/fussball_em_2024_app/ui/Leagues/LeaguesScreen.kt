@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.material.icons.rounded.KeyboardArrowUp
+import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
@@ -175,7 +176,9 @@ fun LeagueItem(league: League, onLeagueClick: (League) -> Unit){
                     color = LocalTextColor.current
                 )
             }
-
+            if(league.isSuggested){
+                Icon(imageVector = Icons.Rounded.Star, contentDescription = "suggested league", tint = LocalTextColor.current)
+            }
         }
     }
 }
