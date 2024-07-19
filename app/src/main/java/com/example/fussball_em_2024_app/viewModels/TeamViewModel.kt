@@ -37,7 +37,10 @@ class TeamViewModel(private val leagueShortcut: String, private val leagueSeason
                 if (response.isNotEmpty()) {
                     _teamState.value= _teamState.value.copy(
                         loading = false,
-                        list= response,
+                        list= response.filter { team: Team ->
+                                    !team.teamName.startsWith("Sieger")
+                                    && !team.teamName.startsWith("Zweiter")
+                                    && !team.teamName.startsWith("Verlierer") }, // problematic data by at least WM Katar
                         error = null
                     )
                 }

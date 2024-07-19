@@ -29,8 +29,18 @@ class LeaguesViewModel : ViewModel() {
                                 || league.leagueShortcut == "wwc"
                                 || league.leagueShortcut.startsWith("bl")
                                 || league.leagueShortcut.startsWith("fem")
-                                || league.leagueShortcut.startsWith("wm"))
+                                || league.leagueShortcut.startsWith("em")
+                                || league.leagueShortcut.startsWith("wm")
+                                || league.leagueShortcut.startsWith("fifa"))
                                 && league.leagueId != 4684
+                                && league.leagueId != 4258 // no data (WM 2018)
+                                && league.leagueId != 4236 // no data (WM 2018)
+                                && league.leagueId != 4220 // no goal scorer (better option) (WM 2018)
+                                && league.leagueId != 4215 // no data (WM 2018)
+                                && league.leagueId != 4257 // no data (WM 2018)
+                                && league.leagueId != 4231 // no pictures (better option) (WM 2018)
+                                && league.leagueId != 4268 // no data (WM 2018?)
+                                && league.leagueId != 4748 // no data (em 2024)
                                 && !league.leagueName.lowercase().contains("test")}
 
                     _leaguesState.value = _leaguesState.value.copy(
