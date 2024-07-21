@@ -1,6 +1,4 @@
-package com.example
-.fussball_em_2024_app
-.viewModels
+package com.example.fussball_em_2024_app.viewModels
 
 import android.util.Log
 import androidx.compose.runtime.State
@@ -12,36 +10,41 @@ import com.example.fussball_em_2024_app.matchService
 import com.example.fussball_em_2024_app.model.Match
 import kotlinx.coroutines.launch
 
-class MainViewModelFactory(private val leagueShortcut: String, private val leagueSeason: String) : ViewModelProvider.Factory{
+class LastMatchesFactory(private val teamName: String, private val pastWeeks: Int) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if(modelClass.isAssignableFrom(MainViewModel::class.java)){
-            return MainViewModel(leagueShortcut, leagueSeason) as T
+        if (modelClass.isAssignableFrom(LastMatchesViewModel::class.java)) {
+            return LastMatchesViewModel(teamName, pastWeeks) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
 }
 
-class MainViewModel(private val leagueShortcut: String, private val leagueSeason: String) : ViewModel() {
-    private val _matchState= mutableStateOf(MatchState())
+class LastMatchesViewModel(val teamName: String, val pastWeeks: Int) : ViewModel() {
+    private val _matchState = mutableStateOf(MatchState())
     val matchState: State<MatchState> = _matchState
 
-    init{
-        fetchMatches()
+    init {
+        fetchLastMatches()
     }
 
-    private fun fetchMatches(){
+    private fun fetchLastMatches() {
         viewModelScope.launch {
             try {
-                val response= matchService.getLatestMatch(leagueShortcut, leagueSeason)
+                val response = matchService.getLastMatchesByTeam(teamName, pastWeeks)
                 if (response.isNotEmpty()) {
-                    _matchState.value= _matchState.value.copy(
-                        list= response,
+                    _matchState.value = _matchState.value.copy(
+                        list = response,
                         loading = false,
                         error = null
                     )
+                } else {
+                    _matchState.value = _matchState.value.copy(
+                        loading = false,
+                        error = "No matches found"
+                    )
                 }
-            }catch (e:Exception){
-                _matchState.value= _matchState.value.copy(
+            } catch (e: Exception) {
+                _matchState.value = _matchState.value.copy(
                     loading = false,
                     error = "Error fetching Matches: ${e.message}"
                 )
@@ -51,9 +54,8 @@ class MainViewModel(private val leagueShortcut: String, private val leagueSeason
     }
 
     data class MatchState(
-        val loading:Boolean= true,
+        val loading: Boolean = true,
         val list: List<Match> = emptyList(),
-        val error:String?=null)
-
+        val error: String? = null
+    )
 }
-

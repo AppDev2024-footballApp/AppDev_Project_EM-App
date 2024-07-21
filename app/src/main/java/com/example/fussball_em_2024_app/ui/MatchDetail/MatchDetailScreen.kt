@@ -1,5 +1,6 @@
 package com.example.fussball_em_2024_app.ui.MatchDetail
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,7 +20,12 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,10 +42,14 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.fussball_em_2024_app.LocalTextColor
 import com.example.fussball_em_2024_app.R
+import com.example.fussball_em_2024_app.getMatchData
 import com.example.fussball_em_2024_app.model.Goal
+import com.example.fussball_em_2024_app.model.OpenAIResponse
 import com.example.fussball_em_2024_app.utils.DateFormater
 import com.example.fussball_em_2024_app.viewModels.MatchDetailViewModel
 import com.example.fussball_em_2024_app.viewModels.MatchDetailViewModelFactory
+import kotlinx.coroutines.launch
+import org.json.JSONObject
 
 @Composable
 fun MatchDetailScreen(
@@ -53,7 +63,51 @@ fun MatchDetailScreen(
     )
     val matchInfo by matchDetailViewModel.matchState
 
+    var prediction by remember { mutableStateOf("Loading...") }
+    val coroutineScope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
+
+    Box(modifier = modifier.fillMaxSize()) {
+    // Fetch prediction
+    LaunchedEffect(matchInfo.match) {
+        matchInfo.match?.let { match ->
+            val team1Name = match.team1?.teamName
+            val team2Name = match.team2?.teamName
+            if (team1Name != null && team2Name != null) {
+                coroutineScope.launch {
+                    try {
+                        val prompt = """
+                        Generate a JSON object for the expected outcome of the match between $team1Name and $team2Name. The Prediction should be based on the last 4 matches between the  teams. The JSON should have the following structure:
+                        {
+                            "team1": "$team1Name",
+                            "team2": "$team2Name",
+                            "expectedOutcome": {
+                                "team1Score": <integer>,
+                                "team2Score": <integer>
+                                
+                            }
+                        }
+                        """.trimIndent()
+                        val data: OpenAIResponse? = getMatchData(prompt)
+                        val jsonString = data?.choices?.firstOrNull()?.message?.content ?: "{}"
+                        Log.d("OpenAIResponse", jsonString)  // Log the response
+                        val jsonObject = JSONObject(jsonString)
+                        val team1 = jsonObject.optString("team1", "Unknown")
+                        val team2 = jsonObject.optString("team2", "Unknown")
+                        val expectedOutcome = jsonObject.optJSONObject("expectedOutcome")
+                        val team1Score = expectedOutcome?.optInt("team1Score", 0) ?: 0
+                        val team2Score = expectedOutcome?.optInt("team2Score", 0) ?: 0
+
+
+                        prediction = "$team1 $team1Score - $team2Score $team2"
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        prediction = "Error fetching prediction: ${e.message}"
+                    }
+                }
+            }
+        }
+    }
 
     Box(modifier = modifier.fillMaxSize()) {
         when {
@@ -133,6 +187,31 @@ fun MatchDetailScreen(
                     if (match.numberOfViewers != null){
                         TextDetailMatchInformation(text = "Number of Viewers: ${match.numberOfViewers}")
                     }
+                    TextDetailMatchInformation(text = "Stadion: ${match.location?.locationStadium} (${match.location?.locationCity})")
+
+                    if (match.numberOfViewers != null){
+                        TextDetailMatchInformation(text = "Number of Viewers: ${match.numberOfViewers}")
+                    }
+
+                    if (match.matchIsFinished) {
+                        val team1Score = match.goals?.lastOrNull()?.scoreTeam1 ?: 0
+                        val team2Score = match.goals?.lastOrNull()?.scoreTeam2 ?: 0
+                        Text(
+                            text = "Result: ${match.team1.teamName} $team1Score - $team2Score ${match.team2.teamName}",
+                            style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp),
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(bottom = 16.dp)
+                        )
+                    }
+
+
+                    // Display prediction
+                    Text(
+                        text = "Prediction: $prediction",
+                        style = TextStyle(fontWeight = FontWeight.SemiBold, fontSize = 16.sp),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(bottom = 20.dp)
+                    )
 
                     // goals
                     Row(
@@ -150,7 +229,7 @@ fun MatchDetailScreen(
 
                     HorizontalDivider(color = Color.Black, thickness = 3.dp)
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(20.dp))
 
                     var team1GoalNumber = 0
                     var team2GoalNumber = 0
@@ -165,7 +244,7 @@ fun MatchDetailScreen(
                             GoalItem(goal, false)
                         }
                     }
-                    
+
                     Spacer(modifier = Modifier.weight(1f))
 
                     // Back button
