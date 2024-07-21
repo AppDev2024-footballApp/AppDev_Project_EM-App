@@ -33,7 +33,7 @@ fun LastMatchScreen(match: Match, navController: NavController) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)
+            .padding(12.dp)
             .background(
                 color = backgroundColor,
                 shape = RoundedCornerShape(4.dp)
@@ -42,12 +42,12 @@ fun LastMatchScreen(match: Match, navController: NavController) {
                 navController.navigate("${MatchDetail.route}/${match.matchID}")
             }
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
+        Column(modifier = Modifier.padding(12.dp)) {
             Text(
                 text = "Last Game",
                 style = TextStyle(fontWeight = FontWeight.Bold),
                 color = LocalTextColor.current,
-                modifier = Modifier.padding(bottom = 8.dp)
+                modifier = Modifier.padding(bottom = 4.dp)
             )
             MatchItems(match = match)
         }
