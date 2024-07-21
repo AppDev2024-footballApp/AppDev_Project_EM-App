@@ -7,11 +7,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -52,6 +50,7 @@ fun MatchScreen(navController: NavController, modifier: Modifier = Modifier) {
     val nextViewState by matchViewModel.nextMatchState
     val lastViewState by matchViewModel.lastMatchState
     val context = LocalContext.current
+    val league = LocalLeague.current
 
     Box(modifier = Modifier.fillMaxSize()) {
         when {
@@ -73,67 +72,68 @@ fun MatchScreen(navController: NavController, modifier: Modifier = Modifier) {
                 }
             }
             else -> {
-                Column (
+                // Layz Column in order to be scrollable
+                LazyColumn (
                     modifier = modifier
-                        .fillMaxSize()
+                        .fillMaxSize(),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
                 )
                 {
-                    // Zeige zuerst den nächsten Match an
-                    nextViewState.match?.let { match ->
-                        NextMatchScreen(match = match, navController = navController)
+                    item {
+                        // Show the next match first
+                        nextViewState.match?.let { match ->
+                            NextMatchScreen(match = match, navController = navController)
+                        }
                     }
 
-                    lastViewState.match?.let { match ->
-                        LastMatchScreen(match = match, navController = navController)
+                    item {
+                        // Show the last match
+                        lastViewState.match?.let { match ->
+                            LastMatchScreen(match = match, navController = navController)
+                        }
                     }
 
-                    Button(
-                        onClick = {
-                            StoreLeague().removeCurrentLeague(context)
-                            navController.navigate("overview")
-                        },
-                        modifier = Modifier
-                            .padding(top = 4.dp)
-                    ) {
-                        Text("Other leagues", color = LocalTextColor.current)
+                    item {
+                        Button(
+                            onClick = {
+                                StoreLeague().removeCurrentLeague(context)
+                                navController.navigate("overview")
+                            },
+                            modifier = Modifier.padding(top = 8.dp)
+                        ) {
+                            Text("Other leagues", color = LocalTextColor.current)
+                        }
                     }
 
-                    // Favourite Teams Section
-                    FavouriteTeams(viewState.list, { selectedTeam ->
-                        navController.navigate("${TeamDetail.route}/${selectedTeam.teamId}")
-                    })
+                    item {
+                        FavouriteTeams(teams = viewState.list, onTeamClick = { selectedTeam ->
+                            navController.navigate("${TeamDetail.route}/${selectedTeam.teamId}")
+                        })
+                    }
 
-                    // Zeige dann die Liste der CategoryScreen Matches
-                    if (viewState.list.isNotEmpty()) {
-                        TeamScreen(teams = viewState.list, navController = navController)
-                    } else {
-                        Text("No Such items Found.")
+                    if (viewState.list.isEmpty()) {
+                        item {
+                            Column{
+                                Text(
+                                    text="All Teams", color = LocalTextColor.current
+                                )
+                                Text("No Such items Found.")
+                            }
+                        }
+                    }else{
+                        item{
+                            Text(
+                                text="All Teams", color = LocalTextColor.current
+                            )
+                        }
+                        items(viewState.list) { team ->
+                            TeamItem(team = team) { selectedTeam ->
+                                navController.navigate("${TeamDetail.route}/${league.leagueId}/${league.leagueShortcut}/${league.leagueSeason}/${selectedTeam.teamId}")
+                            }
+                        }
                     }
                 }
             }
-        }
-    }
-}
-
-@Composable
-fun TeamScreen(teams: List<Team>, navController: NavController) {
-
-    Column {
-        Text(
-            text="All Teams", color = LocalTextColor.current
-        )
-    }
-    val league = LocalLeague.current
-    // Eine LazyColumn ist bereits scrollbar
-    LazyColumn(
-        contentPadding = PaddingValues(all = 8.dp), // Füge Abstand der ganzen Liste hinzu
-        modifier = Modifier.fillMaxSize()
-    ) {
-
-        items(teams) { team ->
-            TeamItem(team = team, onTeamClick = { selectedTeam ->
-                navController.navigate("${TeamDetail.route}/${league.leagueId}/${league.leagueShortcut}/${league.leagueSeason}/${selectedTeam.teamId}")
-            })
         }
     }
 }
