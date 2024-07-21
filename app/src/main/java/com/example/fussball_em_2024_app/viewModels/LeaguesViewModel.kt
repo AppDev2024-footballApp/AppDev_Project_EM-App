@@ -100,6 +100,16 @@ class LeaguesViewModel : ViewModel() {
         _leaguesState.value = _leaguesState.value.copy(filteredList = sortedList)
     }
 
+    fun filterLeaguesBySuggested(bySuggested: Boolean){
+        val filteredList = if (bySuggested){
+            _leaguesState.value.filteredList.filter { it.isSuggested }
+        } else {
+            _leaguesState.value.list
+        }
+
+        _leaguesState.value = _leaguesState.value.copy(filteredList = filteredList)
+    }
+
 
     data class LeaguesState(
         val loading: Boolean = true,
