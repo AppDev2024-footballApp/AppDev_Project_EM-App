@@ -200,6 +200,7 @@ fun MatchDetailScreen(
                             text = "Result: ${match.team1.teamName} $team1Score - $team2Score ${match.team2.teamName}",
                             style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp),
                             textAlign = TextAlign.Center,
+                            color = LocalTextColor.current,
                             modifier = Modifier.padding(bottom = 16.dp)
                         )
                     }
@@ -210,6 +211,7 @@ fun MatchDetailScreen(
                         text = "Prediction: $prediction",
                         style = TextStyle(fontWeight = FontWeight.SemiBold, fontSize = 16.sp),
                         textAlign = TextAlign.Center,
+                        color = LocalTextColor.current,
                         modifier = Modifier.padding(bottom = 20.dp)
                     )
 
@@ -264,7 +266,7 @@ fun MatchDetailScreen(
         }
 
     }
-}
+}}
 
 
 @Composable
