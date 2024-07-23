@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.fussball_em_2024_app.LocalTextColor
+import com.example.fussball_em_2024_app.LocalColors
 import com.example.fussball_em_2024_app.model.TeamInfo
 
 @Composable
@@ -43,7 +43,7 @@ fun TeamInfoPointsText(text: String, modifier: Modifier){
     Text(
         text = text,
         style = TextStyle(fontSize = 24.sp),
-        color = LocalTextColor.current,
+        color = LocalColors.current.textColor,
         modifier = modifier.padding(bottom = 8.dp)
     )
 }

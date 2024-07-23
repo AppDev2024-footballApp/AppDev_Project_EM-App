@@ -59,7 +59,7 @@ fun MatchScreen(navController: NavController, modifier: Modifier = Modifier) {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
             }
             viewState.error != null -> {
-                Text("ERROR OCCURRED", color = LocalTextColor.current)
+                Text("ERROR OCCURRED", color = LocalColors.current.textColor)
                 Button(
                     onClick = {
                         StoreLeague().removeCurrentLeague(context)
@@ -68,7 +68,7 @@ fun MatchScreen(navController: NavController, modifier: Modifier = Modifier) {
                     modifier = Modifier
                         .padding(top = 16.dp)
                 ) {
-                    Text("Other leagues", color = LocalTextColor.current)
+                    Text("Other leagues", color = LocalColors.current.textColor)
                 }
             }
             else -> {
@@ -101,7 +101,7 @@ fun MatchScreen(navController: NavController, modifier: Modifier = Modifier) {
                             },
                             modifier = Modifier.padding(top = 8.dp)
                         ) {
-                            Text("Other leagues", color = LocalTextColor.current)
+                            Text("Other leagues", color = LocalColors.current.textColor)
                         }
                     }
 
@@ -115,7 +115,7 @@ fun MatchScreen(navController: NavController, modifier: Modifier = Modifier) {
                         item {
                             Column{
                                 Text(
-                                    text="All Teams", color = LocalTextColor.current
+                                    text="All Teams", color = LocalColors.current.textColor
                                 )
                                 Text("No Such items Found.")
                             }
@@ -123,7 +123,7 @@ fun MatchScreen(navController: NavController, modifier: Modifier = Modifier) {
                     }else{
                         item{
                             Text(
-                                text="All Teams", color = LocalTextColor.current
+                                text="All Teams", color = LocalColors.current.textColor
                             )
                         }
                         items(viewState.list) { team ->
@@ -160,14 +160,14 @@ fun MatchItems(match: Match) {
                 Text(
                     text = match.team1.teamName.replace(" ", "\n"), // replace because of too long teamNames
                     textAlign = TextAlign.Center,
-                    color = LocalTextColor.current
+                    color = LocalColors.current.textColor
                 )
             }
 
             // Datum des Spiels in der Mitte
             Text(
                 text = formatDate(match.matchDateTime),  // Datum formatieren nach Bedarf
-                color = LocalTextColor.current,
+                color = LocalColors.current.textColor,
                 modifier = Modifier.align(Alignment.CenterVertically)
             )
 
@@ -185,7 +185,7 @@ fun MatchItems(match: Match) {
                 Text(
                     text = match.team2.teamName.replace(" ", "\n"), // replace because of too long teamNames
                     textAlign = TextAlign.Center,
-                    color = LocalTextColor.current
+                    color = LocalColors.current.textColor
                 )
             }
         }
@@ -219,13 +219,13 @@ fun TeamItem(team:Team, onTeamClick: (Team) -> Unit){
                         Text(
                             text= it,
                             textAlign = TextAlign.Center,
-                            color = LocalTextColor.current
+                            color = LocalColors.current.textColor
                             )
                     }
                     Text(
                         text = team.teamName,
                         textAlign = TextAlign.Center,
-                        color = LocalTextColor.current
+                        color = LocalColors.current.textColor
                     )
                 }
 

@@ -34,7 +34,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
-import com.example.fussball_em_2024_app.LocalTextColor
+import com.example.fussball_em_2024_app.LocalColors
 import com.example.fussball_em_2024_app.R
 import com.example.fussball_em_2024_app.model.Goal
 import com.example.fussball_em_2024_app.utils.DateFormater
@@ -58,7 +58,7 @@ fun MatchDetailScreen(
     Box(modifier = modifier.fillMaxSize()) {
         when {
             matchInfo.error != null || matchInfo.match == null -> {
-                Text("ERROR OCCURRED", color = LocalTextColor.current)
+                Text("ERROR OCCURRED", color = LocalColors.current.textColor)
             }
 
             else -> {
@@ -75,7 +75,7 @@ fun MatchDetailScreen(
                         text = "Game: ${match.getTeamVsNames}",
                         style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 24.sp),
                         textAlign = TextAlign.Center,
-                        color = LocalTextColor.current,
+                        color = LocalColors.current.textColor,
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
 
@@ -100,7 +100,7 @@ fun MatchDetailScreen(
                                 text = (if(match.group?.groupName?.length!! > 1) match.group.groupName else "Group ${match.group.groupName}"),
                                 style = TextStyle(fontSize = 18.sp),
                                 textAlign = TextAlign.Center,
-                                color = LocalTextColor.current,
+                                color = LocalColors.current.textColor,
                                 modifier = Modifier.padding(bottom = 16.dp)
                             )
                         }
@@ -129,7 +129,13 @@ fun MatchDetailScreen(
                     }
 
                     if(match.location != null){
-                        TextDetailMatchInformation(text = "Stadion: ${match.location?.locationStadium} (${match.location?.locationCity})")
+                        if(match.location!!.locationStadium == null){
+                            TextDetailMatchInformation(text = "Stadion: ${match.location?.locationCity}")
+                        }else if(match.location!!.locationCity == null){
+                            TextDetailMatchInformation(text = "Stadion: ${match.location?.locationStadium}")
+                        }else{
+                            TextDetailMatchInformation(text = "Stadion: ${match.location?.locationStadium} (${match.location?.locationCity})")
+                        }
                     }
 
                     if (match.numberOfViewers != null){
@@ -142,11 +148,11 @@ fun MatchDetailScreen(
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
                         Column(horizontalAlignment = Alignment.Start) {
-                            Text(match.team1.teamName, color = LocalTextColor.current)
+                            Text(match.team1.teamName, color = LocalColors.current.textColor)
                         }
 
                         Column(horizontalAlignment = Alignment.End) {
-                            Text(match.team2.teamName, color = LocalTextColor.current)
+                            Text(match.team2.teamName, color = LocalColors.current.textColor)
                         }
                     }
 
@@ -158,7 +164,7 @@ fun MatchDetailScreen(
                     var team2GoalNumber = 0
 
                     if(match.matchIsFinished && match.goals == null || match.goals!!.isEmpty())
-                        Text(text = "No goal data available", color = LocalTextColor.current)
+                        Text(text = "No goal data available", color = LocalColors.current.textColor)
 
                     else{
                         match.goals!!.forEach{ goal ->
@@ -183,7 +189,7 @@ fun MatchDetailScreen(
 
                             .padding(top = 16.dp)
                     ) {
-                        Text("Go back", color = LocalTextColor.current)
+                        Text("Go back", color = LocalColors.current.textColor)
                     }
 
                 }
@@ -203,7 +209,7 @@ fun GoalItem(goal: Goal, isFirstTeam: Boolean) {
                 if (isFirstTeam){
                     Text(
                         text = if(goal.matchMinute != null) (goal.matchMinute.toString() + "' ") else "no data ",
-                        color = LocalTextColor.current
+                        color = LocalColors.current.textColor
                     )
                     Image(
                         painter = painterResource(id = R.drawable.football),
@@ -216,7 +222,7 @@ fun GoalItem(goal: Goal, isFirstTeam: Boolean) {
                     )
                     Text(
                         text = if(goal.matchMinute != null) (" " + goal.matchMinute.toString() + "'") else " no data",
-                        color = LocalTextColor.current
+                        color = LocalColors.current.textColor
                     )
                 }
             }
@@ -227,7 +233,7 @@ fun GoalItem(goal: Goal, isFirstTeam: Boolean) {
                 text = "${goal.getGoalGetterName}\n" +
                         "${goal.comment}",
                 textAlign = TextAlign.Center,
-                color = LocalTextColor.current
+                color = LocalColors.current.textColor
             )
         }
         else if(goal.isOwnGoal == true){
@@ -235,14 +241,14 @@ fun GoalItem(goal: Goal, isFirstTeam: Boolean) {
                 text = "${goal.getGoalGetterName}\n" +
                         "(OG)",
                 textAlign = TextAlign.Center,
-                color = LocalTextColor.current
+                color = LocalColors.current.textColor
             )
         }
         else{
             Text(
                 text = goal.getGoalGetterName,
                 textAlign = TextAlign.Center,
-                color = LocalTextColor.current
+                color = LocalColors.current.textColor
             )
         }
         Spacer(modifier = Modifier.height(24.dp))
@@ -255,7 +261,7 @@ fun TextDetailMatchInformation(text: String){
     Text(
         text = text,
         textAlign = TextAlign.Center,
-        color = LocalTextColor.current,
+        color = LocalColors.current.textColor,
         modifier = Modifier.padding(bottom = 16.dp)
     )
 }

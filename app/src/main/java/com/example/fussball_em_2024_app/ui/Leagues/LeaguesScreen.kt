@@ -11,17 +11,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.material.icons.rounded.KeyboardArrowUp
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -34,7 +30,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
@@ -43,7 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.fussball_em_2024_app.LeagueDetail
-import com.example.fussball_em_2024_app.LocalTextColor
+import com.example.fussball_em_2024_app.LocalColors
 import com.example.fussball_em_2024_app.R
 import com.example.fussball_em_2024_app.model.League
 import com.example.fussball_em_2024_app.utils.StoreLeague
@@ -69,7 +64,7 @@ fun LeaguesScreen(
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
             }
             viewState.error != null -> {
-                Text("ERROR OCCURRED", color = LocalTextColor.current)
+                Text("ERROR OCCURRED", color = LocalColors.current.textColor)
             }
             else -> {
                 Column (
@@ -80,7 +75,7 @@ fun LeaguesScreen(
                         SearchAndSortSection(leaguesViewModel)
                         LeaguesList(leagues = viewState.filteredList, navController = navController)
                     }else{
-                        Text("No such items found.", color = LocalTextColor.current)
+                        Text("No such items found.", color = LocalColors.current.textColor)
                     }
                 }
             }
@@ -119,22 +114,22 @@ fun SearchAndSortSection(leaguesViewModel: LeaguesViewModel){
         ) {
 
             Button(onClick = { sortByName = true; ascendingName = !ascendingName; leaguesViewModel.sortLeagues(byName = true, ascending = ascendingName) }) {
-                Text("Sort by Name", color = LocalTextColor.current)
+                Text("Sort by Name", color = LocalColors.current.textColor)
                 if(ascendingName){
-                    Icon(Icons.Rounded.KeyboardArrowDown, contentDescription = "Arrow Down", tint = LocalTextColor.current)
+                    Icon(Icons.Rounded.KeyboardArrowDown, contentDescription = "Arrow Down", tint = LocalColors.current.textColor)
                 }
                 else{
-                    Icon(Icons.Rounded.KeyboardArrowUp, contentDescription = "Arrow Up", tint = LocalTextColor.current)
+                    Icon(Icons.Rounded.KeyboardArrowUp, contentDescription = "Arrow Up", tint = LocalColors.current.textColor)
                 }
 
             }
             Button(onClick = { sortByName = false; ascendingSeason = !ascendingSeason; leaguesViewModel.sortLeagues(byName = false, ascending = ascendingSeason) }) {
-                Text("Sort by Season", color = LocalTextColor.current)
+                Text("Sort by Season", color = LocalColors.current.textColor)
                 if(ascendingSeason){
-                    Icon(Icons.Rounded.KeyboardArrowDown, contentDescription = "Arrow Down", tint = LocalTextColor.current)
+                    Icon(Icons.Rounded.KeyboardArrowDown, contentDescription = "Arrow Down", tint = LocalColors.current.textColor)
                 }
                 else{
-                    Icon(Icons.Rounded.KeyboardArrowUp, contentDescription = "Arrow Up", tint = LocalTextColor.current)
+                    Icon(Icons.Rounded.KeyboardArrowUp, contentDescription = "Arrow Up", tint = LocalColors.current.textColor)
                 }
             }
             IconButton(onClick = {
@@ -146,9 +141,9 @@ fun SearchAndSortSection(leaguesViewModel: LeaguesViewModel){
                 }
                 }) {
                 if(filterBySuggested){
-                    Icon(imageVector = Icons.Rounded.Star, contentDescription = "suggested Leagues", tint = LocalTextColor.current)
+                    Icon(imageVector = Icons.Rounded.Star, contentDescription = "suggested Leagues", tint = LocalColors.current.textColor)
                 } else{
-                    Icon(painterResource(id = R.drawable.baseline_star_outline_24), contentDescription = "suggested Leagues", tint = LocalTextColor.current)
+                    Icon(painterResource(id = R.drawable.baseline_star_outline_24), contentDescription = "suggested Leagues", tint = LocalColors.current.textColor)
                     /* //Icon(imageVector = Icons.Outlined.StarRate, contentDescription = "suggested Leagues", tint = LocalTextColor.current)
                     Icons.Outlined.StarRate has not an outlined star!, therefor either have to import large library androidx.compose.material:material-icons-extended
                     or as now creating a vector asset in drawable (https://stackoverflow.com/questions/74050270/compose-icons-outlined-star-isnt-outlined)
@@ -164,7 +159,7 @@ fun SearchAndSortSection(leaguesViewModel: LeaguesViewModel){
 fun LeaguesList(leagues: List<League>, navController: NavController){
     Column {
         Text(
-            text="All Leagues", color = LocalTextColor.current
+            text="All Leagues", color = LocalColors.current.textColor
         )
     }
 
@@ -196,16 +191,16 @@ fun LeagueItem(league: League, onLeagueClick: (League) -> Unit){
                 Text(
                     text= league.leagueName,
                     textAlign = TextAlign.Center,
-                    color = LocalTextColor.current
+                    color = LocalColors.current.textColor
                 )
                 Text(
                     text = league.leagueSeason,
                     textAlign = TextAlign.Center,
-                    color = LocalTextColor.current
+                    color = LocalColors.current.textColor
                 )
             }
             if(league.isSuggested){
-                Icon(imageVector = Icons.Rounded.Star, contentDescription = "suggested league", tint = LocalTextColor.current)
+                Icon(imageVector = Icons.Rounded.Star, contentDescription = "suggested league", tint = LocalColors.current.textColor)
             }
         }
     }

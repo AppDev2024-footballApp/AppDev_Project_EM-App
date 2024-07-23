@@ -10,32 +10,23 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.fussball_em_2024_app.LocalTextColor
+import com.example.fussball_em_2024_app.LocalColors
 import com.example.fussball_em_2024_app.MatchDetail
 import com.example.fussball_em_2024_app.MatchItems
 import com.example.fussball_em_2024_app.model.Match
-import com.example.fussball_em_2024_app.utils.LightDarkModeHelper
 
 @Composable
 fun LastMatchScreen(match: Match, navController: NavController) {
-    val isDarkMode = LightDarkModeHelper.isDarkMode(LocalTextColor.current)
-    val backgroundColor = if(isDarkMode){
-        Color.Gray
-    }else{
-        Color.White
-    }
-
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(12.dp)
             .background(
-                color = backgroundColor,
+                color = LocalColors.current.secondaryBackgroundColor,
                 shape = RoundedCornerShape(4.dp)
             )
             .clickable {
@@ -46,7 +37,7 @@ fun LastMatchScreen(match: Match, navController: NavController) {
             Text(
                 text = "Last Game",
                 style = TextStyle(fontWeight = FontWeight.Bold),
-                color = LocalTextColor.current,
+                color = LocalColors.current.textColor,
                 modifier = Modifier.padding(bottom = 4.dp)
             )
             MatchItems(match = match)
