@@ -43,7 +43,7 @@ class MainActivity : ComponentActivity() {
 fun FussballEMApp(lightData: LiveData<Float>){
     val lightLevel by lightData.observeAsState()
 
-    val isInDarkTheme = lightLevel != null && lightLevel!! < 1000 // Lux level to switch mode
+    val isInDarkTheme = lightLevel != null && lightLevel!! < 30 // Lux level to switch mode
 
     val backgroundColor = if (isInDarkTheme) Color.DarkGray else Color.LightGray
     val textColor = if (isInDarkTheme) Color.White else Color.Black

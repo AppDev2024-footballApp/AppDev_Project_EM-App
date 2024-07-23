@@ -16,7 +16,7 @@ class LightSensorManager(context: Context) : SensorEventListener {
     init{
         val lightSensor: Sensor? = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT)
         if(lightSensor != null){
-            sensorManager.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_NORMAL)
+            sensorManager.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_UI)
         }
     }
 
