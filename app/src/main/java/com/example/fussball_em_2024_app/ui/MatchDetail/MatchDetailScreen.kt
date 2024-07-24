@@ -187,11 +187,7 @@ fun MatchDetailScreen(
                     if (match.numberOfViewers != null){
                         TextDetailMatchInformation(text = "Number of Viewers: ${match.numberOfViewers}")
                     }
-                    TextDetailMatchInformation(text = "Stadion: ${match.location?.locationStadium} (${match.location?.locationCity})")
 
-                    if (match.numberOfViewers != null){
-                        TextDetailMatchInformation(text = "Number of Viewers: ${match.numberOfViewers}")
-                    }
 
                     if (match.matchIsFinished) {
                         val team1Score = match.goals?.lastOrNull()?.scoreTeam1 ?: 0
