@@ -30,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
@@ -114,22 +115,22 @@ fun SearchAndSortSection(leaguesViewModel: LeaguesViewModel){
         ) {
 
             Button(onClick = { sortByName = true; ascendingName = !ascendingName; leaguesViewModel.sortLeagues(byName = true, ascending = ascendingName) }) {
-                Text("Sort by Name", color = LocalColors.current.textColor)
+                Text("Sort by Name", color = White)
                 if(ascendingName){
-                    Icon(Icons.Rounded.KeyboardArrowDown, contentDescription = "Arrow Down", tint = LocalColors.current.textColor)
+                    Icon(Icons.Rounded.KeyboardArrowDown, contentDescription = "Arrow Down", tint = White)
                 }
                 else{
-                    Icon(Icons.Rounded.KeyboardArrowUp, contentDescription = "Arrow Up", tint = LocalColors.current.textColor)
+                    Icon(Icons.Rounded.KeyboardArrowUp, contentDescription = "Arrow Up", tint = White)
                 }
 
             }
             Button(onClick = { sortByName = false; ascendingSeason = !ascendingSeason; leaguesViewModel.sortLeagues(byName = false, ascending = ascendingSeason) }) {
-                Text("Sort by Season", color = LocalColors.current.textColor)
+                Text("Sort by Season", color = White)
                 if(ascendingSeason){
-                    Icon(Icons.Rounded.KeyboardArrowDown, contentDescription = "Arrow Down", tint = LocalColors.current.textColor)
+                    Icon(Icons.Rounded.KeyboardArrowDown, contentDescription = "Arrow Down", tint = White)
                 }
                 else{
-                    Icon(Icons.Rounded.KeyboardArrowUp, contentDescription = "Arrow Up", tint = LocalColors.current.textColor)
+                    Icon(Icons.Rounded.KeyboardArrowUp, contentDescription = "Arrow Up", tint = White)
                 }
             }
             IconButton(onClick = {
