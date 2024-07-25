@@ -52,7 +52,7 @@ fun TeamDetailScreen(teamId: Int, navController: NavController, modifier: Modifi
 
     val teamName = teamInfo.teamInfo?.teamName
     val lastMatchesViewModel: LastMatchesViewModel? = teamName?.let {
-        viewModel(factory = LastMatchesFactory(it, pastWeeks = 8))
+        viewModel(factory = LastMatchesFactory(it, pastWeeks = 260)) // All Matches from last 5 Years
     }
 
     val lastMatches = lastMatchesViewModel?.matchState
