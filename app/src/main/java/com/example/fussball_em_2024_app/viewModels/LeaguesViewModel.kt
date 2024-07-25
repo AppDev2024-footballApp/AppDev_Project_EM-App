@@ -29,9 +29,29 @@ class LeaguesViewModel : ViewModel() {
                                 || league.leagueShortcut == "wwc"
                                 || league.leagueShortcut.startsWith("bl")
                                 || league.leagueShortcut.startsWith("fem")
-                                || league.leagueShortcut.startsWith("wm"))
+                                || league.leagueShortcut.startsWith("em")
+                                || league.leagueShortcut.startsWith("wm")
+                                || league.leagueShortcut.startsWith("fifa"))
                                 && league.leagueId != 4684
+                                && league.leagueId != 4258 // no data (WM 2018)
+                                && league.leagueId != 4236 // no data (WM 2018)
+                                && league.leagueId != 4220 // no goal scorer (better option) (WM 2018)
+                                && league.leagueId != 4215 // no data (WM 2018)
+                                && league.leagueId != 4257 // no data (WM 2018)
+                                && league.leagueId != 4231 // no pictures (better option) (WM 2018)
+                                && league.leagueId != 4268 // no data (WM 2018?)
+                                && league.leagueId != 4748 // no data (em 2024)
                                 && !league.leagueName.lowercase().contains("test")}
+
+                    allLeagues.filter { league: League ->
+                        league.leagueId == 4694
+                                || league.leagueId == 4708
+                                || league.leagueId == 4537
+                                || league.leagueId == 4457
+                                || league.leagueId == 4755
+                                || league.leagueId == 4741
+                                || league.leagueId == 4756
+                    }.forEach { league: League -> league.isSuggested = true }
 
                     _leaguesState.value = _leaguesState.value.copy(
                         loading = false,
@@ -78,6 +98,16 @@ class LeaguesViewModel : ViewModel() {
             }
         }
         _leaguesState.value = _leaguesState.value.copy(filteredList = sortedList)
+    }
+
+    fun filterLeaguesBySuggested(bySuggested: Boolean){
+        val filteredList = if (bySuggested){
+            _leaguesState.value.filteredList.filter { it.isSuggested }
+        } else {
+            _leaguesState.value.list
+        }
+
+        _leaguesState.value = _leaguesState.value.copy(filteredList = filteredList)
     }
 
 

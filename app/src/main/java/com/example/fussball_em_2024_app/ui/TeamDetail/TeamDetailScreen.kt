@@ -26,8 +26,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
+import com.example.fussball_em_2024_app.LocalColors
 import com.example.fussball_em_2024_app.LocalLeague
-import com.example.fussball_em_2024_app.LocalTextColor
 import com.example.fussball_em_2024_app.ui.Main.LastMatchScreen
 import com.example.fussball_em_2024_app.ui.Main.NextMatchScreen
 import com.example.fussball_em_2024_app.viewModels.TeamDetailViewModel
@@ -65,7 +65,7 @@ fun TeamDetailScreen(teamId: Int, navController: NavController, modifier: Modifi
                                 text = teamInfo.teamInfo!!.teamName,
                                 style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 48.sp),
                                 textAlign = TextAlign.Center,
-                                color = LocalTextColor.current,
+                                color = LocalColors.current.textColor,
                                 modifier = modifier.padding(bottom = 10.dp)
                             )
 
@@ -83,7 +83,7 @@ fun TeamDetailScreen(teamId: Int, navController: NavController, modifier: Modifi
                             Text(
                                 text = "Points: ${teamInfo.teamInfo?.points}",
                                 style = TextStyle(fontSize = 30.sp),
-                                color = LocalTextColor.current,
+                                color = LocalColors.current.textColor,
                                 modifier = modifier.padding(bottom = 16.dp)
                             )
 

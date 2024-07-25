@@ -11,5 +11,9 @@ class Goal(
     var isOwnGoal: Boolean?,
     var isOvertime: Boolean?,
     var comment: String?
+
 ) {
+
+    val getGoalGetterName: String
+        get() = goalGetterName ?: "unknow goal scorer"
 }

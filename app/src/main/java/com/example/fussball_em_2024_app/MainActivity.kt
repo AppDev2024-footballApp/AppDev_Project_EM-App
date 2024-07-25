@@ -6,7 +6,6 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.staticCompositionLocalOf
@@ -22,9 +21,10 @@ import com.example.fussball_em_2024_app.ui.Leagues.LeaguesScreen
 import com.example.fussball_em_2024_app.ui.MatchDetail.MatchDetailScreen
 import com.example.fussball_em_2024_app.ui.LightSensorViewModel
 import com.example.fussball_em_2024_app.ui.TeamDetail.TeamDetailScreen
+import com.example.fussball_em_2024_app.utils.ColorHelper
 import com.example.testjetpackcompose.ui.theme.TestJetpackComposeTheme
 
-var LocalTextColor = staticCompositionLocalOf { Color.Black }
+val LocalColors = staticCompositionLocalOf { ColorHelper() }
 val LocalLeague = staticCompositionLocalOf { League() }
 
 class MainActivity : ComponentActivity() {
@@ -43,14 +43,16 @@ class MainActivity : ComponentActivity() {
 fun FussballEMApp(lightData: LiveData<Float>){
     val lightLevel by lightData.observeAsState()
 
-    val isInDarkTheme = lightLevel != null && lightLevel!! < 1000 // Lux level to switch mode
+    val isInDarkTheme = lightLevel != null && lightLevel!! < 30 // Lux level to switch mode
 
     val backgroundColor = if (isInDarkTheme) Color.DarkGray else Color.LightGray
     val textColor = if (isInDarkTheme) Color.White else Color.Black
+    val secBackColor = if (isInDarkTheme) Color.Gray else Color.White
 
+    val colors = ColorHelper(textColor, backgroundColor, secBackColor)
     val modifier: Modifier = Modifier.background(backgroundColor)
 
-    CompositionLocalProvider(LocalTextColor provides textColor) {
+    CompositionLocalProvider(LocalColors provides colors) {
         TestJetpackComposeTheme {
             val navController = rememberNavController()
 

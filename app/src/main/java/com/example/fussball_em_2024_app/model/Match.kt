@@ -24,4 +24,11 @@ class Match(
     var location: Location?,
     var numberOfViewers: Int?
     ) {
+
+    val getTeamVsNames: String
+        get() {
+            if (team1.shortName == null || team1.shortName.isEmpty() || team2.shortName == null || team2.shortName.isEmpty())
+                return "${team1.teamName} vs. ${team2.teamName}"
+            return "${team1.shortName} vs. ${team2.shortName}"
+        }
 }
