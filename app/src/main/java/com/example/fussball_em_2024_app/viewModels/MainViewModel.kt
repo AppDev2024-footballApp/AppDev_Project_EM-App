@@ -56,4 +56,3 @@ class MainViewModel(private val leagueShortcut: String, private val leagueSeason
         val error:String?=null)
 
 }
-

@@ -1,8 +1,12 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     id("kotlin-kapt")
 }
+val localProperties = Properties()
+file("local.properties").inputStream().use { localProperties.load(it) }
 
 android {
     namespace = "com.example.fussball_em_2024_app"
@@ -14,7 +18,7 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-
+        buildConfigField("String", "OPENAI_API_KEY", "\"${localProperties["openai.api.key"]}\"")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
@@ -39,6 +43,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig= true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
