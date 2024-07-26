@@ -45,6 +45,8 @@ import com.example.fussball_em_2024_app.R
 import com.example.fussball_em_2024_app.getMatchData
 import com.example.fussball_em_2024_app.model.Goal
 import com.example.fussball_em_2024_app.model.OpenAIResponse
+import com.example.fussball_em_2024_app.ui.SimpleText
+import com.example.fussball_em_2024_app.ui.TextAlignCenter
 import com.example.fussball_em_2024_app.utils.DateFormater
 import com.example.fussball_em_2024_app.viewModels.MatchDetailViewModel
 import com.example.fussball_em_2024_app.viewModels.MatchDetailViewModelFactory
@@ -112,7 +114,7 @@ fun MatchDetailScreen(
     Box(modifier = modifier.fillMaxSize()) {
         when {
             matchInfo.error != null || matchInfo.match == null -> {
-                Text("ERROR OCCURRED", color = LocalColors.current.textColor)
+                SimpleText("ERROR OCCURRED")
             }
 
             else -> {
@@ -125,11 +127,9 @@ fun MatchDetailScreen(
                         .verticalScroll(scrollState),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(
+                    TextAlignCenter(
                         text = "Game: ${match.getTeamVsNames}",
                         style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 24.sp),
-                        textAlign = TextAlign.Center,
-                        color = LocalColors.current.textColor,
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
 
@@ -150,11 +150,9 @@ fun MatchDetailScreen(
                         }
 
                         Column {
-                            Text(
+                            TextAlignCenter(
                                 text = (if(match.group?.groupName?.length!! > 1) match.group.groupName else "Group ${match.group.groupName}"),
                                 style = TextStyle(fontSize = 18.sp),
-                                textAlign = TextAlign.Center,
-                                color = LocalColors.current.textColor,
                                 modifier = Modifier.padding(bottom = 16.dp)
                             )
                         }
@@ -200,22 +198,18 @@ fun MatchDetailScreen(
                     if (match.matchIsFinished) {
                         val team1Score = match.goals?.lastOrNull()?.scoreTeam1 ?: 0
                         val team2Score = match.goals?.lastOrNull()?.scoreTeam2 ?: 0
-                        Text(
+                        TextAlignCenter(
                             text = "Result: ${match.team1.teamName} $team1Score - $team2Score ${match.team2.teamName}",
                             style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp),
-                            textAlign = TextAlign.Center,
-                            color = LocalColors.current.textColor,
                             modifier = Modifier.padding(bottom = 16.dp)
                         )
                     }
 
 
                     // Display prediction
-                    Text(
+                    TextAlignCenter(
                         text = "Prediction: $prediction",
                         style = TextStyle(fontWeight = FontWeight.SemiBold, fontSize = 16.sp),
-                        textAlign = TextAlign.Center,
-                        color = LocalColors.current.textColor,
                         modifier = Modifier.padding(bottom = 20.dp)
                     )
 
@@ -225,11 +219,11 @@ fun MatchDetailScreen(
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
                         Column(horizontalAlignment = Alignment.Start) {
-                            Text(match.team1.teamName, color = LocalColors.current.textColor)
+                            SimpleText(match.team1.teamName)
                         }
 
                         Column(horizontalAlignment = Alignment.End) {
-                            Text(match.team2.teamName, color = LocalColors.current.textColor)
+                            SimpleText(match.team2.teamName)
                         }
                     }
 
@@ -241,7 +235,7 @@ fun MatchDetailScreen(
                     var team2GoalNumber = 0
 
                     if(match.matchIsFinished && match.goals == null || match.goals!!.isEmpty())
-                        Text(text = "No goal data available", color = LocalColors.current.textColor)
+                        SimpleText(text = "No goal data available")
 
                     else{
                         match.goals!!.forEach{ goal ->
@@ -266,7 +260,7 @@ fun MatchDetailScreen(
 
                             .padding(top = 16.dp)
                     ) {
-                        Text("Go back", color = LocalColors.current.textColor)
+                        SimpleText("Go back")
                     }
 
                 }
@@ -284,9 +278,8 @@ fun GoalItem(goal: Goal, isFirstTeam: Boolean) {
         Column(modifier = Modifier.fillMaxWidth(0.5f), horizontalAlignment = if (isFirstTeam) Alignment.End else Alignment.Start) {
             Row {
                 if (isFirstTeam){
-                    Text(
-                        text = if(goal.matchMinute != null) (goal.matchMinute.toString() + "' ") else "no data ",
-                        color = LocalColors.current.textColor
+                    SimpleText(
+                        text = if(goal.matchMinute != null) (goal.matchMinute.toString() + "' ") else "no data "
                     )
                     Image(
                         painter = painterResource(id = R.drawable.football),
@@ -297,36 +290,25 @@ fun GoalItem(goal: Goal, isFirstTeam: Boolean) {
                         painter = painterResource(id = R.drawable.football),
                         contentDescription = "football"
                     )
-                    Text(
-                        text = if(goal.matchMinute != null) (" " + goal.matchMinute.toString() + "'") else " no data",
-                        color = LocalColors.current.textColor
-                    )
+                    SimpleText(text = if(goal.matchMinute != null) (" " + goal.matchMinute.toString() + "'") else " no data")
                 }
             }
         }
 
         if(goal.comment != null){
-            Text(
+            TextAlignCenter(
                 text = "${goal.getGoalGetterName}\n" +
-                        "${goal.comment}",
-                textAlign = TextAlign.Center,
-                color = LocalColors.current.textColor
+                        "${goal.comment}"
             )
         }
         else if(goal.isOwnGoal == true){
-            Text(
+            TextAlignCenter(
                 text = "${goal.getGoalGetterName}\n" +
-                        "(OG)",
-                textAlign = TextAlign.Center,
-                color = LocalColors.current.textColor
+                        "(OG)"
             )
         }
         else{
-            Text(
-                text = goal.getGoalGetterName,
-                textAlign = TextAlign.Center,
-                color = LocalColors.current.textColor
-            )
+            TextAlignCenter(text = goal.getGoalGetterName)
         }
         Spacer(modifier = Modifier.height(24.dp))
     }
@@ -335,10 +317,8 @@ fun GoalItem(goal: Goal, isFirstTeam: Boolean) {
 
 @Composable
 fun TextDetailMatchInformation(text: String){
-    Text(
+    TextAlignCenter(
         text = text,
-        textAlign = TextAlign.Center,
-        color = LocalColors.current.textColor,
         modifier = Modifier.padding(bottom = 16.dp)
     )
 }

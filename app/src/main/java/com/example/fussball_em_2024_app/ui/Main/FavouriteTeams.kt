@@ -40,6 +40,8 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.fussball_em_2024_app.LocalColors
 import com.example.fussball_em_2024_app.LocalLeague
 import com.example.fussball_em_2024_app.model.Team
+import com.example.fussball_em_2024_app.ui.SimpleText
+import com.example.fussball_em_2024_app.ui.TextAlignCenter
 import com.example.fussball_em_2024_app.viewModels.FavouriteTeamsViewModel
 import com.example.fussball_em_2024_app.viewModels.FavouriteTeamsViewModelFactory
 
@@ -64,10 +66,9 @@ fun FavouriteTeams(teams: List<Team>, onTeamClick: (Team) -> Unit){
             .padding(16.dp)
             .fillMaxWidth()
     ) {
-        Text(
+        SimpleText(
             text = "Favourite Teams",
             style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 18.sp),
-            color = LocalColors.current.textColor,
             modifier = Modifier.padding(bottom = 8.dp)
         )
 
@@ -98,10 +99,8 @@ fun FavouriteTeams(teams: List<Team>, onTeamClick: (Team) -> Unit){
                                 contentScale = ContentScale.Crop
                             )
                             Spacer(modifier = Modifier.width(8.dp))
-                            Text(
+                            TextAlignCenter(
                                 text = team.teamName.replace(" ", "\n"),
-                                textAlign = TextAlign.Center,
-                                color = LocalColors.current.textColor,
                                 style = TextStyle(fontSize = 14.sp)
                             )
                             Spacer(modifier = Modifier.width(8.dp))
@@ -113,7 +112,7 @@ fun FavouriteTeams(teams: List<Team>, onTeamClick: (Team) -> Unit){
                                     .clickable { viewModel.removeFavouriteTeam(favTeam, leagueName) },
                                 contentAlignment = Alignment.Center
                             ) {
-                                Text("-", style = TextStyle(color = Color.White, fontSize = 24.sp), color = LocalColors.current.textColor)
+                                SimpleText("-", style = TextStyle(color = Color.White, fontSize = 24.sp))
                             }
 
                         }
@@ -136,12 +135,10 @@ fun FavouriteTeams(teams: List<Team>, onTeamClick: (Team) -> Unit){
                                 .background(Color.Gray),
                             contentAlignment = Alignment.Center
                         ) {
-                            Text("+", style = TextStyle(fontSize = 24.sp), color = LocalColors.current.textColor)
+                            SimpleText("+", style = TextStyle(fontSize = 24.sp))
                         }
-                        Text(
+                        TextAlignCenter(
                             text = "Add",
-                            textAlign = TextAlign.Center,
-                            color = LocalColors.current.textColor,
                             style = TextStyle(fontSize = 14.sp)
                         )
                     }
@@ -164,12 +161,10 @@ fun FavouriteTeams(teams: List<Team>, onTeamClick: (Team) -> Unit){
                         .background(Color.Gray),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text("+", style = TextStyle(fontSize = 24.sp), color = LocalColors.current.textColor)
+                    SimpleText(text = "+", style = TextStyle(fontSize = 24.sp))
                 }
-                Text(
+                TextAlignCenter(
                     text = "Add",
-                    textAlign = TextAlign.Center,
-                    color = LocalColors.current.textColor,
                     style = TextStyle(fontSize = 14.sp)
                 )
             }

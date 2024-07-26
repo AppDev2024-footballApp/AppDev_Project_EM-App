@@ -30,6 +30,8 @@ import com.example.fussball_em_2024_app.LocalColors
 import com.example.fussball_em_2024_app.LocalLeague
 import com.example.fussball_em_2024_app.ui.Main.LastMatchScreen
 import com.example.fussball_em_2024_app.ui.Main.NextMatchScreen
+import com.example.fussball_em_2024_app.ui.SimpleText
+import com.example.fussball_em_2024_app.ui.TextAlignCenter
 import com.example.fussball_em_2024_app.viewModels.TeamDetailViewModel
 import com.example.fussball_em_2024_app.viewModels.TeamDetailViewModelFactory
 
@@ -46,7 +48,7 @@ fun TeamDetailScreen(teamId: Int, navController: NavController, modifier: Modifi
     Box(modifier = modifier.fillMaxSize()) {
         when{
             teamInfo.error != null -> {
-                Text("ERROR OCCURRED")
+                SimpleText("ERROR OCCURRED")
             }
             else -> {
                 Column(
@@ -57,15 +59,13 @@ fun TeamDetailScreen(teamId: Int, navController: NavController, modifier: Modifi
 
                     when{
                         teamInfo.teamInfo == null -> {
-                            Text("ERROR OCCURRED")
+                            SimpleText("ERROR OCCURRED")
                         }
                         else -> {
                             // Team name as a headline
-                            Text(
+                            TextAlignCenter(
                                 text = teamInfo.teamInfo!!.teamName,
                                 style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 48.sp),
-                                textAlign = TextAlign.Center,
-                                color = LocalColors.current.textColor,
                                 modifier = modifier.padding(bottom = 10.dp)
                             )
 
@@ -80,10 +80,9 @@ fun TeamDetailScreen(teamId: Int, navController: NavController, modifier: Modifi
                             )
 
                             // Team details
-                            Text(
+                            SimpleText(
                                 text = "Points: ${teamInfo.teamInfo?.points}",
                                 style = TextStyle(fontSize = 30.sp),
-                                color = LocalColors.current.textColor,
                                 modifier = modifier.padding(bottom = 16.dp)
                             )
 
@@ -112,7 +111,7 @@ fun TeamDetailScreen(teamId: Int, navController: NavController, modifier: Modifi
                         onClick = { navController.popBackStack() },
                         modifier = Modifier.align(Alignment.Start)
                     ) {
-                        Text("← Back")
+                        SimpleText("← Back")
                     }
                 }
             }

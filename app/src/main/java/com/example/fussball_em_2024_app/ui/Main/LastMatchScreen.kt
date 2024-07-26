@@ -18,6 +18,7 @@ import com.example.fussball_em_2024_app.LocalColors
 import com.example.fussball_em_2024_app.MatchDetail
 import com.example.fussball_em_2024_app.MatchItems
 import com.example.fussball_em_2024_app.model.Match
+import com.example.fussball_em_2024_app.ui.SimpleText
 
 @Composable
 fun LastMatchScreen(match: Match, navController: NavController) {
@@ -34,10 +35,9 @@ fun LastMatchScreen(match: Match, navController: NavController) {
             }
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
-            Text(
+            SimpleText(
                 text = "Last Game",
                 style = TextStyle(fontWeight = FontWeight.Bold),
-                color = LocalColors.current.textColor,
                 modifier = Modifier.padding(bottom = 4.dp)
             )
             MatchItems(match = match)

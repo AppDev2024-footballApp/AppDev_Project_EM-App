@@ -35,6 +35,8 @@ import com.example.fussball_em_2024_app.model.Team
 import com.example.fussball_em_2024_app.ui.Main.FavouriteTeams
 import com.example.fussball_em_2024_app.ui.Main.LastMatchScreen
 import com.example.fussball_em_2024_app.ui.Main.NextMatchScreen
+import com.example.fussball_em_2024_app.ui.SimpleText
+import com.example.fussball_em_2024_app.ui.TextAlignCenter
 import com.example.fussball_em_2024_app.utils.DateFormater.formatDate
 import com.example.fussball_em_2024_app.utils.StoreLeague
 import com.example.fussball_em_2024_app.viewModels.MatchViewModel
@@ -59,7 +61,7 @@ fun MatchScreen(navController: NavController, modifier: Modifier = Modifier) {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
             }
             viewState.error != null -> {
-                Text("ERROR OCCURRED", color = LocalColors.current.textColor)
+                SimpleText("ERROR OCCURRED")
                 Button(
                     onClick = {
                         StoreLeague().removeCurrentLeague(context)
@@ -68,7 +70,7 @@ fun MatchScreen(navController: NavController, modifier: Modifier = Modifier) {
                     modifier = Modifier
                         .padding(top = 16.dp)
                 ) {
-                    Text("Other leagues", color = LocalColors.current.textColor)
+                    SimpleText("Other leagues")
                 }
             }
             else -> {
@@ -101,7 +103,7 @@ fun MatchScreen(navController: NavController, modifier: Modifier = Modifier) {
                             },
                             modifier = Modifier.padding(top = 8.dp)
                         ) {
-                            Text("Other leagues", color = LocalColors.current.textColor)
+                            SimpleText("Other leagues")
                         }
                     }
 
@@ -114,17 +116,13 @@ fun MatchScreen(navController: NavController, modifier: Modifier = Modifier) {
                     if (viewState.list.isEmpty()) {
                         item {
                             Column{
-                                Text(
-                                    text="All Teams", color = LocalColors.current.textColor
-                                )
-                                Text("No Such items Found.")
+                                SimpleText("All Teams")
+                                SimpleText("No Such items Found.")
                             }
                         }
                     }else{
                         item{
-                            Text(
-                                text="All Teams", color = LocalColors.current.textColor
-                            )
+                            SimpleText("All Teams")
                         }
                         items(viewState.list) { team ->
                             TeamItem(team = team) { selectedTeam ->
@@ -157,17 +155,12 @@ fun MatchItems(match: Match) {
                         .clip(CircleShape),  // Macht das Bild kreisförmig
                     contentScale = ContentScale.Crop
                 )
-                Text(
-                    text = match.team1.teamName.replace(" ", "\n"), // replace because of too long teamNames
-                    textAlign = TextAlign.Center,
-                    color = LocalColors.current.textColor
-                )
+                TextAlignCenter( text = match.team1.teamName.replace(" ", "\n")) // replace because of too long teamNames
             }
 
             // Datum des Spiels in der Mitte
-            Text(
+            SimpleText(
                 text = formatDate(match.matchDateTime),  // Datum formatieren nach Bedarf
-                color = LocalColors.current.textColor,
                 modifier = Modifier.align(Alignment.CenterVertically)
             )
 
@@ -182,11 +175,7 @@ fun MatchItems(match: Match) {
                         .clip(CircleShape),  // Macht das Bild kreisförmig
                     contentScale = ContentScale.Crop
                 )
-                Text(
-                    text = match.team2.teamName.replace(" ", "\n"), // replace because of too long teamNames
-                    textAlign = TextAlign.Center,
-                    color = LocalColors.current.textColor
-                )
+                TextAlignCenter(text = match.team2.teamName.replace(" ", "\n")) // replace because of too long teamNames
             }
         }
     }
@@ -216,19 +205,10 @@ fun TeamItem(team:Team, onTeamClick: (Team) -> Unit){
                 )
                 Column {
                     team.teamGroupName?.let {
-                        Text(
-                            text= it,
-                            textAlign = TextAlign.Center,
-                            color = LocalColors.current.textColor
-                            )
+                        TextAlignCenter(it )
                     }
-                    Text(
-                        text = team.teamName,
-                        textAlign = TextAlign.Center,
-                        color = LocalColors.current.textColor
-                    )
+                    SimpleText(text = team.teamName)
                 }
-
             }
 
             // Datum des Spiels in der Mitte

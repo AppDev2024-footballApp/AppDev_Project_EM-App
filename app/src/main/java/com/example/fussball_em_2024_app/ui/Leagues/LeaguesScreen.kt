@@ -33,7 +33,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -41,6 +40,8 @@ import com.example.fussball_em_2024_app.LeagueDetail
 import com.example.fussball_em_2024_app.LocalColors
 import com.example.fussball_em_2024_app.R
 import com.example.fussball_em_2024_app.model.League
+import com.example.fussball_em_2024_app.ui.SimpleText
+import com.example.fussball_em_2024_app.ui.TextAlignCenter
 import com.example.fussball_em_2024_app.utils.StoreLeague
 import com.example.fussball_em_2024_app.viewModels.LeaguesViewModel
 
@@ -64,7 +65,7 @@ fun LeaguesScreen(
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
             }
             viewState.error != null -> {
-                Text("ERROR OCCURRED", color = LocalColors.current.textColor)
+                SimpleText("ERROR OCCURRED")
             }
             else -> {
                 Column (
@@ -75,7 +76,7 @@ fun LeaguesScreen(
                         SearchAndSortSection(leaguesViewModel)
                         LeaguesList(leagues = viewState.filteredList, navController = navController)
                     }else{
-                        Text("No such items found.", color = LocalColors.current.textColor)
+                        SimpleText("No such items found.")
                     }
                 }
             }
@@ -114,7 +115,7 @@ fun SearchAndSortSection(leaguesViewModel: LeaguesViewModel){
         ) {
 
             Button(onClick = { sortByName = true; ascendingName = !ascendingName; leaguesViewModel.sortLeagues(byName = true, ascending = ascendingName) }) {
-                Text("Sort by Name", color = LocalColors.current.textColor)
+                SimpleText("Sort by Name")
                 if(ascendingName){
                     Icon(Icons.Rounded.KeyboardArrowDown, contentDescription = "Arrow Down", tint = LocalColors.current.textColor)
                 }
@@ -124,7 +125,7 @@ fun SearchAndSortSection(leaguesViewModel: LeaguesViewModel){
 
             }
             Button(onClick = { sortByName = false; ascendingSeason = !ascendingSeason; leaguesViewModel.sortLeagues(byName = false, ascending = ascendingSeason) }) {
-                Text("Sort by Season", color = LocalColors.current.textColor)
+                SimpleText("Sort by Season")
                 if(ascendingSeason){
                     Icon(Icons.Rounded.KeyboardArrowDown, contentDescription = "Arrow Down", tint = LocalColors.current.textColor)
                 }
@@ -158,9 +159,7 @@ fun SearchAndSortSection(leaguesViewModel: LeaguesViewModel){
 @Composable
 fun LeaguesList(leagues: List<League>, navController: NavController){
     Column {
-        Text(
-            text="All Leagues", color = LocalColors.current.textColor
-        )
+        SimpleText(text="All Leagues")
     }
 
     val currentContext = LocalContext.current
@@ -188,16 +187,8 @@ fun LeagueItem(league: League, onLeagueClick: (League) -> Unit){
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Column {
-                Text(
-                    text= league.leagueName,
-                    textAlign = TextAlign.Center,
-                    color = LocalColors.current.textColor
-                )
-                Text(
-                    text = league.leagueSeason,
-                    textAlign = TextAlign.Center,
-                    color = LocalColors.current.textColor
-                )
+                TextAlignCenter(text= league.leagueName)
+                TextAlignCenter(text = league.leagueSeason)
             }
             if(league.isSuggested){
                 Icon(imageVector = Icons.Rounded.Star, contentDescription = "suggested league", tint = LocalColors.current.textColor)

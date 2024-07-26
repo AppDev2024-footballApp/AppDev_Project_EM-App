@@ -18,6 +18,7 @@ import com.example.fussball_em_2024_app.LocalColors
 import com.example.fussball_em_2024_app.MatchDetail
 import com.example.fussball_em_2024_app.MatchItems
 import com.example.fussball_em_2024_app.model.Match
+import com.example.fussball_em_2024_app.ui.SimpleText
 
 @Composable
 fun NextMatchScreen(match: Match, navController: NavController) {
@@ -31,10 +32,9 @@ fun NextMatchScreen(match: Match, navController: NavController) {
             }
     ){
         Column(modifier = Modifier.padding(12.dp)) {
-            Text(
+            SimpleText(
                 text = "Next Game:",
                 style = TextStyle(fontWeight = FontWeight.Bold),
-                color = LocalColors.current.textColor,
                 modifier = Modifier.padding(bottom = 4.dp)
             )
             MatchItems(match = match)
