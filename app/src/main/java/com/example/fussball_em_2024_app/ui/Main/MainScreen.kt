@@ -1,11 +1,10 @@
-package com.example.fussball_em_2024_app
+package com.example.fussball_em_2024_app.ui.Main
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,7 +16,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -25,16 +23,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
+import com.example.fussball_em_2024_app.LocalLeague
+import com.example.fussball_em_2024_app.TeamDetail
 import com.example.fussball_em_2024_app.model.Match
 import com.example.fussball_em_2024_app.model.Team
-import com.example.fussball_em_2024_app.ui.Main.FavouriteTeams
-import com.example.fussball_em_2024_app.ui.Main.LastMatchScreen
-import com.example.fussball_em_2024_app.ui.Main.NextMatchScreen
 import com.example.fussball_em_2024_app.ui.SimpleText
 import com.example.fussball_em_2024_app.ui.TextAlignCenter
 import com.example.fussball_em_2024_app.utils.DateFormater.formatDate
@@ -81,16 +77,17 @@ fun MatchScreen(navController: NavController, modifier: Modifier = Modifier) {
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 )
                 {
-                    item {
-                        // Show the next match first
-                        nextViewState.match?.let { match ->
+                    // Show the next match first
+                    nextViewState.match?.let { match ->
+                        item{
                             NextMatchScreen(match = match, navController = navController)
                         }
+
                     }
 
-                    item {
-                        // Show the last match
-                        lastViewState.match?.let { match ->
+                    // Show the last match
+                    lastViewState.match?.let { match->
+                        item{
                             LastMatchScreen(match = match, navController = navController)
                         }
                     }
@@ -113,17 +110,15 @@ fun MatchScreen(navController: NavController, modifier: Modifier = Modifier) {
                         })
                     }
 
-                    if (viewState.list.isEmpty()) {
-                        item {
-                            Column{
-                                SimpleText("All Teams")
+                    item{
+                        Column {
+                            SimpleText("All Teams")
+                            if (viewState.list.isEmpty()) {
                                 SimpleText("No Such items Found.")
                             }
                         }
-                    }else{
-                        item{
-                            SimpleText("All Teams")
-                        }
+                    }
+                    if(viewState.list.isNotEmpty()){
                         items(viewState.list) { team ->
                             TeamItem(team = team) { selectedTeam ->
                                 navController.navigate("${TeamDetail.route}/${league.leagueId}/${league.leagueShortcut}/${league.leagueSeason}/${selectedTeam.teamId}")
@@ -210,14 +205,7 @@ fun TeamItem(team:Team, onTeamClick: (Team) -> Unit){
                     SimpleText(text = team.teamName)
                 }
             }
-
-            // Datum des Spiels in der Mitte
-
         }
     }
 
 }
-
-
-
-

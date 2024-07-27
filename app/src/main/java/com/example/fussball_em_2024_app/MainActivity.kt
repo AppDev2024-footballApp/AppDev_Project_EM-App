@@ -18,6 +18,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.fussball_em_2024_app.model.League
 import com.example.fussball_em_2024_app.ui.Leagues.LeaguesScreen
+import com.example.fussball_em_2024_app.ui.Main.MatchScreen
 import com.example.fussball_em_2024_app.ui.MatchDetail.MatchDetailScreen
 import com.example.fussball_em_2024_app.viewModels.LightSensorViewModel
 import com.example.fussball_em_2024_app.ui.TeamDetail.TeamDetailScreen

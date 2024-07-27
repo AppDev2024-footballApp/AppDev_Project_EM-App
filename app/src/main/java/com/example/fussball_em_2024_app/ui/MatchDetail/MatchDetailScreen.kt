@@ -211,41 +211,7 @@ fun MatchDetailScreen(
                     )
 
                     // goals
-                    Row(
-                        modifier = Modifier.fillMaxSize(),
-                        horizontalArrangement = Arrangement.SpaceEvenly
-                    ) {
-                        Column(horizontalAlignment = Alignment.Start) {
-                            SimpleText(match.team1.teamName)
-                        }
-
-                        Column(horizontalAlignment = Alignment.End) {
-                            SimpleText(match.team2.teamName)
-                        }
-                    }
-
-                    HorizontalDivider(color = Color.Black, thickness = 3.dp)
-
-                    Spacer(modifier = Modifier.height(20.dp))
-
-                    var team1GoalNumber = 0
-                    var team2GoalNumber = 0
-
-                    if(match.matchIsFinished && match.goals == null || match.goals!!.isEmpty())
-                        SimpleText(text = "No goal data available")
-
-                    else{
-                        match.goals!!.forEach{ goal ->
-                            if (goal.scoreTeam1!! > team1GoalNumber){
-                                team1GoalNumber++
-                                GoalItem(goal, true)
-                            }
-                            else if (goal.scoreTeam2!! > team2GoalNumber){
-                                team2GoalNumber++
-                                GoalItem(goal, false)
-                            }
-                        }
-                    }
+                    GoalsScreen(match = match)
 
                     Spacer(modifier = Modifier.weight(1f))
 
@@ -259,58 +225,12 @@ fun MatchDetailScreen(
                     ) {
                         SimpleText("Go back")
                     }
-
                 }
-
             }
         }
 
     }
 }}
-
-
-@Composable
-fun GoalItem(goal: Goal, isFirstTeam: Boolean) {
-    Column(modifier = Modifier.fillMaxSize(),horizontalAlignment = if (isFirstTeam) Alignment.Start else Alignment.End){
-        Column(modifier = Modifier.fillMaxWidth(0.5f), horizontalAlignment = if (isFirstTeam) Alignment.End else Alignment.Start) {
-            Row {
-                if (isFirstTeam){
-                    SimpleText(
-                        text = if(goal.matchMinute != null) (goal.matchMinute.toString() + "' ") else "no data "
-                    )
-                    Image(
-                        painter = painterResource(id = R.drawable.football),
-                        contentDescription = "football"
-                    )
-                }else {
-                    Image(
-                        painter = painterResource(id = R.drawable.football),
-                        contentDescription = "football"
-                    )
-                    SimpleText(text = if(goal.matchMinute != null) (" " + goal.matchMinute.toString() + "'") else " no data")
-                }
-            }
-        }
-
-        if(goal.comment != null){
-            TextAlignCenter(
-                text = "${goal.getGoalGetterName}\n" +
-                        "${goal.comment}"
-            )
-        }
-        else if(goal.isOwnGoal == true){
-            TextAlignCenter(
-                text = "${goal.getGoalGetterName}\n" +
-                        "(OG)"
-            )
-        }
-        else{
-            TextAlignCenter(text = goal.getGoalGetterName)
-        }
-        Spacer(modifier = Modifier.height(24.dp))
-    }
-}
-
 
 @Composable
 fun TextDetailMatchInformation(text: String){

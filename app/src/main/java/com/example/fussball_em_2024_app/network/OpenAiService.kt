@@ -1,7 +1,5 @@
 package com.example.fussball_em_2024_app.network
 
-
-
 import android.util.Log
 import com.example.fussball_em_2024_app.BuildConfig
 import com.example.fussball_em_2024_app.model.OpenAIRequest

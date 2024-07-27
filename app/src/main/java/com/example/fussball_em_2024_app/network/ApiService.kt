@@ -64,8 +64,3 @@ interface ApiService {
     @GET("getmatchesbyteam/{teamName}/{pastWeeks}/0")
     suspend fun getLastMatchesByTeam(@Path("teamName") teamName: String, @Path("pastWeeks") pastWeeks: Int): List<Match>
 }
-
-
-
-
-

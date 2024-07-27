@@ -83,102 +83,32 @@ fun FavouriteTeams(teams: List<Team>, onTeamClick: (Team) -> Unit){
                 chunk.forEach { favTeam ->
                     val team: Team? = teams.find { it.teamName == favTeam.teamName }
                     if (team != null) {
-                        Column(
-                            modifier = Modifier
-                                .clickable { onTeamClick(team) }
-                                .padding(8.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Image(
-                                painter = rememberAsyncImagePainter(model = team.teamIconUrl),
-                                contentDescription = "Logo von ${team.teamName}",
-                                modifier = Modifier
-                                    .size(50.dp)
-                                    .aspectRatio(1f)
-                                    .clip(CircleShape),
-                                contentScale = ContentScale.Crop
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            TextAlignCenter(
-                                text = team.teamName.replace(" ", "\n"),
-                                style = TextStyle(fontSize = 14.sp)
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Box(
-                                modifier = Modifier
-                                    .size(24.dp)
-                                    .clip(CircleShape)
-                                    .background(Color.Red)
-                                    .clickable { viewModel.removeFavouriteTeam(favTeam, leagueName) },
-                                contentAlignment = Alignment.Center
-                            ) {
-                                SimpleText("-", style = TextStyle(color = Color.White, fontSize = 24.sp))
-                            }
-
+                        FavouriteTeamItem(team = team, onTeamClick = onTeamClick)  {
+                            viewModel.removeFavouriteTeam(favTeam, leagueName)
                         }
                     }
                 }
 
                 // Add the Add button in the last row if not full and it's the last chunk
                 if (chunk.size < 3 && chunk == favouriteTeamChunks.last()) {
-                    Column(
-                        modifier = Modifier
-                            .clickable { isDropdownExpanded = true }
-                            .padding(8.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .size(60.dp)
-                                .aspectRatio(1f)
-                                .clip(CircleShape)
-                                .background(Color.Gray),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            SimpleText("+", style = TextStyle(fontSize = 24.sp))
-                        }
-                        TextAlignCenter(
-                            text = "Add",
-                            style = TextStyle(fontSize = 14.sp)
-                        )
-                    }
+                    FavouriteTeamAddButton { isDropdownExpanded = true }
                 }
             }
         }
 
         if (favouriteTeamChunks.isEmpty()) {
-            Column(
-                modifier = Modifier
-                    .clickable { isDropdownExpanded = true }
-                    .padding(8.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Box(
-                    modifier = Modifier
-                        .size(60.dp)
-                        .aspectRatio(1f)
-                        .clip(CircleShape)
-                        .background(Color.Gray),
-                    contentAlignment = Alignment.Center
-                ) {
-                    SimpleText(text = "+", style = TextStyle(fontSize = 24.sp))
-                }
-                TextAlignCenter(
-                    text = "Add",
-                    style = TextStyle(fontSize = 14.sp)
-                )
-            }
+            FavouriteTeamAddButton { isDropdownExpanded = true }
         }
 
         // DropdownMenu for selecting a team to add
         DropdownMenu(
             expanded = isDropdownExpanded,
             onDismissRequest = { isDropdownExpanded = false },
-            modifier = Modifier.background(Color.White)
+            modifier = Modifier.background(LocalColors.current.secondaryBackgroundColor),
         ) {
             teams.forEach { team ->
                 DropdownMenuItem(
-                    text = { Text(team.teamName) },
+                    text = { SimpleText(team.teamName) },
                     onClick = {
                         viewModel.addFavouriteTeam(team, leagueName)
                         isDropdownExpanded = false
@@ -186,5 +116,66 @@ fun FavouriteTeams(teams: List<Team>, onTeamClick: (Team) -> Unit){
                 )
             }
         }
+    }
+}
+
+@Composable
+fun FavouriteTeamItem(team: Team, onTeamClick: (Team) -> Unit, onMinusClick: () -> Unit){
+    Column(
+        modifier = Modifier
+            .clickable { onTeamClick(team) }
+            .padding(8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Image(
+            painter = rememberAsyncImagePainter(model = team.teamIconUrl),
+            contentDescription = "Logo von ${team.teamName}",
+            modifier = Modifier
+                .size(50.dp)
+                .aspectRatio(1f)
+                .clip(CircleShape),
+            contentScale = ContentScale.Crop
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        TextAlignCenter(
+            text = team.teamName.replace(" ", "\n"),
+            style = TextStyle(fontSize = 14.sp)
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Box(
+            modifier = Modifier
+                .size(24.dp)
+                .clip(CircleShape)
+                .background(Color.Red)
+                .clickable { onMinusClick() },
+            contentAlignment = Alignment.Center
+        ) {
+            SimpleText("-", style = TextStyle(color = Color.White, fontSize = 24.sp))
+        }
+    }
+}
+
+@Composable
+fun FavouriteTeamAddButton(onClick: () -> Unit){
+    Column(
+        modifier = Modifier
+            .clickable { onClick() }
+            .padding(8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Box(
+            modifier = Modifier
+                .size(60.dp)
+                .aspectRatio(1f)
+                .clip(CircleShape)
+                .background(Color.Gray),
+            contentAlignment = Alignment.Center
+        ) {
+            SimpleText("+", style = TextStyle(fontSize = 24.sp))
+        }
+        TextAlignCenter(
+            text = "Add",
+            style = TextStyle(fontSize = 14.sp)
+        )
     }
 }
