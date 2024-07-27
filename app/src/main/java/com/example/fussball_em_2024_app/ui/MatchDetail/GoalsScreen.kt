@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.example.fussball_em_2024_app.LocalColors
 import com.example.fussball_em_2024_app.R
 import com.example.fussball_em_2024_app.model.Goal
 import com.example.fussball_em_2024_app.model.Match
@@ -73,18 +74,10 @@ fun GoalItem(goal: Goal, isFirstTeam: Boolean) {
         Column(modifier = Modifier.fillMaxWidth(0.5f), horizontalAlignment = if (isFirstTeam) Alignment.End else Alignment.Start) {
             Row {
                 if (isFirstTeam){
-                    SimpleText(
-                        text = if(goal.matchMinute != null) (goal.matchMinute.toString() + "' ") else "no data "
-                    )
-                    Image(
-                        painter = painterResource(id = R.drawable.football),
-                        contentDescription = "football"
-                    )
+                    SimpleText(text = if(goal.matchMinute != null) (goal.matchMinute.toString() + "' ") else "no data ")
+                    FootballImage()
                 }else {
-                    Image(
-                        painter = painterResource(id = R.drawable.football),
-                        contentDescription = "football"
-                    )
+                    FootballImage()
                     SimpleText(text = if(goal.matchMinute != null) (" " + goal.matchMinute.toString() + "'") else " no data")
                 }
             }
@@ -107,4 +100,12 @@ fun GoalItem(goal: Goal, isFirstTeam: Boolean) {
         }
         Spacer(modifier = Modifier.height(24.dp))
     }
+}
+
+@Composable
+fun FootballImage(){
+    Image(
+        painter = if (LocalColors.current.textColor == Color.Black) painterResource(id = R.drawable.black_football) else painterResource(id = R.drawable.white_football),
+        contentDescription = "football"
+    )
 }
