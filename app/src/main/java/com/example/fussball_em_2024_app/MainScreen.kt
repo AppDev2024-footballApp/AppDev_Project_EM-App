@@ -107,7 +107,7 @@ fun MatchScreen(navController: NavController, modifier: Modifier = Modifier) {
 
                     item {
                         FavouriteTeams(teams = viewState.list, onTeamClick = { selectedTeam ->
-                            navController.navigate("${TeamDetail.route}/${selectedTeam.teamId}")
+                            navController.navigate("${TeamDetail.route}/${league.leagueId}/${league.leagueShortcut}/${league.leagueSeason}/${selectedTeam.teamId}")
                         })
                     }
 
