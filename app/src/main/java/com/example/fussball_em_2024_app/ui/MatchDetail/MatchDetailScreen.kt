@@ -10,14 +10,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -28,9 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -38,15 +33,12 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
-import com.example.fussball_em_2024_app.R
-import com.example.fussball_em_2024_app.network.getMatchData
-import com.example.fussball_em_2024_app.model.Goal
 import com.example.fussball_em_2024_app.model.OpenAIResponse
+import com.example.fussball_em_2024_app.network.getMatchData
 import com.example.fussball_em_2024_app.ui.BasicButton
 import com.example.fussball_em_2024_app.ui.SimpleText
 import com.example.fussball_em_2024_app.ui.TextAlignCenter
 import com.example.fussball_em_2024_app.utils.DateFormater
-import com.example.fussball_em_2024_app.utils.StoreLeague
 import com.example.fussball_em_2024_app.viewModels.MatchDetailViewModel
 import com.example.fussball_em_2024_app.viewModels.MatchDetailViewModelFactory
 import kotlinx.coroutines.launch
@@ -72,39 +64,37 @@ fun MatchDetailScreen(
     // Fetch prediction
     LaunchedEffect(matchInfo.match) {
         matchInfo.match?.let { match ->
-            val team1Name = match.team1?.teamName
-            val team2Name = match.team2?.teamName
-            if (team1Name != null && team2Name != null) {
-                coroutineScope.launch {
-                    try {
-                        val prompt = """
-                        Generate a JSON object for the expected outcome of the match between $team1Name and $team2Name. The Prediction should be based on the last 4 matches between the  teams. The JSON should have the following structure:
-                        {
-                            "team1": "$team1Name",
-                            "team2": "$team2Name",
-                            "expectedOutcome": {
-                                "team1Score": <integer>,
-                                "team2Score": <integer>
-                                
-                            }
+            val team1Name = match.team1.teamName
+            val team2Name = match.team2.teamName
+            coroutineScope.launch {
+                try {
+                    val prompt = """
+                    Generate a JSON object for the expected outcome of the match between $team1Name and $team2Name. The Prediction should be based on the last 4 matches between the  teams. The JSON should have the following structure:
+                    {
+                        "team1": "$team1Name",
+                        "team2": "$team2Name",
+                        "expectedOutcome": {
+                            "team1Score": <integer>,
+                            "team2Score": <integer>
+                            
                         }
-                        """.trimIndent()
-                        val data: OpenAIResponse? = getMatchData(prompt)
-                        val jsonString = data?.choices?.firstOrNull()?.message?.content ?: "{}"
-                        Log.d("OpenAIResponse", jsonString)  // Log the response
-                        val jsonObject = JSONObject(jsonString)
-                        val team1 = jsonObject.optString("team1", "Unknown")
-                        val team2 = jsonObject.optString("team2", "Unknown")
-                        val expectedOutcome = jsonObject.optJSONObject("expectedOutcome")
-                        val team1Score = expectedOutcome?.optInt("team1Score", 0) ?: 0
-                        val team2Score = expectedOutcome?.optInt("team2Score", 0) ?: 0
-
-
-                        prediction = "$team1 $team1Score - $team2Score $team2"
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                        prediction = "Error fetching prediction: ${e.message}"
                     }
+                    """.trimIndent()
+                    val data: OpenAIResponse? = getMatchData(prompt)
+                    val jsonString = data?.choices?.firstOrNull()?.message?.content ?: "{}"
+                    Log.d("OpenAIResponse", jsonString)  // Log the response
+                    val jsonObject = JSONObject(jsonString)
+                    val team1 = jsonObject.optString("team1", "Unknown")
+                    val team2 = jsonObject.optString("team2", "Unknown")
+                    val expectedOutcome = jsonObject.optJSONObject("expectedOutcome")
+                    val team1Score = expectedOutcome?.optInt("team1Score", 0) ?: 0
+                    val team2Score = expectedOutcome?.optInt("team2Score", 0) ?: 0
+
+
+                    prediction = "$team1 $team1Score - $team2Score $team2"
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    prediction = "Error fetching prediction: ${e.message}"
                 }
             }
         }
@@ -138,8 +128,8 @@ fun MatchDetailScreen(
                     ){
                         Column(horizontalAlignment = Alignment.Start) {
                             Image(
-                                painter = rememberAsyncImagePainter(model = match.team1?.teamIconUrl),
-                                contentDescription = "Logo von ${match.team1?.teamName}",
+                                painter = rememberAsyncImagePainter(model = match.team1.teamIconUrl),
+                                contentDescription = "Logo von ${match.team1.teamName}",
                                 modifier = Modifier
                                     .size(60.dp)
                                     .aspectRatio(1f)
@@ -158,8 +148,8 @@ fun MatchDetailScreen(
 
                         Column(horizontalAlignment = Alignment.End) {
                             Image(
-                                painter = rememberAsyncImagePainter(model = match.team2?.teamIconUrl),
-                                contentDescription = "Logo von ${match.team2?.teamName}",
+                                painter = rememberAsyncImagePainter(model = match.team2.teamIconUrl),
+                                contentDescription = "Logo von ${match.team2.teamName}",
                                 modifier = Modifier
                                     .size(60.dp)
                                     .aspectRatio(1f)

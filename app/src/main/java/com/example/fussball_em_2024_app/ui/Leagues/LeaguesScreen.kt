@@ -1,23 +1,16 @@
 package com.example.fussball_em_2024_app.ui.Leagues
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.KeyboardArrowDown
-import androidx.compose.material.icons.rounded.KeyboardArrowUp
 import androidx.compose.material.icons.rounded.Star
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -39,10 +32,8 @@ import androidx.navigation.NavController
 import com.example.fussball_em_2024_app.LeagueDetail
 import com.example.fussball_em_2024_app.LocalColors
 import com.example.fussball_em_2024_app.R
-import com.example.fussball_em_2024_app.model.League
 import com.example.fussball_em_2024_app.ui.ButtonWithAscendingIcon
 import com.example.fussball_em_2024_app.ui.SimpleText
-import com.example.fussball_em_2024_app.ui.TextAlignCenter
 import com.example.fussball_em_2024_app.utils.StoreLeague
 import com.example.fussball_em_2024_app.viewModels.LeaguesViewModel
 
@@ -114,20 +105,20 @@ fun SearchAndSortSection(leaguesViewModel: LeaguesViewModel){
             modifier = Modifier.fillMaxWidth()
         ) {
             ButtonWithAscendingIcon("Sort by Name", ascendingName, onClick = {
-                sortByName = true;
-                ascendingName = !ascendingName;
+                sortByName = true
+                ascendingName = !ascendingName
                 leaguesViewModel.sortLeagues(byName = true, ascending = ascendingName)
             })
 
             ButtonWithAscendingIcon("Sort by Season", ascendingSeason, onClick = {
-                sortByName = false;
-                ascendingSeason = !ascendingSeason;
+                sortByName = false
+                ascendingSeason = !ascendingSeason
                 leaguesViewModel.sortLeagues(byName = false, ascending = ascendingSeason)
             })
 
             IconButton(onClick = {
-                filterBySuggested = !filterBySuggested;
-                leaguesViewModel.filterLeaguesBySuggested(filterBySuggested);
+                filterBySuggested = !filterBySuggested
+                leaguesViewModel.filterLeaguesBySuggested(filterBySuggested)
                 if (!filterBySuggested){ // reset screen after 2nd click
                     ascendingName = true
                     ascendingSeason = true
