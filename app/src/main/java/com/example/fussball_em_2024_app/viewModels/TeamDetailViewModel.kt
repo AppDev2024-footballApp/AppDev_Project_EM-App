@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.fussball_em_2024_app.matchService
+import com.example.fussball_em_2024_app.network.apiService
 import com.example.fussball_em_2024_app.model.Match
 import com.example.fussball_em_2024_app.model.TeamInfo
 import kotlinx.coroutines.launch
@@ -37,7 +37,7 @@ class TeamDetailViewModel(teamId: Int, private val leagueId: Int, private val le
     private fun fetchTeam(teamId: Int){
         viewModelScope.launch{
             try {
-                val response= matchService.getTeamsDetails(leagueShortcut, leagueSeason)
+                val response= apiService.getTeamsDetails(leagueShortcut, leagueSeason)
                 if (response.isNotEmpty()) {
                     for(team in response){
                         if(team.teamInfoId == teamId){
@@ -65,7 +65,7 @@ class TeamDetailViewModel(teamId: Int, private val leagueId: Int, private val le
         viewModelScope.launch {
             try {
 
-                val response= matchService.getNextMatchByTeam(leagueId, teamId)
+                val response= apiService.getNextMatchByTeam(leagueId, teamId)
                 if (response != null) {
                     _nextMatchState.value= _nextMatchState.value.copy(
                         match= response,
@@ -88,7 +88,7 @@ class TeamDetailViewModel(teamId: Int, private val leagueId: Int, private val le
         viewModelScope.launch {
             try {
 
-                val response= matchService.getLastMatchByTeam(leagueId, teamId)
+                val response= apiService.getLastMatchByTeam(leagueId, teamId)
                 if (response != null) {
                     _lastMatchState.value= _lastMatchState.value.copy(
                         match= response,

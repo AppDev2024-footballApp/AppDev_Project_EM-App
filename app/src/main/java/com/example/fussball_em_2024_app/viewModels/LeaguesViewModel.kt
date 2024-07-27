@@ -5,7 +5,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.fussball_em_2024_app.matchService
+import com.example.fussball_em_2024_app.network.apiService
 import com.example.fussball_em_2024_app.model.League
 import kotlinx.coroutines.launch
 
@@ -20,7 +20,7 @@ class LeaguesViewModel : ViewModel() {
     private fun fetchLeagues(){
         viewModelScope.launch {
             try{
-                val response = matchService.getAllLeagues()
+                val response = apiService.getAllLeagues()
                 if(response.isNotEmpty()){
 
                     val allLeagues = response.filter { league: League ->

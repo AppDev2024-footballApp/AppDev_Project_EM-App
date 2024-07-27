@@ -1,4 +1,4 @@
-package com.example.fussball_em_2024_app
+package com.example.fussball_em_2024_app.network
 
 import com.example.fussball_em_2024_app.model.League
 import com.example.fussball_em_2024_app.model.Match
@@ -31,7 +31,7 @@ val retrofit = Retrofit.Builder()
     .build()
 
 
-val matchService = retrofit.create(ApiService::class.java)
+val apiService = retrofit.create(ApiService::class.java)
 
 
 interface ApiService {

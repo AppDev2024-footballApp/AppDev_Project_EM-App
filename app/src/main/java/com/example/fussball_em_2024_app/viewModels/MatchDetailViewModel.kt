@@ -5,7 +5,7 @@ import androidx.compose.runtime.State
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.fussball_em_2024_app.matchService
+import com.example.fussball_em_2024_app.network.apiService
 import com.example.fussball_em_2024_app.model.Match
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -38,7 +38,7 @@ class MatchDetailViewModel(private val matchId: Int) : ViewModel() {
 
     private suspend fun fetchMatch(matchId: Int) {
         try {
-            val response = matchService.getMatch(matchId)
+            val response = apiService.getMatch(matchId)
             if (response != null) {
                 _matchState.value = _matchState.value.copy(
                     match = response,

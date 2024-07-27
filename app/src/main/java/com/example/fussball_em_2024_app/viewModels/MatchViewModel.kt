@@ -10,7 +10,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.room.Room
 import com.example.fussball_em_2024_app.data.AppDatabase
 import com.example.fussball_em_2024_app.entity.FavouriteTeam
-import com.example.fussball_em_2024_app.matchService
+import com.example.fussball_em_2024_app.network.apiService
 import com.example.fussball_em_2024_app.model.Match
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -44,7 +44,7 @@ class MatchViewModel(private val myContext: Context, private val leagueId: Int, 
 
                 for(favouriteTeam in favoriteTeams){
                     try{
-                        val match = matchService.getNextMatchByTeam(leagueId, favouriteTeam.apiTeamId)
+                        val match = apiService.getNextMatchByTeam(leagueId, favouriteTeam.apiTeamId)
                         if(response == null || response.matchDateTime > match.matchDateTime)
                             response = match
                     }catch (e: Exception){
@@ -53,7 +53,7 @@ class MatchViewModel(private val myContext: Context, private val leagueId: Int, 
                 }
 
                 if (response == null) {
-                    response = matchService.getNextMatch(leagueShortcut)
+                    response = apiService.getNextMatch(leagueShortcut)
                 }
                 if (response != null) {
                     _nextMatchState.value= _nextMatchState.value.copy(
@@ -81,7 +81,7 @@ class MatchViewModel(private val myContext: Context, private val leagueId: Int, 
 
                 for(favouriteTeam in favoriteTeams){
                     try{
-                        val match = matchService.getLastMatchByTeam(leagueId, favouriteTeam.apiTeamId)
+                        val match = apiService.getLastMatchByTeam(leagueId, favouriteTeam.apiTeamId)
                         if(response == null || response.matchDateTime < match.matchDateTime)
                             response = match
                     }catch (e: Exception){
@@ -90,7 +90,7 @@ class MatchViewModel(private val myContext: Context, private val leagueId: Int, 
                 }
 
                 if (response == null) {
-                    response = matchService.getLastMatch(leagueShortcut)
+                    response = apiService.getLastMatch(leagueShortcut)
                 }
                 if (response != null) {
                     _lastMatchState.value= _lastMatchState.value.copy(

@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.fussball_em_2024_app.matchService
+import com.example.fussball_em_2024_app.network.apiService
 import com.example.fussball_em_2024_app.model.Team
 import kotlinx.coroutines.launch
 
@@ -33,7 +33,7 @@ class TeamViewModel(private val leagueShortcut: String, private val leagueSeason
     private fun fetchTeams(){
         viewModelScope.launch {
             try {
-                val response= matchService.getTeams(leagueShortcut, leagueSeason)
+                val response= apiService.getTeams(leagueShortcut, leagueSeason)
                 if (response.isNotEmpty()) {
                     _teamState.value= _teamState.value.copy(
                         loading = false,

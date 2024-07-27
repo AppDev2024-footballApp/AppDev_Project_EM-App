@@ -19,7 +19,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.fussball_em_2024_app.model.League
 import com.example.fussball_em_2024_app.ui.Leagues.LeaguesScreen
 import com.example.fussball_em_2024_app.ui.MatchDetail.MatchDetailScreen
-import com.example.fussball_em_2024_app.ui.LightSensorViewModel
+import com.example.fussball_em_2024_app.viewModels.LightSensorViewModel
 import com.example.fussball_em_2024_app.ui.TeamDetail.TeamDetailScreen
 import com.example.fussball_em_2024_app.utils.ColorHelper
 import com.example.testjetpackcompose.ui.theme.TestJetpackComposeTheme
