@@ -31,6 +31,7 @@ import com.example.fussball_em_2024_app.LocalLeague
 import com.example.fussball_em_2024_app.TeamDetail
 import com.example.fussball_em_2024_app.model.Match
 import com.example.fussball_em_2024_app.model.Team
+import com.example.fussball_em_2024_app.ui.BasicButton
 import com.example.fussball_em_2024_app.ui.SimpleText
 import com.example.fussball_em_2024_app.ui.TextAlignCenter
 import com.example.fussball_em_2024_app.utils.DateFormater.formatDate
@@ -58,15 +59,9 @@ fun MatchScreen(navController: NavController, modifier: Modifier = Modifier) {
             }
             viewState.error != null -> {
                 SimpleText("ERROR OCCURRED")
-                Button(
-                    onClick = {
-                        StoreLeague().removeCurrentLeague(context)
-                        navController.navigate("overview")
-                    },
-                    modifier = Modifier
-                        .padding(top = 16.dp)
-                ) {
-                    SimpleText("Other leagues")
+                BasicButton("Other leagues", Modifier.padding(top = 16.dp)) {
+                    StoreLeague().removeCurrentLeague(context)
+                    navController.navigate("overview")
                 }
             }
             else -> {
@@ -93,14 +88,9 @@ fun MatchScreen(navController: NavController, modifier: Modifier = Modifier) {
                     }
 
                     item {
-                        Button(
-                            onClick = {
-                                StoreLeague().removeCurrentLeague(context)
-                                navController.navigate("overview")
-                            },
-                            modifier = Modifier.padding(top = 8.dp)
-                        ) {
-                            SimpleText("Other leagues")
+                        BasicButton("Other leagues", Modifier.padding(top = 8.dp)) {
+                            StoreLeague().removeCurrentLeague(context)
+                            navController.navigate("overview")
                         }
                     }
 

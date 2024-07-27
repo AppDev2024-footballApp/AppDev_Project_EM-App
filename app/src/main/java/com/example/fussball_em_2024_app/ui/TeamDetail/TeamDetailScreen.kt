@@ -28,6 +28,7 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.fussball_em_2024_app.LocalColors
 import com.example.fussball_em_2024_app.LocalLeague
+import com.example.fussball_em_2024_app.ui.BasicButton
 import com.example.fussball_em_2024_app.ui.Main.LastMatchScreen
 import com.example.fussball_em_2024_app.ui.Main.NextMatchScreen
 import com.example.fussball_em_2024_app.ui.SimpleText
@@ -107,11 +108,8 @@ fun TeamDetailScreen(teamId: Int, navController: NavController, modifier: Modifi
                     Spacer(modifier = Modifier.weight(1f)) // Fills remaining space
 
                     // Back button
-                    Button(
-                        onClick = { navController.popBackStack() },
-                        modifier = Modifier.align(Alignment.Start)
-                    ) {
-                        SimpleText("← Back")
+                    BasicButton("Go back", Modifier.align(Alignment.Start)) {
+                        navController.popBackStack()
                     }
                 }
             }

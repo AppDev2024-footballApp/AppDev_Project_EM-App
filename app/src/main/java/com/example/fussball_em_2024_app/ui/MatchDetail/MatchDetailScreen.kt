@@ -42,9 +42,11 @@ import com.example.fussball_em_2024_app.R
 import com.example.fussball_em_2024_app.network.getMatchData
 import com.example.fussball_em_2024_app.model.Goal
 import com.example.fussball_em_2024_app.model.OpenAIResponse
+import com.example.fussball_em_2024_app.ui.BasicButton
 import com.example.fussball_em_2024_app.ui.SimpleText
 import com.example.fussball_em_2024_app.ui.TextAlignCenter
 import com.example.fussball_em_2024_app.utils.DateFormater
+import com.example.fussball_em_2024_app.utils.StoreLeague
 import com.example.fussball_em_2024_app.viewModels.MatchDetailViewModel
 import com.example.fussball_em_2024_app.viewModels.MatchDetailViewModelFactory
 import kotlinx.coroutines.launch
@@ -216,14 +218,11 @@ fun MatchDetailScreen(
                     Spacer(modifier = Modifier.weight(1f))
 
                     // Back button
-                    Button(
-                        onClick = { navController.popBackStack() },
-                        modifier = Modifier
-                            .align(Alignment.CenterHorizontally)
-
-                            .padding(top = 16.dp)
-                    ) {
-                        SimpleText("Go back")
+                    BasicButton("Go back", Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(top = 16.dp))
+                    {
+                        navController.popBackStack()
                     }
                 }
             }

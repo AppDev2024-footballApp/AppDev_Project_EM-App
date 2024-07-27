@@ -40,6 +40,7 @@ import com.example.fussball_em_2024_app.LeagueDetail
 import com.example.fussball_em_2024_app.LocalColors
 import com.example.fussball_em_2024_app.R
 import com.example.fussball_em_2024_app.model.League
+import com.example.fussball_em_2024_app.ui.ButtonWithAscendingIcon
 import com.example.fussball_em_2024_app.ui.SimpleText
 import com.example.fussball_em_2024_app.ui.TextAlignCenter
 import com.example.fussball_em_2024_app.utils.StoreLeague
@@ -82,7 +83,6 @@ fun LeaguesScreen(
             }
         }
     }
-
 }
 
 @Composable
@@ -100,7 +100,7 @@ fun SearchAndSortSection(leaguesViewModel: LeaguesViewModel){
                 searchQuery = it
                 leaguesViewModel.searchLeagues(it.text)
             },
-            label = { Text("Search by League Name"/*, color = LocalTextColor.current // see below why this is comment*/) },
+            label = { Text("Search by League Name"/*, color = LocalTextColor.current // see below why this is in a comment*/) },
             modifier = Modifier
                 .fillMaxWidth()
                 // textField does not matter what in background is defined, therefor LightMode format is always for the TextField
@@ -113,26 +113,18 @@ fun SearchAndSortSection(leaguesViewModel: LeaguesViewModel){
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.fillMaxWidth()
         ) {
+            ButtonWithAscendingIcon("Sort by Name", ascendingName, onClick = {
+                sortByName = true;
+                ascendingName = !ascendingName;
+                leaguesViewModel.sortLeagues(byName = true, ascending = ascendingName)
+            })
 
-            Button(onClick = { sortByName = true; ascendingName = !ascendingName; leaguesViewModel.sortLeagues(byName = true, ascending = ascendingName) }) {
-                SimpleText("Sort by Name")
-                if(ascendingName){
-                    Icon(Icons.Rounded.KeyboardArrowDown, contentDescription = "Arrow Down", tint = LocalColors.current.textColor)
-                }
-                else{
-                    Icon(Icons.Rounded.KeyboardArrowUp, contentDescription = "Arrow Up", tint = LocalColors.current.textColor)
-                }
+            ButtonWithAscendingIcon("Sort by Season", ascendingSeason, onClick = {
+                sortByName = false;
+                ascendingSeason = !ascendingSeason;
+                leaguesViewModel.sortLeagues(byName = false, ascending = ascendingSeason)
+            })
 
-            }
-            Button(onClick = { sortByName = false; ascendingSeason = !ascendingSeason; leaguesViewModel.sortLeagues(byName = false, ascending = ascendingSeason) }) {
-                SimpleText("Sort by Season")
-                if(ascendingSeason){
-                    Icon(Icons.Rounded.KeyboardArrowDown, contentDescription = "Arrow Down", tint = LocalColors.current.textColor)
-                }
-                else{
-                    Icon(Icons.Rounded.KeyboardArrowUp, contentDescription = "Arrow Up", tint = LocalColors.current.textColor)
-                }
-            }
             IconButton(onClick = {
                 filterBySuggested = !filterBySuggested;
                 leaguesViewModel.filterLeaguesBySuggested(filterBySuggested);
@@ -150,48 +142,6 @@ fun SearchAndSortSection(leaguesViewModel: LeaguesViewModel){
                     or as now creating a vector asset in drawable (https://stackoverflow.com/questions/74050270/compose-icons-outlined-star-isnt-outlined)
                     */
                 }
-
-            }
-        }
-    }
-}
-
-@Composable
-fun LeaguesList(leagues: List<League>, navController: NavController){
-    Column {
-        SimpleText(text="All Leagues")
-    }
-
-    val currentContext = LocalContext.current
-
-    LazyColumn(
-        contentPadding = PaddingValues(all = 8.dp),
-        modifier = Modifier.fillMaxSize()
-    ) {
-        items(leagues) { league ->
-            LeagueItem(league = league, onLeagueClick = { selectedLeague ->
-                StoreLeague().saveCurrentLeague(selectedLeague, currentContext)
-                navController.navigate("${LeagueDetail.route}/${league.leagueId}/${league.leagueShortcut}/${league.leagueSeason}")
-            })
-        }
-    }
-}
-
-@Composable
-fun LeagueItem(league: League, onLeagueClick: (League) -> Unit){
-    Column(modifier = Modifier
-        .padding(8.dp)
-        .clickable { onLeagueClick(league) }) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Column {
-                TextAlignCenter(text= league.leagueName)
-                TextAlignCenter(text = league.leagueSeason)
-            }
-            if(league.isSuggested){
-                Icon(imageVector = Icons.Rounded.Star, contentDescription = "suggested league", tint = LocalColors.current.textColor)
             }
         }
     }
