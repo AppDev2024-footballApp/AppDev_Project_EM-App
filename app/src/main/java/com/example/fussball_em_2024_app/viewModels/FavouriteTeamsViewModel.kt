@@ -1,4 +1,4 @@
-package com.example.fussball_em_2024_app.ui.Main
+package com.example.fussball_em_2024_app.viewModels
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
@@ -39,20 +39,20 @@ class FavouriteTeamsViewModel(context: Context) : ViewModel() {
         }
     }
 
-    fun addFavouriteTeam(team: Team) {
+    fun addFavouriteTeam(team: Team, leagueName: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val teamAlreadyAdded = db.favouriteTeamDao().findByLeagueAndTeamName(league = "em24", teamName = team.teamName)
+            val teamAlreadyAdded = db.favouriteTeamDao().findByLeagueAndTeamName(league = leagueName, teamName = team.teamName)
             if(teamAlreadyAdded == null){
-                db.favouriteTeamDao().insert(FavouriteTeam(apiTeamId = team.teamId, leagueName = "em24", teamName = team.teamName))
-                loadFavouriteTeams("em24")
+                db.favouriteTeamDao().insert(FavouriteTeam(apiTeamId = team.teamId, leagueName = leagueName, teamName = team.teamName))
+                loadFavouriteTeams(leagueName)
             }
         }
     }
 
-    fun removeFavouriteTeam(team: FavouriteTeam) {
+    fun removeFavouriteTeam(team: FavouriteTeam, leagueName: String) {
         viewModelScope.launch(Dispatchers.IO) {
             db.favouriteTeamDao().delete(team)
-            loadFavouriteTeams("em24")
+            loadFavouriteTeams(leagueName)
         }
     }
 }

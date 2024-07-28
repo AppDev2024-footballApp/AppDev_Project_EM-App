@@ -18,7 +18,7 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,13 +41,13 @@ import com.example.fussball_em_2024_app.LocalColors
 import com.example.fussball_em_2024_app.LocalLeague
 import com.example.fussball_em_2024_app.model.Team
 import com.example.testjetpackcompose.ui.theme.lightGreen
+import com.example.fussball_em_2024_app.viewModels.FavouriteTeamsViewModel
+import com.example.fussball_em_2024_app.viewModels.FavouriteTeamsViewModelFactory
 
 @Composable
-fun FavouriteTeams(teams: List<Team>, onTeamClick: (Team) -> Unit,
-                   viewModel: FavouriteTeamsViewModel = viewModel(
-                       factory = FavouriteTeamsViewModelFactory(LocalContext.current)
-                   )){
+fun FavouriteTeams(teams: List<Team>, onTeamClick: (Team) -> Unit){
     val league = LocalLeague.current
+    val leagueName = league.leagueShortcut + league.leagueSeason
 
     LaunchedEffect(league.leagueShortcut + league.leagueSeason) {
         viewModel.loadFavouriteTeams(league.leagueShortcut + league.leagueSeason)
@@ -89,14 +89,14 @@ fun FavouriteTeams(teams: List<Team>, onTeamClick: (Team) -> Unit,
                                 painter = rememberAsyncImagePainter(model = team.teamIconUrl),
                                 contentDescription = "Logo von ${team.teamName}",
                                 modifier = Modifier
-                                    .size(60.dp)
+                                    .size(50.dp)
                                     .aspectRatio(1f)
                                     .clip(CircleShape),
                                 contentScale = ContentScale.Crop
                             )
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(
-                                text = team.teamName,
+                                text = team.teamName.replace(" ", "\n"),
                                 textAlign = TextAlign.Center,
                                 color = LocalColors.current.textColor,
                                 style = TextStyle(fontSize = 14.sp)
@@ -107,7 +107,7 @@ fun FavouriteTeams(teams: List<Team>, onTeamClick: (Team) -> Unit,
                                     .size(24.dp)
                                     .clip(CircleShape)
                                     .background(Color.Red)
-                                    .clickable { viewModel.removeFavouriteTeam(favTeam) },
+                                    .clickable { viewModel.removeFavouriteTeam(favTeam, leagueName) },
                                 contentAlignment = Alignment.Center
                             ) {
                                 Text("-", style = TextStyle(color = Color.White, fontSize = 24.sp), color = LocalColors.current.textColor)
@@ -182,7 +182,7 @@ fun FavouriteTeams(teams: List<Team>, onTeamClick: (Team) -> Unit,
                 DropdownMenuItem(
                     text = { Text(team.teamName) },
                     onClick = {
-                        viewModel.addFavouriteTeam(team)
+                        viewModel.addFavouriteTeam(team, leagueName)
                         isDropdownExpanded = false
                     }
                 )
