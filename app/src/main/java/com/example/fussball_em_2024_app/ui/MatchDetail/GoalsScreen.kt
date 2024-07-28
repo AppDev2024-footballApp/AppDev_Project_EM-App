@@ -1,6 +1,5 @@
 package com.example.fussball_em_2024_app.ui.MatchDetail
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,10 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.example.fussball_em_2024_app.LocalColors
-import com.example.fussball_em_2024_app.R
 import com.example.fussball_em_2024_app.model.Goal
 import com.example.fussball_em_2024_app.model.Match
 import com.example.fussball_em_2024_app.ui.FootballImage
