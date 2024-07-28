@@ -1,4 +1,4 @@
-package com.example.fussball_em_2024_app.ui.MatchDetail
+package com.example.fussball_em_2024_app.ui.matchDetail
 
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement

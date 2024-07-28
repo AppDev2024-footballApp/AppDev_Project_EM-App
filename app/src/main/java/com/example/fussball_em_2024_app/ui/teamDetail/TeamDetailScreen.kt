@@ -1,4 +1,4 @@
-package com.example.fussball_em_2024_app.ui.TeamDetail
+package com.example.fussball_em_2024_app.ui.teamDetail
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,8 +18,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.fussball_em_2024_app.LocalLeague
 import com.example.fussball_em_2024_app.ui.BasicButton
-import com.example.fussball_em_2024_app.ui.Main.LastMatchScreen
-import com.example.fussball_em_2024_app.ui.Main.NextMatchScreen
+import com.example.fussball_em_2024_app.ui.main.LastMatchScreen
+import com.example.fussball_em_2024_app.ui.main.NextMatchScreen
 import com.example.fussball_em_2024_app.ui.SimpleText
 import com.example.fussball_em_2024_app.ui.TeamFlagImage
 import com.example.fussball_em_2024_app.ui.TextAlignCenter

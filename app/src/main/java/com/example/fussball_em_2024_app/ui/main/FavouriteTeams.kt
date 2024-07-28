@@ -1,4 +1,4 @@
-package com.example.fussball_em_2024_app.ui.Main
+package com.example.fussball_em_2024_app.ui.main
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

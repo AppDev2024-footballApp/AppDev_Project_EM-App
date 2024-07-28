@@ -1,4 +1,4 @@
-package com.example.fussball_em_2024_app.ui.Leagues
+package com.example.fussball_em_2024_app.ui.leagues
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
