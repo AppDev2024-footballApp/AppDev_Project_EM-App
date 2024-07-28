@@ -40,17 +40,21 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.fussball_em_2024_app.LocalColors
 import com.example.fussball_em_2024_app.LocalLeague
 import com.example.fussball_em_2024_app.model.Team
-import com.example.testjetpackcompose.ui.theme.lightGreen
 import com.example.fussball_em_2024_app.viewModels.FavouriteTeamsViewModel
 import com.example.fussball_em_2024_app.viewModels.FavouriteTeamsViewModelFactory
+import com.example.testjetpackcompose.ui.theme.lightGreen
 
 @Composable
 fun FavouriteTeams(teams: List<Team>, onTeamClick: (Team) -> Unit){
     val league = LocalLeague.current
     val leagueName = league.leagueShortcut + league.leagueSeason
 
-    LaunchedEffect(league.leagueShortcut + league.leagueSeason) {
-        viewModel.loadFavouriteTeams(league.leagueShortcut + league.leagueSeason)
+    val viewModel: FavouriteTeamsViewModel = viewModel(
+        factory = FavouriteTeamsViewModelFactory(LocalContext.current)
+    )
+
+    SideEffect {
+        viewModel.loadFavouriteTeams(leagueName)
     }
 
     val favouriteTeams by viewModel.favouriteTeams.collectAsState()
