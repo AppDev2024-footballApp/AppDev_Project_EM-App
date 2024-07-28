@@ -35,7 +35,7 @@ fun NextMatchScreen(match: Match, navController: NavController) {
                 style = TextStyle(fontWeight = FontWeight.Bold),
                 modifier = Modifier.padding(bottom = 4.dp)
             )
-            MatchItems(match = match)
+            MatchItem(match = match)
         }
     }
 }

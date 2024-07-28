@@ -120,50 +120,7 @@ fun MatchScreen(navController: NavController, modifier: Modifier = Modifier) {
     }
 }
 
-@Composable
-fun MatchItems(match: Match) {
-    Column(modifier = Modifier.padding(8.dp)) {
-        // Oberer Teil mit den Logos
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            // Circle image with team name for team1
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Image(
-                    painter = rememberAsyncImagePainter(model = match.team1.teamIconUrl),
-                    contentDescription = "Logo von ${match.team1.teamName}",
-                    modifier = Modifier
-                        .size(60.dp)
-                        .aspectRatio(1f)
-                        .clip(CircleShape),  // Macht das Bild kreisförmig
-                    contentScale = ContentScale.Crop
-                )
-                TextAlignCenter( text = match.team1.teamName.replace(" ", "\n")) // replace because of too long teamNames
-            }
 
-            // Datum des Spiels in der Mitte
-            SimpleText(
-                text = formatDate(match.matchDateTime),  // Datum formatieren nach Bedarf
-                modifier = Modifier.align(Alignment.CenterVertically)
-            )
-
-            // Circle image with team name for team2
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Image(
-                    painter = rememberAsyncImagePainter(model = match.team2.teamIconUrl),
-                    contentDescription = "Logo von ${match.team2.teamName}",
-                    modifier = Modifier
-                        .size(60.dp)
-                        .aspectRatio(1f)
-                        .clip(CircleShape),  // Macht das Bild kreisförmig
-                    contentScale = ContentScale.Crop
-                )
-                TextAlignCenter(text = match.team2.teamName.replace(" ", "\n")) // replace because of too long teamNames
-            }
-        }
-    }
-}
 
 
 @Composable
