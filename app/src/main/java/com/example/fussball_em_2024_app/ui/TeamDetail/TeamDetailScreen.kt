@@ -28,6 +28,7 @@ import com.example.fussball_em_2024_app.ui.BasicButton
 import com.example.fussball_em_2024_app.ui.Main.LastMatchScreen
 import com.example.fussball_em_2024_app.ui.Main.NextMatchScreen
 import com.example.fussball_em_2024_app.ui.SimpleText
+import com.example.fussball_em_2024_app.ui.TeamFlagImage
 import com.example.fussball_em_2024_app.ui.TextAlignCenter
 import com.example.fussball_em_2024_app.viewModels.TeamDetailViewModel
 import com.example.fussball_em_2024_app.viewModels.TeamDetailViewModelFactory
@@ -66,15 +67,9 @@ fun TeamDetailScreen(teamId: Int, navController: NavController, modifier: Modifi
                                 modifier = modifier.padding(bottom = 10.dp)
                             )
 
-                            Image(
-                                painter = rememberAsyncImagePainter(model = teamInfo.teamInfo?.teamIconUrl),
-                                contentDescription = "Logo von ${teamInfo.teamInfo?.teamName}",
-                                modifier = modifier
-                                    .size(60.dp)
-                                    .aspectRatio(1f)
-                                    .clip(CircleShape),  // Macht das Bild kreisförmig
-                                contentScale = ContentScale.Crop
-                            )
+                            if(teamInfo.teamInfo != null){
+                                TeamFlagImage(teamInfo.teamInfo!!)
+                            }
 
                             // Team details
                             SimpleText(

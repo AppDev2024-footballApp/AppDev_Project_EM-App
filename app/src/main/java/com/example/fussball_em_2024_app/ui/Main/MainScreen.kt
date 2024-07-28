@@ -32,6 +32,7 @@ import com.example.fussball_em_2024_app.model.Match
 import com.example.fussball_em_2024_app.model.Team
 import com.example.fussball_em_2024_app.ui.BasicButton
 import com.example.fussball_em_2024_app.ui.SimpleText
+import com.example.fussball_em_2024_app.ui.TeamFlagImage
 import com.example.fussball_em_2024_app.ui.TextAlignCenter
 import com.example.fussball_em_2024_app.utils.DateFormater.formatDate
 import com.example.fussball_em_2024_app.utils.StoreLeague
@@ -135,15 +136,7 @@ fun TeamItem(team:Team, onTeamClick: (Team) -> Unit){
         ) {
             // Circle image with team name for team1
             Row {
-                Image(
-                    painter = rememberAsyncImagePainter(model = team.teamIconUrl),
-                    contentDescription = "Logo von ${team.teamName}",
-                    modifier = Modifier
-                        .size(60.dp)
-                        .aspectRatio(1f)
-                        .clip(CircleShape),  // Macht das Bild kreisförmig
-                    contentScale = ContentScale.Crop
-                )
+                TeamFlagImage(team = team)
                 Column {
                     team.teamGroupName?.let {
                         TextAlignCenter(it )

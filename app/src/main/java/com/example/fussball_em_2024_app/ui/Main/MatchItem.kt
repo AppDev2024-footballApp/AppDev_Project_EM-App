@@ -1,23 +1,16 @@
 package com.example.fussball_em_2024_app.ui.Main
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import coil.compose.rememberAsyncImagePainter
 import com.example.fussball_em_2024_app.model.Match
-import com.example.fussball_em_2024_app.ui.SimpleText
+import com.example.fussball_em_2024_app.ui.TeamFlagImage
 import com.example.fussball_em_2024_app.ui.TextAlignCenter
 import com.example.fussball_em_2024_app.utils.DateFormater.formatDate
 
@@ -31,15 +24,7 @@ fun MatchItem(match: Match) {
         ) {
             // Circle image with team name for team1
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Image(
-                    painter = rememberAsyncImagePainter(model = match.team1.teamIconUrl),
-                    contentDescription = "Logo von ${match.team1.teamName}",
-                    modifier = Modifier
-                        .size(60.dp)
-                        .aspectRatio(1f)
-                        .clip(CircleShape),  // Macht das Bild kreisförmig
-                    contentScale = ContentScale.Crop
-                )
+                TeamFlagImage(team = match.team1)
                 TextAlignCenter( text = match.team1.teamName.replace(" ", "\n")) // replace because of too long teamNames
             }
 
@@ -59,15 +44,7 @@ fun MatchItem(match: Match) {
 
             // Circle image with team name for team2
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Image(
-                    painter = rememberAsyncImagePainter(model = match.team2.teamIconUrl),
-                    contentDescription = "Logo von ${match.team2.teamName}",
-                    modifier = Modifier
-                        .size(60.dp)
-                        .aspectRatio(1f)
-                        .clip(CircleShape),  // Macht das Bild kreisförmig
-                    contentScale = ContentScale.Crop
-                )
+                TeamFlagImage(team = match.team2)
                 TextAlignCenter(text = match.team2.teamName.replace(" ", "\n")) // replace because of too long teamNames
             }
         }

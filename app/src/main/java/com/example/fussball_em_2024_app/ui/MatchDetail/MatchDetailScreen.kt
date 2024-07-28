@@ -37,6 +37,7 @@ import com.example.fussball_em_2024_app.model.OpenAIResponse
 import com.example.fussball_em_2024_app.network.getMatchData
 import com.example.fussball_em_2024_app.ui.BasicButton
 import com.example.fussball_em_2024_app.ui.SimpleText
+import com.example.fussball_em_2024_app.ui.TeamFlagImage
 import com.example.fussball_em_2024_app.ui.TextAlignCenter
 import com.example.fussball_em_2024_app.utils.DateFormater
 import com.example.fussball_em_2024_app.viewModels.MatchDetailViewModel
@@ -127,15 +128,7 @@ fun MatchDetailScreen(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ){
                         Column(horizontalAlignment = Alignment.Start) {
-                            Image(
-                                painter = rememberAsyncImagePainter(model = match.team1.teamIconUrl),
-                                contentDescription = "Logo von ${match.team1.teamName}",
-                                modifier = Modifier
-                                    .size(60.dp)
-                                    .aspectRatio(1f)
-                                    .clip(CircleShape),  // Macht das Bild kreisförmig
-                                contentScale = ContentScale.Crop
-                            )
+                            TeamFlagImage(team = match.team1)
                         }
 
                         Column {
@@ -147,15 +140,7 @@ fun MatchDetailScreen(
                         }
 
                         Column(horizontalAlignment = Alignment.End) {
-                            Image(
-                                painter = rememberAsyncImagePainter(model = match.team2.teamIconUrl),
-                                contentDescription = "Logo von ${match.team2.teamName}",
-                                modifier = Modifier
-                                    .size(60.dp)
-                                    .aspectRatio(1f)
-                                    .clip(CircleShape),  // Macht das Bild kreisförmig
-                                contentScale = ContentScale.Crop
-                            )
+                            TeamFlagImage(team = match.team2)
                         }
                     }
 

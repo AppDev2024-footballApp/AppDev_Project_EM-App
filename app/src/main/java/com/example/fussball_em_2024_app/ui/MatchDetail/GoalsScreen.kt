@@ -19,6 +19,7 @@ import com.example.fussball_em_2024_app.LocalColors
 import com.example.fussball_em_2024_app.R
 import com.example.fussball_em_2024_app.model.Goal
 import com.example.fussball_em_2024_app.model.Match
+import com.example.fussball_em_2024_app.ui.FootballImage
 import com.example.fussball_em_2024_app.ui.SimpleText
 import com.example.fussball_em_2024_app.ui.TextAlignCenter
 
@@ -102,10 +103,3 @@ fun GoalItem(goal: Goal, isFirstTeam: Boolean) {
     }
 }
 
-@Composable
-fun FootballImage(){
-    Image(
-        painter = if (LocalColors.current.textColor == Color.Black) painterResource(id = R.drawable.black_football) else painterResource(id = R.drawable.white_football),
-        contentDescription = "football"
-    )
-}

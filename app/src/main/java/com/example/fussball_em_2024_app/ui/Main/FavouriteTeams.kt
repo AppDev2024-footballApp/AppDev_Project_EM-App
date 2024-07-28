@@ -1,6 +1,5 @@
 package com.example.fussball_em_2024_app.ui.Main
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -16,7 +15,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
@@ -28,19 +26,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil.compose.rememberAsyncImagePainter
 import com.example.fussball_em_2024_app.LocalColors
 import com.example.fussball_em_2024_app.LocalLeague
 import com.example.fussball_em_2024_app.model.Team
 import com.example.fussball_em_2024_app.ui.SimpleText
+import com.example.fussball_em_2024_app.ui.TeamFlagImage
 import com.example.fussball_em_2024_app.ui.TextAlignCenter
 import com.example.fussball_em_2024_app.viewModels.FavouriteTeamsViewModel
 import com.example.fussball_em_2024_app.viewModels.FavouriteTeamsViewModelFactory
@@ -127,15 +123,7 @@ fun FavouriteTeamItem(team: Team, onTeamClick: (Team) -> Unit, onMinusClick: () 
             .padding(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Image(
-            painter = rememberAsyncImagePainter(model = team.teamIconUrl),
-            contentDescription = "Logo von ${team.teamName}",
-            modifier = Modifier
-                .size(50.dp)
-                .aspectRatio(1f)
-                .clip(CircleShape),
-            contentScale = ContentScale.Crop
-        )
+        TeamFlagImage(team = team, size = 50.dp)
         Spacer(modifier = Modifier.width(8.dp))
         TextAlignCenter(
             text = team.teamName.replace(" ", "\n"),
