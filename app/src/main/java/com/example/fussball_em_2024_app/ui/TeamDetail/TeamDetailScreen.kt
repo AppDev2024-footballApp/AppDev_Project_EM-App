@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -39,6 +40,7 @@ import com.example.fussball_em_2024_app.viewModels.LastMatchesFactory
 import com.example.fussball_em_2024_app.viewModels.LastMatchesViewModel
 import com.example.fussball_em_2024_app.viewModels.TeamDetailViewModel
 import com.example.fussball_em_2024_app.viewModels.TeamDetailViewModelFactory
+import com.example.testjetpackcompose.ui.theme.buttonsColor
 
 @Composable
 fun TeamDetailScreen(teamId: Int, navController: NavController, modifier: Modifier = Modifier) {
@@ -189,6 +191,10 @@ fun TeamDetailScreen(teamId: Int, navController: NavController, modifier: Modifi
                         // Back button
                         Button(
                             onClick = { navController.popBackStack() },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = buttonsColor, // Farbe des Buttons
+                                contentColor = Color.White,
+                            ),
                             modifier = Modifier.align(Alignment.Center)
                         ) {
                             Text("← Back")
@@ -209,19 +215,14 @@ fun MatchItem(match: Match, navController: NavController) {
             .padding(16.dp)
             .background(
                 color = LocalColors.current.secondaryBackgroundColor,
-                shape = RoundedCornerShape(4.dp)
+                shape = RoundedCornerShape(16.dp)
             )
             .clickable {
                 navController.navigate("${MatchDetail.route}/${match.matchID}")
             }
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text(
-                text = "Game",
-                style = TextStyle(fontWeight = FontWeight.Bold),
-                color = LocalColors.current.textColor,
-                modifier = Modifier.padding(bottom = 4.dp)
-            )
+
             MatchItems(match = match)
         }
     }
