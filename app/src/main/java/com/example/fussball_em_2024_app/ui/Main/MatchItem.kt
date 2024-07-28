@@ -44,10 +44,18 @@ fun MatchItem(match: Match) {
             }
 
             // Datum des Spiels in der Mitte
-            SimpleText(
-                text = formatDate(match.matchDateTime),  // Datum formatieren nach Bedarf
-                modifier = Modifier.align(Alignment.CenterVertically)
-            )
+            Column(Modifier.align(Alignment.CenterVertically)) {
+                if(match.matchIsFinished){
+                    val team1Score = match.goals?.lastOrNull()?.scoreTeam1 ?: 0
+                    val team2Score = match.goals?.lastOrNull()?.scoreTeam2 ?: 0
+                    TextAlignCenter(text = formatDate(match.matchDateTime) + "\n$team1Score - $team2Score")
+                }else{
+                    TextAlignCenter(
+                        text = formatDate(match.matchDateTime),  // Datum formatieren nach Bedarf
+                        //modifier = Modifier.align(Alignment.CenterVertically)
+                    )
+                }
+            }
 
             // Circle image with team name for team2
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
