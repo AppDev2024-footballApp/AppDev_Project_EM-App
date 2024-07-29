@@ -68,7 +68,6 @@ fun MatchScreen(navController: NavController, modifier: Modifier = Modifier) {
                         item{
                             NextMatchScreen(match = match, navController = navController)
                         }
-
                     }
 
                     // Show the last match

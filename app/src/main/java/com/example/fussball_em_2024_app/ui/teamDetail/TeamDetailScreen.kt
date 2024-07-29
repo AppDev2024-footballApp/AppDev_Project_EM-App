@@ -1,55 +1,48 @@
 package com.example.fussball_em_2024_app.ui.teamDetail
 
 import android.util.Log
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.fussball_em_2024_app.LocalColors
 import com.example.fussball_em_2024_app.LocalLeague
 import com.example.fussball_em_2024_app.MatchDetail
-import com.example.fussball_em_2024_app.MatchItems
 import com.example.fussball_em_2024_app.model.Match
-import com.example.fussball_em_2024_app.ui.Main.LastMatchScreen
-import com.example.fussball_em_2024_app.ui.Main.NextMatchScreen
-import com.example.fussball_em_2024_app.viewModels.LastMatchesFactory
-import com.example.fussball_em_2024_app.viewModels.LastMatchesViewModel
 import com.example.fussball_em_2024_app.ui.BasicButton
-import com.example.fussball_em_2024_app.ui.main.LastMatchScreen
-import com.example.fussball_em_2024_app.ui.main.NextMatchScreen
 import com.example.fussball_em_2024_app.ui.SimpleText
 import com.example.fussball_em_2024_app.ui.TeamFlagImage
 import com.example.fussball_em_2024_app.ui.TextAlignCenter
+import com.example.fussball_em_2024_app.ui.main.LastMatchScreen
+import com.example.fussball_em_2024_app.ui.main.MatchItem
+import com.example.fussball_em_2024_app.ui.main.NextMatchScreen
+import com.example.fussball_em_2024_app.viewModels.LastMatchesFactory
+import com.example.fussball_em_2024_app.viewModels.LastMatchesViewModel
 import com.example.fussball_em_2024_app.viewModels.TeamDetailViewModel
 import com.example.fussball_em_2024_app.viewModels.TeamDetailViewModelFactory
-import com.example.testjetpackcompose.ui.theme.buttonsColor
 
 @Composable
 fun TeamDetailScreen(teamId: Int, navController: NavController, modifier: Modifier = Modifier) {
@@ -150,29 +143,25 @@ fun TeamDetailScreen(teamId: Int, navController: NavController, modifier: Modifi
                         // Display past matches
                         when {
                             lastMatches == null -> {
-                                Text("Loading team info...",
-                                    modifier = Modifier.padding(16.dp),
-                                    color= LocalColors.current.textColor)
+                                SimpleText("Loading team info...",
+                                    modifier = Modifier.padding(16.dp))
                             }
                             lastMatches.value.loading -> {
                                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                             }
                             lastMatches.value.error != null -> {
-                                Text("ERROR OCCURRED: ${lastMatches.value.error}",
-                                    color= LocalColors.current.textColor)
+                                SimpleText("ERROR OCCURRED: ${lastMatches.value.error}")
                             }
                             lastMatches.value.list.isNotEmpty() -> {
-                                Text(
+                                SimpleText(
                                     text = "Last Games",
                                     style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 24.sp),
-                                    modifier = Modifier.padding(bottom = 8.dp),
-                                    color= LocalColors.current.textColor
+                                    modifier = Modifier.padding(bottom = 8.dp)
                                 )
                             }
                             else -> {
-                                Text("No past matches found.",
-                                    modifier = Modifier.padding(16.dp),
-                                    color= LocalColors.current.textColor)
+                                SimpleText("No past matches found.",
+                                    modifier = Modifier.padding(16.dp))
                             }
                         }
                     }
@@ -183,22 +172,18 @@ fun TeamDetailScreen(teamId: Int, navController: NavController, modifier: Modifi
                     }
 
                     items(filteredMatches) { match ->
-                        MatchItem(match = match, navController = navController)
+                        MatchItems(match = match, navController = navController)
                         Spacer(modifier = Modifier.height(8.dp))
                     }
 
                     item {
                         // Back button
-                        Button(
+                        BasicButton(
+                            text = "Go back",
                             onClick = { navController.popBackStack() },
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = buttonsColor, // Farbe des Buttons
-                                contentColor = Color.White,
-                            ),
+
                             modifier = Modifier.align(Alignment.Center)
-                        ) {
-                            Text("← Back")
-                        }
+                        )
                     }
                 }
             }
@@ -208,7 +193,7 @@ fun TeamDetailScreen(teamId: Int, navController: NavController, modifier: Modifi
 
 
 @Composable
-fun MatchItem(match: Match, navController: NavController) {
+fun MatchItems(match: Match, navController: NavController) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -223,7 +208,7 @@ fun MatchItem(match: Match, navController: NavController) {
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
 
-            MatchItems(match = match)
+            MatchItem(match = match)
         }
     }
 }
