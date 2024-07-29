@@ -26,7 +26,7 @@ fun LastMatchScreen(match: Match, navController: NavController) {
             .padding(12.dp)
             .background(
                 color = LocalColors.current.secondaryBackgroundColor,
-                shape = RoundedCornerShape(4.dp)
+                shape = RoundedCornerShape(16.dp)
             )
             .clickable {
                 navController.navigate("${MatchDetail.route}/${match.matchID}")

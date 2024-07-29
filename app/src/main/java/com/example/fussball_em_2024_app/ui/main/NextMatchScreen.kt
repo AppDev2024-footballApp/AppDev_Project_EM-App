@@ -24,7 +24,7 @@ fun NextMatchScreen(match: Match, navController: NavController) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(12.dp)
-            .background(color = LocalColors.current.secondaryBackgroundColor, shape = RoundedCornerShape(4.dp)) // Abgerundete Ecke
+            .background(color = LocalColors.current.secondaryBackgroundColor, shape = RoundedCornerShape(16.dp)) // Abgerundete Ecke und weißer Hintergrund
             .clickable {
                 navController.navigate("${MatchDetail.route}/${match.matchID}")
             }
