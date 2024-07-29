@@ -42,6 +42,7 @@ import com.example.fussball_em_2024_app.LocalLeague
 import com.example.fussball_em_2024_app.model.Team
 import com.example.fussball_em_2024_app.viewModels.FavouriteTeamsViewModel
 import com.example.fussball_em_2024_app.viewModels.FavouriteTeamsViewModelFactory
+import com.example.testjetpackcompose.ui.theme.lightGreen
 
 @Composable
 fun FavouriteTeams(teams: List<Team>, onTeamClick: (Team) -> Unit){
@@ -133,7 +134,7 @@ fun FavouriteTeams(teams: List<Team>, onTeamClick: (Team) -> Unit){
                                 .size(60.dp)
                                 .aspectRatio(1f)
                                 .clip(CircleShape)
-                                .background(Color.Gray),
+                                .background(lightGreen),
                             contentAlignment = Alignment.Center
                         ) {
                             Text("+", style = TextStyle(fontSize = 24.sp), color = LocalColors.current.textColor)
@@ -161,7 +162,7 @@ fun FavouriteTeams(teams: List<Team>, onTeamClick: (Team) -> Unit){
                         .size(60.dp)
                         .aspectRatio(1f)
                         .clip(CircleShape)
-                        .background(Color.Gray),
+                        .background(lightGreen),
                     contentAlignment = Alignment.Center
                 ) {
                     Text("+", style = TextStyle(fontSize = 24.sp), color = LocalColors.current.textColor)

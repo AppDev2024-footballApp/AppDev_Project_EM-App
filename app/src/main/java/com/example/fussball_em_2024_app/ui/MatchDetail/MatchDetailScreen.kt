@@ -2,6 +2,7 @@ package com.example.fussball_em_2024_app.ui.MatchDetail
 
 import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,6 +18,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -48,6 +51,8 @@ import com.example.fussball_em_2024_app.model.OpenAIResponse
 import com.example.fussball_em_2024_app.utils.DateFormater
 import com.example.fussball_em_2024_app.viewModels.MatchDetailViewModel
 import com.example.fussball_em_2024_app.viewModels.MatchDetailViewModelFactory
+import com.example.testjetpackcompose.ui.theme.buttonsColor
+import com.example.testjetpackcompose.ui.theme.darkGreen
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 
@@ -233,7 +238,7 @@ fun MatchDetailScreen(
                         }
                     }
 
-                    HorizontalDivider(color = Color.Black, thickness = 3.dp)
+                    HorizontalDivider(color = LocalColors.current.textColor, thickness = 3.dp)
 
                     Spacer(modifier = Modifier.height(20.dp))
 
@@ -261,12 +266,16 @@ fun MatchDetailScreen(
                     // Back button
                     Button(
                         onClick = { navController.popBackStack() },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = buttonsColor, // Farbe des Buttons
+                            contentColor = Color.White,
+                        ),
                         modifier = Modifier
                             .align(Alignment.CenterHorizontally)
 
                             .padding(top = 16.dp)
                     ) {
-                        Text("Go back", color = LocalColors.current.textColor)
+                        Text("Go back", color = Color.White)
                     }
 
                 }
@@ -282,20 +291,26 @@ fun MatchDetailScreen(
 fun GoalItem(goal: Goal, isFirstTeam: Boolean) {
     Column(modifier = Modifier.fillMaxSize(),horizontalAlignment = if (isFirstTeam) Alignment.Start else Alignment.End){
         Column(modifier = Modifier.fillMaxWidth(0.5f), horizontalAlignment = if (isFirstTeam) Alignment.End else Alignment.Start) {
+           val imageColor = if (LocalColors.current.textColor == Color.White) Color.White else Color.Black
             Row {
                 if (isFirstTeam){
                     Text(
                         text = if(goal.matchMinute != null) (goal.matchMinute.toString() + "' ") else "no data ",
                         color = LocalColors.current.textColor
                     )
+
+
                     Image(
                         painter = painterResource(id = R.drawable.football),
-                        contentDescription = "football"
+                        contentDescription = "football",
+                        colorFilter = ColorFilter.tint(imageColor),
+
                     )
                 }else {
                     Image(
                         painter = painterResource(id = R.drawable.football),
-                        contentDescription = "football"
+                        contentDescription = "football",
+                        colorFilter = ColorFilter.tint(imageColor)
                     )
                     Text(
                         text = if(goal.matchMinute != null) (" " + goal.matchMinute.toString() + "'") else " no data",

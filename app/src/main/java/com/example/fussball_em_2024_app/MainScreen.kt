@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,6 +24,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
@@ -41,6 +44,7 @@ import com.example.fussball_em_2024_app.viewModels.MatchViewModel
 import com.example.fussball_em_2024_app.viewModels.MatchViewModelFactory
 import com.example.fussball_em_2024_app.viewModels.TeamViewModel
 import com.example.fussball_em_2024_app.viewModels.TeamViewModelFactory
+import com.example.testjetpackcompose.ui.theme.buttonsColor
 
 @Composable
 fun MatchScreen(navController: NavController, modifier: Modifier = Modifier) {
@@ -99,9 +103,15 @@ fun MatchScreen(navController: NavController, modifier: Modifier = Modifier) {
                                 StoreLeague().removeCurrentLeague(context)
                                 navController.navigate("overview")
                             },
-                            modifier = Modifier.padding(top = 8.dp)
+                            modifier = Modifier
+                                .padding(top = 8.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = buttonsColor, // Farbe des Buttons
+                                contentColor = White,
+                            )
+
                         ) {
-                            Text("Other leagues", color = LocalColors.current.textColor)
+                            Text("Other leagues", color = White)
                         }
                     }
 
@@ -231,7 +241,7 @@ fun TeamItem(team:Team, onTeamClick: (Team) -> Unit){
 
             }
 
-            // Datum des Spiels in der Mitte
+
 
         }
     }
