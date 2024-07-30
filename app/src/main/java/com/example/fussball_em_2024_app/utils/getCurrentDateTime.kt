@@ -14,10 +14,6 @@ object DateFormater{
         return formatter.format(this)
     }
 
-    fun getCurrentDateTime() : Date {
-        return Calendar.getInstance().time
-    }
-
     // Funktion zum Konvertieren des Datums in String
     fun formatDate(date: Date?): String {
         return if(date != null) {

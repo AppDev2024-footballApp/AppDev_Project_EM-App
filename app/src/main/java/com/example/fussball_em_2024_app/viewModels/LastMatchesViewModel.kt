@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.fussball_em_2024_app.matchService
+import com.example.fussball_em_2024_app.network.apiService
 import com.example.fussball_em_2024_app.model.Match
 import kotlinx.coroutines.launch
 
@@ -29,7 +29,7 @@ class LastMatchesViewModel(val teamName: String, val pastWeeks: Int) : ViewModel
     private fun fetchLastMatches() {
         viewModelScope.launch {
             try {
-                val response = matchService.getLastMatchesByTeam(teamName, pastWeeks)
+                val response = apiService.getLastMatchesByTeam(teamName, pastWeeks)
                 if (response.isNotEmpty()) {
                     _matchState.value = _matchState.value.copy(
                         list = response,

@@ -1,4 +1,4 @@
-package com.example.fussball_em_2024_app.ui
+package com.example.fussball_em_2024_app.viewModels
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
