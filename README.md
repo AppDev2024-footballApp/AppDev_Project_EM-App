@@ -1,30 +1,30 @@
 # Fussball App
 
 ## Zusammenfassung
-Die Fussball App bietet Fussballfans eine umfassende Plattform, um verschiendene Fussball Ligen wie z.B. die Europameisterschaft 2024 zu verfolgen. Die App liefert aktuelle Informationen zu Spielen und deren Teams. Außerdem ermöglicht es Benutzern, ihre Lieblingsteams zu highlighten und bietet zusätzlich Spielvorhersagen für jedes Spiel.
+Die Fussball App bietet Fussballfans eine umfassende Plattform, um verschiendene Fussballligen wie z.B. die Europameisterschaft 2024 zu verfolgen. Die App liefert aktuelle Informationen zu Spielen und deren Teams. Außerdem ermöglicht sie Benutzern, ihre Lieblingsteams zu markieren und bietet zusätzlich Spielvorhersagen für jedes Spiel.
 
 ## Features
 
 ### Other Leagues Screen
-- **Ligen-Auswahl**: Auswahl verschiedener Ligen und damit deren Spiele und Teams.
+- **Ligen-Auswahl**: Auswahl verschiedener Ligen und deren Spiele und Teams.
 - **Searchbox**: Mithilfe einem Searchbox kann die Auswahl weiter eingegrenzt werden
-- **Sort-Funktionien**: Die Leaguen können zu einem über ihrem Namen als auch ihrer Season sortiert werden
-- **Favoured Ligen**: Bestimmte Ligen sind mit einem Stern gekennzeichnet. Dieser Stern bedeutet das die Daten der Liga richtig und vollständig dokumentiert sind.
+- **Sortierfunktionen**: Die Ligen können sowohl nach ihrem Namen als auch nach ihrer Saison sortiert werden
+- **Markierte Ligen**: Bestimmte Ligen sind mit einem Stern gekennzeichnet. Dieser Stern bedeutet, dass die Daten der Liga richtig und vollständig dokumentiert sind.
 
 ### League Screen
-- **Next & Last Match**: Anzeigen des letzten und nächsten Spiele dieser Liga
-- **All teams in league**: Alle Teams werden in einer Liste bereitgestellt
-- **Favouriten Teams**: Möglichkeit bis zu 3 Teams zu folgen. Beinflusst die Next & Last Match Anzeige
+- **Next & Last Match**: Anzeigen des letzten und nächsten Spiels dieser Liga
+- **Alle Teams in der Liga**: Alle Teams werden in einer Liste bereitgestellt
+- **Favorisierte Teams**: Möglichkeit, bis zu 3 Teams zu folgen. Beinflusst die Next & Last Match-Anzeige
 
 ### Team Detail Screen
-- **Basic Information**: Informationen zum derzeitigen Punktestand als auch Siege/Unentschieden/Niederlagen und Goal Points
-- **Next & Last Match**: Anzeige des nächsten und letzten Spiele vom ausgewählten Team
+- **Basisinformationen**: Informationen zum derzeitigen Punktestand sowie Siege/Unentschieden/Niederlagen und Torpunkte.
+- **Next & Last Match**: Anzeige des nächsten und letzten Spiels des ausgewählten Teams
 
 ### Match Detail Screen
 - **Spielstände**: Anzeige der aktuellen und vergangenen Spielstände.
 - **Spielinformationen**: Details zu Datum, Uhrzeit und Austragungsort (falls vorhanden).
 - **Spielverlauf**: Chronologischer Überblick über Tore.
-- **Game Prediction by AI**: Schätzung der AI wie das Spiel ausgehen wird.
+- **Game Prediction by AI**: Schätzung der AI, wie das Spiel ausgehen wird.
 
 
 ## Covered topics
@@ -34,7 +34,7 @@ Die Fussball App bietet Fussballfans eine umfassende Plattform, um verschiendene
 - **Automatische Anpassung**: Dynamische Umschaltung zwischen Licht- und Dunkelmodus basierend auf den Sensordaten.
 
 ### Data Centricity
-- **Fussball Daten**: Die Daten der Ligen, Matches, etc. werden von der openligadb gratis und freizugänglich bereitgestellt. (https://www.openligadb.de/)
+- **Fussball Daten**: Die Daten der Ligen, Matches, etc. werden von der OpenLigaDB gratis und frei zugänglich bereitgestellt. (https://www.openligadb.de/)
 - **KI-Modelle**: Nutzung von OpenAI-Modellen zur Vorhersage von Spielergebnissen.
 
 ### Advanced Layout
@@ -53,18 +53,18 @@ Die Fussball App bietet Fussballfans eine umfassende Plattform, um verschiendene
 2. **Projekt in Android Studio öffnen**
 
 3. **Abhängigkeiten synchronisieren**:
-    - Warten Sie, bis Android Studio das Projekt geladen und die Abhängigkeiten synchronisiert hat.
+   - Warten Sie, bis Android Studio das Projekt geladen und die Abhängigkeiten synchronisiert hat.
 
 4. **(optional) Enable Game Predictions**
-    - Falls die Game Predictions generiert werden sollen muss ein OpenAI Key mit Credits angegeben werden. Dieser muss in der local.properties Datei hinzugefügt werden
-   ```
+   - Falls die Game Predictions generiert werden sollen muss ein OpenAI Key mit Credits angegeben werden. Dieser muss in der local.properties Datei hinzugefügt werden
+   ```properties
    openai.api.key=your-open-ai-key
    ```
 
 5. **App auf Gerät/Emulator hochladen und ausführen**
 
 6. **Let's go**:
-    - Die App sollte nun auf Ihrem Gerät/Emulator ausgeführt werden. Erkunden Sie die verschiedenen Funktionen und geniessen Sie die beste Fussball App der Uni!
+   - Die App sollte nun auf Ihrem Gerät/Emulator ausgeführt werden. Erkunden Sie die verschiedenen Funktionen und geniessen Sie die beste Fussball App der Uni!
 
 ---
 
