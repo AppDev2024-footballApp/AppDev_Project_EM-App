@@ -17,6 +17,7 @@ import com.example.fussball_em_2024_app.LocalColors
 import com.example.fussball_em_2024_app.R
 import com.example.fussball_em_2024_app.model.Team
 import com.example.fussball_em_2024_app.model.TeamInfo
+import com.example.testjetpackcompose.ui.theme.darkGreen90
 
 @Composable
 fun TeamFlagImage(team: Team, size: Dp = 60.dp){
@@ -47,7 +48,7 @@ fun TeamFlagImage(team: TeamInfo, size: Dp = 60.dp){
 @Composable
 fun FootballImage(){
     Image(
-        painter = if (LocalColors.current.textColor == Color.Black) painterResource(id = R.drawable.black_football) else painterResource(id = R.drawable.white_football),
+        painter = if (LocalColors.current.textColor == darkGreen90) painterResource(id = R.drawable.black_football) else painterResource(id = R.drawable.white_football),
         contentDescription = "football"
     )
 }
